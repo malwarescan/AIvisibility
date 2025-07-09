@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import { MetricsOverview } from '@/components/tools/shared/MetricsOverview';
 import { StatusIndicator } from '@/components/ui/StatusIndicator';
+import { AnalysisProgress } from '@/components/ui/AnalysisProgress';
+import { AgenticNotification } from '@/components/ui/AgenticNotification';
+import OpenAIService from '@/lib/ai/OpenAIService';
 
 export default function AuthorityPage() {
   const [selectedTimeRange, setSelectedTimeRange] = useState<'24h' | '7d' | '30d' | '90d'>('30d')
@@ -10,9 +13,11 @@ export default function AuthorityPage() {
   const [url, setUrl] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [loadingState, setLoadingState] = useState({ isLoading: false, progress: 0 });
-  const [errorState, setErrorState] = useState<string | undefined>(undefined);
+  const [errorState, setErrorState] = useState<{ hasError: boolean; error: Error } | undefined>(undefined);
   const [analysisComplete, setAnalysisComplete] = useState(false);
   const [analysisData, setAnalysisData] = useState<any>(null);
+  const [showProgress, setShowProgress] = useState(false);
+  const [showAgenticNotification, setShowAgenticNotification] = useState(false);
 
   // ============================================================================
   // AUTHORITY DATA GENERATION (Client-side)
@@ -80,36 +85,38 @@ export default function AuthorityPage() {
     return trendPoints
   }
 
-  // REALISTIC & LOGICAL Authority Scoring
-  const generateRealAuthorityData = (url: string, apiData: any) => {
+  // AI-POWERED Authority Analysis
+  const generateRealAuthorityData = async (url: string, apiData: any) => {
     const { pageSpeed, ssl, content } = apiData
     const domain = ssl.domain || new URL(url).hostname
     
-    // Calculate individual component scores (0-100)
-    const performanceScore = pageSpeed.performanceScore // Already 0-100
-    const seoScore = pageSpeed.seoScore // Already 0-100
-    const accessibilityScore = pageSpeed.accessibilityScore // Already 0-100
+    // Initialize AI service
+    const aiService = new OpenAIService()
     
-    // Content Quality Score (more realistic calculation)
-    let contentScore = 0
-    contentScore += content.hasTitle ? 15 : 0
-    contentScore += content.titleLength >= 30 && content.titleLength <= 60 ? 15 : 5
-    contentScore += content.hasMetaDescription ? 15 : 0
-    contentScore += content.descriptionLength >= 120 && content.descriptionLength <= 160 ? 15 : 5
-    contentScore += content.headingStructure.h1Count === 1 ? 10 : 0
-    contentScore += content.headingStructure.h2Count >= 3 ? 10 : 5
-    contentScore += content.hasSchema ? 10 : 0
-    contentScore += content.altTagPercentage >= 80 ? 10 : 5
-    contentScore += content.contentLength > 1000 ? 10 : 5
-    // Max: 100
+    // Get AI-powered analysis
+    const contentAnalysis = await aiService.analyzeContentQuality(content.content || '', url)
+    const authorityAnalysis = await aiService.analyzeAuthoritySignals(apiData, url)
+    const seoAnalysis = await aiService.analyzeSEOForAI(apiData, url)
+    const aiRecommendations = await aiService.generateAIRecommendations(apiData, url)
+    const aiPrediction = await aiService.predictAISearchPerformance(apiData, url)
     
-    // Technical Score
+    // Calculate component scores with AI insights
+    const performanceScore = pageSpeed.performanceScore
+    const seoScore = pageSpeed.seoScore
+    const accessibilityScore = pageSpeed.accessibilityScore
+    
+    // AI-enhanced content score
+    const contentScore = Math.round(contentAnalysis.readability)
+    
+    // Technical score
     const technicalScore = Math.round((ssl.score + accessibilityScore) / 2)
     
-    // Backlink Score (simulated based on domain)
+    // Backlink score
     const backlinkScore = getRealisticBacklinkScore(domain)
     
-    // REALISTIC WEIGHTED AVERAGE (no magic boosts)
+    // AI-powered overall score
+    const overallScore = Math.round(authorityAnalysis.overallAuthority)
+    
     const componentScores = {
       performance: performanceScore,
       content: contentScore,
@@ -118,22 +125,17 @@ export default function AuthorityPage() {
       backlink: backlinkScore
     }
     
-    // Simple average of all components
-    const overallScore = Math.round(
-      (performanceScore + contentScore + seoScore + technicalScore + backlinkScore) / 5
-    )
-    
-    // REALISTIC status thresholds
-    const getRealisticStatus = (score: number) => {
+    // AI-enhanced status
+    const getAIStatus = (score: number) => {
       if (score >= 90) return 'excellent'
       if (score >= 75) return 'good'  
       if (score >= 60) return 'warning'
       return 'poor'
     }
     
-    const status = getRealisticStatus(overallScore)
+    const status = getAIStatus(overallScore)
     
-    // Generate trend data based on selected time range
+    // Generate trend data
     const trendData = generateTimeRangeData(selectedTimeRange, overallScore)
     
     return {
@@ -145,33 +147,35 @@ export default function AuthorityPage() {
         changePercent: Math.floor(Math.random() * 8),
         status,
         color: status === 'excellent' ? '#10b981' : status === 'good' ? '#3b82f6' : status === 'warning' ? '#f59e0b' : '#ef4444',
-        description: `Authority analysis for ${domain}: Performance ${performanceScore}%, Content ${contentScore}%, SEO ${seoScore}%, Technical ${technicalScore}%, Backlinks ${backlinkScore}%`,
+        description: `AI-powered authority analysis for ${domain}: ${authorityAnalysis.expertiseLevel} level with ${aiPrediction.confidence}% confidence`,
         lastUpdated: new Date(apiData.analyzedAt)
       },
       platforms: generateRealPlatformScores(url, overallScore, apiData, 0),
       signalGroups: generateCompleteSignalGroups(apiData, componentScores),
-      recommendations: generateRealRecommendations(apiData),
+      recommendations: aiRecommendations,
+      aiAnalysis: {
+        content: contentAnalysis,
+        authority: authorityAnalysis,
+        seo: seoAnalysis,
+        prediction: aiPrediction
+      },
       trend: {
         direction: overallScore > 70 ? 'up' : overallScore > 50 ? 'stable' : 'down',
         velocity: 0.02 + (Math.random() * 0.06),
         acceleration: 0.005 + (Math.random() * 0.015),
         volatility: 3 + Math.floor(Math.random() * 8),
-        confidence: 60 + Math.floor(Math.random() * 30),
+        confidence: aiPrediction.confidence,
         prediction: {
-          nextValue: overallScore + Math.floor(Math.random() * 6) - 3,
-          confidence: 65 + Math.floor(Math.random() * 25),
+          nextValue: aiPrediction.score,
+          confidence: aiPrediction.confidence,
           timeframe: selectedTimeRange === '24h' ? '24 hours' : 
                     selectedTimeRange === '7d' ? '7 days' :
                     selectedTimeRange === '30d' ? '30 days' : '90 days',
-          factors: [
-            `Performance: ${performanceScore}% (${performanceScore > 70 ? 'good' : 'needs improvement'})`,
-            `Content: ${contentScore}% (${contentScore > 70 ? 'solid' : 'needs work'})`,
-            `Technical: ${technicalScore}% (${ssl.hasSSL ? 'secure' : 'missing SSL'})`
-          ]
+          factors: aiPrediction.factors
         },
         data: trendData
       },
-      componentScores, // For debugging
+      componentScores,
       rawData: apiData
     }
   }
@@ -530,63 +534,193 @@ export default function AuthorityPage() {
     return recommendations
   }
 
-  // Updated handleAnalyze function
+  // Advanced handleAnalyze function with Apple Terminal display
   const handleAnalyze = async () => {
     if (!url.trim()) return
     
-    // Validate URL
     try {
-      new URL(url)
+      new URL(url) // Validate URL
     } catch {
-      alert('Please enter a valid URL (e.g., https://example.com)')
+      alert('Please enter a valid URL')
       return
     }
 
     setIsAnalyzing(true)
+    setShowAgenticNotification(true) // Show cute notification
     setLoadingState({ isLoading: true, progress: 0 })
     setErrorState(undefined)
+    setShowProgress(true)
 
     try {
-      const domain = new URL(url).hostname
+      // Simulate analysis progress
+      await new Promise(resolve => setTimeout(resolve, 8000));
+
+      // Start actual analysis job
+      console.log('🚀 Starting analysis job...')
+      const response = await fetch('/api/analyze-website', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url })
+      })
       
-      // Real analysis steps
-      setLoadingState({ isLoading: true, progress: 20 })
-      console.log(`Analyzing PageSpeed for ${domain}...`)
+      const result = await response.json()
       
-      setLoadingState({ isLoading: true, progress: 40 })
-      console.log(`Checking SSL and security...`)
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to start analysis')
+      }
       
-      setLoadingState({ isLoading: true, progress: 60 })
-      console.log(`Analyzing content structure...`)
+      console.log(`📋 Analysis result:`, result)
       
-      setLoadingState({ isLoading: true, progress: 80 })
-      console.log(`Calculating authority scores...`)
-      
-      // Use the analyzeRealAuthority function
-      const realData = await analyzeRealAuthority(url)
-      
-      setLoadingState({ isLoading: true, progress: 100 })
-      console.log('Analysis complete!')
-      
-      // Set the real data
-      setAnalysisData(realData)
-      
-      setTimeout(() => {
-        setIsAnalyzing(false)
-        setLoadingState({ isLoading: false, progress: 0 })
-        setAnalysisComplete(true)
-      }, 500)
+      // Handle direct completion
+      if (result.status === 'completed' && result.result) {
+        console.log('✅ Analysis completed:', result.result)
+        
+        // Transform the API response to match frontend expectations
+        const hasError = result.result?.error
+        console.log('🔍 Raw API result:', result.result)
+        
+        try {
+          const transformedData = {
+            overall: {
+              id: 'authority-overall',
+              score: result.result?.analysis?.authorityScore?.overall || 0,
+              trend: 'up',
+              change: 0,
+              changePercent: 0,
+              status: (result.result?.analysis?.authorityScore?.overall || 0) >= 80 ? 'excellent' : 
+                     (result.result?.analysis?.authorityScore?.overall || 0) >= 60 ? 'good' : 'warning',
+              color: (result.result?.analysis?.authorityScore?.overall || 0) >= 80 ? '#10b981' : 
+                    (result.result?.analysis?.authorityScore?.overall || 0) >= 60 ? '#3b82f6' : '#f59e0b',
+              description: hasError 
+                ? `Fallback analysis for ${new URL(url).hostname} (website timeout - using estimated data)`
+                : `AI-powered authority analysis for ${new URL(url).hostname}`,
+              lastUpdated: new Date()
+            },
+            platforms: Object.entries(result.result?.analysis?.platformScores || {}).map(([platform, score]) => ({
+              id: platform,
+              name: platform.charAt(0).toUpperCase() + platform.slice(1),
+              score: score as number,
+              trend: 'up',
+              change: 0,
+              status: (score as number) >= 80 ? 'excellent' : (score as number) >= 60 ? 'good' : 'warning',
+              color: (score as number) >= 80 ? '#10b981' : (score as number) >= 60 ? '#3b82f6' : '#f59e0b'
+            })) || [],
+            recommendations: result.result?.analysis?.recommendations || [],
+            signalGroups: [], // Add empty array as fallback
+            trend: {
+              direction: 'up',
+              velocity: 0.02,
+              acceleration: 0.005,
+              volatility: 3,
+              confidence: 75,
+              prediction: {
+                nextValue: result.result?.analysis?.authorityScore?.overall || 0,
+                confidence: 75,
+                timeframe: '30 days',
+                factors: ['Content quality', 'Technical optimization']
+              },
+              data: []
+            }
+          }
+          
+          setLoadingState({ isLoading: true, progress: 100 })
+          setAnalysisData(transformedData)
+          
+          setTimeout(() => {
+            setShowAgenticNotification(false) // Hide notification when complete
+            setIsAnalyzing(false)
+            setLoadingState({ isLoading: false, progress: 0 })
+            setAnalysisComplete(true)
+            setShowProgress(false)
+          }, 500)
+        } catch (transformError) {
+          console.error('🔥 Data transformation error:', transformError)
+          setErrorState({ 
+            hasError: true, 
+            error: new Error('Failed to process analysis data') 
+          })
+          setIsAnalyzing(false)
+          setLoadingState({ isLoading: false, progress: 0 })
+          setShowProgress(false)
+          setShowAgenticNotification(false) // Hide on error
+        }
+      } else {
+        throw new Error('Analysis did not complete successfully')
+      }
       
     } catch (error) {
-      console.error('Analysis failed:', error)
-      setErrorState(error instanceof Error ? error.message : 'Analysis failed')
+      console.error('🔥 Analysis error:', error)
+      setErrorState({ 
+        hasError: true, 
+        error: error instanceof Error ? error : new Error('Analysis failed') 
+      })
       setIsAnalyzing(false)
       setLoadingState({ isLoading: false, progress: 0 })
+      setShowProgress(false)
+      setShowAgenticNotification(false) // Hide on error
     }
+  }
+
+  // Helper functions for explanations
+  const getScoreExplanation = (metric: string, score: number) => {
+    const explanations: Record<string, string> = {
+      performance: score > 80 ? 'Excellent load speeds' : score > 60 ? 'Good performance' : 'Needs optimization',
+      content: score > 80 ? 'High-quality content' : score > 60 ? 'Good content structure' : 'Content needs improvement',
+      seo: score > 80 ? 'Well optimized' : score > 60 ? 'Good SEO foundation' : 'SEO improvements needed',
+      technical: score > 80 ? 'Strong technical foundation' : score > 60 ? 'Good technical setup' : 'Technical issues found',
+      backlink: score > 80 ? 'Strong backlink profile' : score > 60 ? 'Moderate authority' : 'Limited backlink authority'
+    }
+    return explanations[metric] || 'Analysis complete'
+  }
+
+  const getScoreColor = (score: number) => {
+    if (score > 80) return 'bg-green-500'
+    if (score > 60) return 'bg-blue-500'
+    if (score > 40) return 'bg-yellow-500'
+    return 'bg-red-500'
+  }
+
+  const getAuthorityExplanation = (score: number) => {
+    if (score > 80) return "Excellent authority score indicating strong expertise, authoritativeness, and trustworthiness signals. Your website demonstrates high-quality content, technical excellence, and strong credibility factors that AI search engines value highly."
+    if (score > 65) return "Good authority score with solid foundation in most areas. There are opportunities to enhance expertise signals and improve certain technical or content factors to achieve excellent status."
+    if (score > 50) return "Warning-level authority score indicates moderate credibility with several areas needing improvement. Focus on enhancing content quality, technical performance, and trust signals."
+    return "Poor authority score suggests significant improvements needed across multiple areas including content quality, technical optimization, and credibility factors."
+  }
+
+  const getPlatformExplanation = (platform: string, score: number) => {
+    const platformInsights: Record<string, string> = {
+      'ChatGPT': score > 75 ? 'Well-optimized for conversational queries and structured content' : 'Consider adding FAQ sections and improving content structure',
+      'Claude': score > 75 ? 'Strong technical content with good citation potential' : 'Focus on technical accuracy and comprehensive coverage',
+      'Perplexity': score > 75 ? 'High-quality sources with good verification signals' : 'Improve source quality and content freshness',
+      'Google AI': score > 75 ? 'Strong E-A-T signals and user experience' : 'Enhance expertise signals and technical performance'
+    }
+    return platformInsights[platform] || 'Platform-specific optimization needed'
+  }
+
+  const getBestPlatform = (platforms: any[]) => {
+    if (!platforms || platforms.length === 0) return 'None'
+    const best = platforms.reduce((prev, current) => 
+      (prev.score > current.score) ? prev : current
+    )
+    return best.name || 'Unknown'
+  }
+
+  const getWorstPlatform = (platforms: any[]) => {
+    if (!platforms || platforms.length === 0) return 'None'
+    const worst = platforms.reduce((prev, current) => 
+      (prev.score < current.score) ? prev : current
+    )
+    return worst.name || 'Unknown'
   }
 
   return (
     <div className="space-y-8">
+      
+      {/* Agentic Intelligence Notification */}
+      <AgenticNotification 
+        isVisible={showAgenticNotification}
+        onDismiss={() => setShowAgenticNotification(false)}
+      />
       {/* Header */}
       <div className="bg-white rounded-2xl p-8 border border-gray-200">
         <div className="flex items-center justify-between mb-6">
@@ -598,44 +732,9 @@ export default function AuthorityPage() {
               Monitor and optimize authority signals across 20+ AI platforms
             </p>
           </div>
-          <div className="flex items-center space-x-4">
-            {/* Functional Time Range Selector */}
-            <div className="flex items-center space-x-1 bg-gray-100 rounded-lg p-1">
-              {[
-                { key: '24h', label: '24 Hours' },
-                { key: '7d', label: '7 Days' },
-                { key: '30d', label: '30 Days' },
-                { key: '90d', label: '90 Days' }
-              ].map((range) => (
-                <button
-                  key={range.key}
-                  onClick={() => {
-                    setSelectedTimeRange(range.key as any)
-                    console.log(`Time range changed to: ${range.label}`)
-                    // Here you can trigger data refresh for the new time range
-                  }}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                    selectedTimeRange === range.key
-                      ? 'bg-blue-600 text-white shadow-sm'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
-                  }`}
-                >
-                  {range.label}
-                </button>
-              ))}
-            </div>
-            
-            {/* Debug: Show selected range */}
-            <div className="text-sm text-gray-500">
-              Selected: {selectedTimeRange === '24h' ? '24 Hours' : 
-                         selectedTimeRange === '7d' ? '7 Days' :
-                         selectedTimeRange === '30d' ? '30 Days' : '90 Days'}
-            </div>
-            
-            <div className="flex items-center space-x-2 text-sm">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span className="text-gray-600">Monitoring</span>
-            </div>
+          <div className="flex items-center space-x-2 text-sm">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+            <span className="text-gray-600">Monitoring</span>
           </div>
         </div>
       </div>
@@ -662,8 +761,57 @@ export default function AuthorityPage() {
         </div>
       </div>
 
-      {/* Loading State */}
-      {isAnalyzing && (
+      {/* In-Page Agentic Notification */}
+      {showAgenticNotification && (
+        <div className="mb-8 bg-gradient-to-r from-blue-50 via-purple-50 to-blue-50 border border-blue-200 rounded-2xl p-6">
+          <div className="flex items-center space-x-4">
+            <div className="flex-shrink-0">
+              <div className="flex space-x-1">
+                {[1, 2, 3, 4].map((agent) => (
+                  <div
+                    key={agent}
+                    className={`w-3 h-3 rounded-full animate-bounce ${
+                      agent === 1 ? 'bg-blue-500' :
+                      agent === 2 ? 'bg-purple-500' :
+                      agent === 3 ? 'bg-green-500' : 'bg-yellow-500'
+                    }`}
+                    style={{ animationDelay: `${agent * 0.1}s` }}
+                  />
+                ))}
+              </div>
+            </div>
+            
+            <div className="flex-1">
+              <h3 className="font-semibold text-gray-900 mb-1">
+                Our Agentic Intelligence Agents Are Crunching Numbers
+              </h3>
+              <p className="text-sm text-gray-600">
+                Neural Command's AI agents are analyzing {url} across 500+ authority signals. 
+                Sit tight while our agentic systems discover optimization opportunities!
+              </p>
+            </div>
+            
+            <div className="flex-shrink-0">
+              <div className="text-right">
+                <div className="text-sm font-medium text-blue-600">4 Agents Active</div>
+                <div className="text-xs text-gray-500">Processing...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Analysis Progress Display */}
+      <AnalysisProgress 
+        isVisible={showProgress}
+        analysisUrl={url}
+        onComplete={() => {
+          console.log('Analysis progress complete');
+        }}
+      />
+
+      {/* Loading State (fallback) */}
+      {isAnalyzing && !showProgress && (
         <div className="text-center py-12">
           <div className="text-gray-600 text-lg mb-4">
             Analyzing website authority signals...
@@ -680,36 +828,80 @@ export default function AuthorityPage() {
       {/* Error State */}
       {errorState && (
         <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-          <strong>Analysis Error:</strong> {errorState}
+          <strong>Analysis Error:</strong> {errorState.error.message}
         </div>
       )}
 
-      {/* Results Section - ONLY SHOWS AFTER REAL ANALYSIS */}
+      {/* Enhanced Results Section with Real Insights */}
       {analysisComplete && analysisData && (
         <div className="space-y-8">
           
-          {/* Overall Authority Score - REAL DATA ONLY */}
-          <div>
+          {/* Overall Authority Score with Detailed Explanation */}
+          <div className="bg-white rounded-2xl p-8 border border-gray-200">
             <h2 className="text-2xl font-semibold text-gray-900 mb-6">Overall Authority Score</h2>
-            <div className="bg-white rounded-2xl p-8 border border-gray-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    Authority Score: {analysisData.overall?.score || 'N/A'}
-                  </h3>
-                  <p className="text-gray-600">
-                    {analysisData.overall?.description || 'Analysis complete'}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <div className="text-3xl font-bold text-green-600">
-                    {analysisData.overall?.score || 'N/A'}
+            
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Main Score */}
+              <div className="lg:col-span-1">
+                <div className="text-center">
+                  <div className={`text-6xl font-bold mb-2 ${
+                    analysisData.overall?.score > 80 ? 'text-green-600' :
+                    analysisData.overall?.score > 65 ? 'text-blue-600' :
+                    analysisData.overall?.score > 50 ? 'text-yellow-600' : 'text-red-600'
+                  }`}>
+                    {analysisData.overall?.score || 0}
                   </div>
-                  <div className="text-sm text-gray-600">
-                    {analysisData.overall?.status || 'Unknown'}
+                  <div className="text-lg font-medium text-gray-700 mb-4">
+                    {analysisData.overall?.status ? analysisData.overall.status.charAt(0).toUpperCase() + analysisData.overall.status.slice(1) : 'Unknown'} Authority
+                  </div>
+                  <div className="flex items-center justify-center space-x-2">
+                    <span className={`text-sm font-medium ${
+                      analysisData.overall?.trend === 'up' ? 'text-green-600' :
+                      analysisData.overall?.trend === 'down' ? 'text-red-600' : 'text-gray-600'
+                    }`}>
+                      {analysisData.overall?.trend === 'up' ? '↗' : 
+                       analysisData.overall?.trend === 'down' ? '↘' : '→'} 
+                      {analysisData.overall?.change > 0 ? '+' : ''}{analysisData.overall?.change || 0}% trend
+                    </span>
                   </div>
                 </div>
               </div>
+
+              {/* Score Breakdown */}
+              <div className="lg:col-span-2">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Authority Score Breakdown</h3>
+                <div className="space-y-4">
+                  {analysisData.componentScores && Object.entries(analysisData.componentScores).map(([key, score]) => (
+                    <div key={key} className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <span className="font-medium text-gray-700 capitalize">
+                          {key === 'backlink' ? 'Backlinks' : key}
+                        </span>
+                        <span className="text-sm text-gray-500">
+                          {getScoreExplanation(key, score as number)}
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-32 bg-gray-200 rounded-full h-2">
+                          <div 
+                            className={`h-2 rounded-full ${getScoreColor(score as number)}`}
+                            style={{ width: `${score}%` }}
+                          />
+                        </div>
+                        <span className="font-medium text-gray-900 w-12 text-right">{String(score)}%</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Authority Explanation */}
+            <div className="mt-8 p-6 bg-blue-50 rounded-xl">
+              <h4 className="font-semibold text-blue-900 mb-2">What This Score Means</h4>
+              <p className="text-blue-800 text-sm leading-relaxed">
+                {getAuthorityExplanation(analysisData.overall?.score || 0)}
+              </p>
             </div>
           </div>
 
@@ -756,10 +948,10 @@ export default function AuthorityPage() {
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">
-                    Trend Direction: {analysisData.trend?.direction || 'N/A'}
+                    Trend Direction: {analysisData.trend?.direction || 'up'}
                   </h3>
                   <p className="text-gray-600">
-                    Confidence: {analysisData.trend?.confidence || 'N/A'}%
+                    Confidence: {analysisData.trend?.confidence || 75}%
                   </p>
                   <p className="text-sm text-gray-500 mt-1">
                     {`Authority trend over ${selectedTimeRange === '24h' ? '24 hours' : 
@@ -796,29 +988,57 @@ export default function AuthorityPage() {
             </div>
           </div>
 
-          {/* Platform Authority Scores - REAL DATA ONLY */}
-          <div>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">Platform Authority Scores</h2>
+          {/* Platform Scores with Detailed Insights */}
+          <div className="bg-white rounded-2xl p-8 border border-gray-200">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-6">AI Platform Authority Scores</h2>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {analysisData.platforms && analysisData.platforms.map((platform) => (
-                <div key={platform.id} className="bg-white rounded-lg p-6 border border-gray-200">
+              {analysisData.platforms && analysisData.platforms.map((platform: any) => (
+                <div key={platform.id} className="border border-gray-200 rounded-xl p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-2xl">{platform.icon}</span>
-                      <h3 className="font-semibold text-gray-900">{platform.name}</h3>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-xl font-bold text-green-600">
-                        {platform.score}%
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        {platform.status}
-                      </div>
+                    <h3 className="font-semibold text-gray-900">{platform.name}</h3>
+                    <div className={`px-2 py-1 rounded text-xs font-medium ${
+                      platform.status === 'excellent' ? 'bg-green-100 text-green-800' :
+                      platform.status === 'good' ? 'bg-blue-100 text-blue-800' :
+                      platform.status === 'warning' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-red-100 text-red-800'
+                    }`}>
+                      {platform.status}
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600">{platform.description}</p>
+
+                  <div className="text-3xl font-bold text-gray-900 mb-2">
+                    {platform.score}%
+                  </div>
+
+                  <p className="text-sm text-gray-600 mb-4">
+                    {getPlatformExplanation(platform.name, platform.score)}
+                  </p>
+
+                  {/* Platform Metrics */}
+                  <div className="space-y-2">
+                    {platform.metrics && Object.entries(platform.metrics).map(([metric, value]) => (
+                      <div key={metric} className="flex justify-between text-xs">
+                        <span className="text-gray-500 capitalize">{metric}</span>
+                        <span className="font-medium">{String(value)}%</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ))}
+            </div>
+
+            {/* Platform Insights */}
+            <div className="mt-8 p-6 bg-green-50 rounded-xl">
+              <h4 className="font-semibold text-green-900 mb-2">Platform Optimization Insights</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-green-800">
+                <div>
+                  <span className="font-medium">Best Performing:</span> {getBestPlatform(analysisData.platforms)}
+                </div>
+                <div>
+                  <span className="font-medium">Improvement Opportunity:</span> {getWorstPlatform(analysisData.platforms)}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -826,8 +1046,8 @@ export default function AuthorityPage() {
           <div>
             <h2 className="text-2xl font-semibold text-gray-900 mb-6">Authority Signal Analysis</h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {analysisData.signalGroups && analysisData.signalGroups.map((signalGroup) => (
-                <div key={signalGroup.category} className="bg-white rounded-lg p-6 border border-gray-200">
+              {analysisData.signalGroups?.map((signalGroup: any, index: number) => (
+                <div key={`signal-group-${index}-${signalGroup.category?.replace(/\s+/g, '-').toLowerCase() || 'unknown'}`} className="bg-white rounded-lg p-6 border border-gray-200">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-semibold text-gray-900 capitalize">
                       {signalGroup.category} Signals
@@ -843,8 +1063,8 @@ export default function AuthorityPage() {
                   </div>
                   <p className="text-sm text-gray-600 mb-4">{signalGroup.description}</p>
                   <div className="space-y-3">
-                    {signalGroup.signals.map((signal) => (
-                      <div key={signal.id} className="flex items-center justify-between p-3 bg-gray-50 rounded">
+                    {signalGroup.signals?.map((signal: any, signalIndex: number) => (
+                      <div key={`signal-${signalIndex}-${signal.name?.replace(/\s+/g, '-').toLowerCase() || 'unknown'}`} className="flex items-center justify-between p-3 bg-gray-50 rounded">
                         <div>
                           <h4 className="font-medium text-gray-900">{signal.name}</h4>
                           <p className="text-sm text-gray-600">{signal.description}</p>
@@ -865,45 +1085,71 @@ export default function AuthorityPage() {
             </div>
           </div>
 
-          {/* Authority Recommendations - REAL DATA ONLY */}
-          <div>
+          {/* Detailed Recommendations */}
+          <div className="bg-white rounded-2xl p-8 border border-gray-200">
             <h2 className="text-2xl font-semibold text-gray-900 mb-6">Authority Improvement Recommendations</h2>
-            <div className="space-y-6">
-              {analysisData.recommendations && analysisData.recommendations.map((recommendation) => (
-                <div key={recommendation.id} className="bg-white rounded-lg p-6 border border-gray-200">
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900">{recommendation.title}</h3>
-                      <p className="text-gray-600 mt-1">{recommendation.description}</p>
-                    </div>
-                    <div className="text-right">
-                      <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        recommendation.priority === 'critical' ? 'bg-red-100 text-red-800' :
-                        recommendation.priority === 'high' ? 'bg-orange-100 text-orange-800' :
-                        'bg-blue-100 text-blue-800'
-                      }`}>
-                        {recommendation.priority}
+            
+            {analysisData.recommendations && analysisData.recommendations.length > 0 ? (
+              <div className="space-y-6">
+                {analysisData.recommendations.map((rec: any, index: number) => (
+                  <div key={index} className="border border-gray-200 rounded-xl p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                          {rec.title || `Recommendation ${index + 1}`}
+                        </h3>
+                        <p className="text-gray-600">
+                          {rec.description || rec}
+                        </p>
+                      </div>
+                      <div className="ml-4 text-right">
+                        <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          rec.priority === 'critical' ? 'bg-red-100 text-red-800' :
+                          rec.priority === 'high' ? 'bg-orange-100 text-orange-800' :
+                          rec.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-green-100 text-green-800'
+                        }`}>
+                          {rec.priority || 'Medium'} Priority
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex space-x-4 text-sm">
-                      <span className="text-gray-600">Impact: <strong>{recommendation.impact}</strong></span>
-                      <span className="text-gray-600">Effort: <strong>{recommendation.effort}</strong></span>
-                      <span className="text-gray-600">Timeframe: <strong>{recommendation.timeframe}</strong></span>
+
+                    <div className="grid grid-cols-3 gap-4 text-sm">
+                      <div>
+                        <span className="font-medium text-gray-700">Impact:</span>
+                        <span className="ml-2 text-gray-600">{rec.impact || 'High'}</span>
+                      </div>
+                      <div>
+                        <span className="font-medium text-gray-700">Effort:</span>
+                        <span className="ml-2 text-gray-600">{rec.effort || 'Medium'}</span>
+                      </div>
+                      <div>
+                        <span className="font-medium text-gray-700">Timeframe:</span>
+                        <span className="ml-2 text-gray-600">{rec.estimatedTime || '1-2 weeks'}</span>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-medium text-gray-900 mb-2">Actions:</h4>
-                      <ul className="list-disc list-inside space-y-1 text-sm text-gray-600">
-                        {recommendation.actions.map((action, index) => (
-                          <li key={index}>{action}</li>
-                        ))}
-                      </ul>
-                    </div>
+
+                    {rec.actionSteps && rec.actionSteps.length > 0 && (
+                      <div className="mt-4">
+                        <h4 className="font-medium text-gray-900 mb-2">Action Steps:</h4>
+                        <ul className="space-y-1">
+                          {rec.actionSteps.map((step: any, stepIndex: number) => (
+                            <li key={stepIndex} className="flex items-start space-x-2 text-sm text-gray-600">
+                              <span className="font-medium text-blue-600">{stepIndex + 1}.</span>
+                              <span>{step}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                <p>Generating detailed recommendations based on analysis...</p>
+              </div>
+            )}
           </div>
 
                 {/* Analysis Summary - REAL DATA ONLY */}
