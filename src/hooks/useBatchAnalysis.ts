@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react'
+import OpenAIService from '@/lib/ai/OpenAIService'
 
 interface BatchProgress {
   totalUrls: number
@@ -57,21 +58,255 @@ export function useBatchAnalysis() {
     }
   }
 
-  // Copy your existing generateRealAuthorityData function here
+  // === BEGIN: Copied from Authority tool ===
   const generateRealAuthorityData = async (url: string, apiData: any) => {
-    // TODO: Copy the EXACT function from your working Authority tool
-    // This ensures we use the same working logic that fixes content scores
-    
-    // For now, placeholder that will be replaced with your working function
+    const { pageSpeed, ssl, content } = apiData
+    const domain = ssl.domain || new URL(url).hostname
+    const aiService = new OpenAIService()
+    const contentAnalysis = await aiService.analyzeContentQuality(content.content || '', url)
+    const authorityAnalysis = await aiService.analyzeAuthoritySignals(apiData, url)
+    const seoAnalysis = await aiService.analyzeSEOForAI(apiData, url)
+    const aiRecommendations = await aiService.generateAIRecommendations(apiData, url)
+    const aiPrediction = await aiService.predictAISearchPerformance(apiData, url)
+    const performanceScore = pageSpeed.performanceScore
+    const seoScore = pageSpeed.seoScore
+    const accessibilityScore = pageSpeed.accessibilityScore
+    const contentScore = Math.round(contentAnalysis.readability)
+    const technicalScore = Math.round((ssl.score + accessibilityScore) / 2)
+    const backlinkScore = getRealisticBacklinkScore(domain)
+    const overallScore = Math.round(authorityAnalysis.overallAuthority)
+    const componentScores = {
+      performance: performanceScore,
+      content: contentScore,
+      seo: seoScore,
+      technical: technicalScore,
+      backlink: backlinkScore
+    }
+    const getAIStatus = (score: number) => {
+      if (score >= 90) return 'excellent'
+      if (score >= 75) return 'good'  
+      if (score >= 60) return 'warning'
+      return 'poor'
+    }
+    const status = getAIStatus(overallScore)
+    const trendData: any[] = []
     return {
-      url,
-      overall: { score: 75, trend: 'up', status: 'good' },
-      componentScores: { performance: 68, content: 55, seo: 64, technical: 75, backlink: 35 },
-      platforms: [],
-      recommendations: [],
-      timestamp: new Date()
+      overall: {
+        id: 'authority-overall',
+        score: overallScore,
+        trend: overallScore > 70 ? 'up' : overallScore > 50 ? 'stable' : 'down',
+        change: Math.floor(Math.random() * 6) - 3,
+        changePercent: Math.floor(Math.random() * 8),
+        status,
+        color: status === 'excellent' ? '#10b981' : status === 'good' ? '#3b82f6' : status === 'warning' ? '#f59e0b' : '#ef4444',
+        description: `AI-powered authority analysis for ${domain}: ${authorityAnalysis.expertiseLevel} level with ${aiPrediction.confidence}% confidence`,
+        lastUpdated: new Date(apiData.analyzedAt)
+      },
+      platforms: generateRealPlatformScores(url, overallScore, apiData, 0),
+      signalGroups: generateCompleteSignalGroups(apiData, componentScores),
+      recommendations: aiRecommendations,
+      aiAnalysis: {
+        content: contentAnalysis,
+        authority: authorityAnalysis,
+        seo: seoAnalysis,
+        prediction: aiPrediction
+      },
+      trend: {
+        direction: overallScore > 70 ? 'up' : overallScore > 50 ? 'stable' : 'down',
+        velocity: 0.02 + (Math.random() * 0.06),
+        acceleration: 0.005 + (Math.random() * 0.015),
+        volatility: 3 + Math.floor(Math.random() * 8),
+        confidence: aiPrediction.confidence,
+        prediction: {
+          nextValue: aiPrediction.score,
+          confidence: aiPrediction.confidence,
+          timeframe: '30 days',
+          factors: aiPrediction.factors
+        },
+        data: trendData
+      },
+      componentScores,
+      rawData: apiData
     }
   }
+
+  const getRealisticBacklinkScore = (domain: string): number => {
+    const domainScores: Record<string, number> = {
+      'google.com': 95,
+      'microsoft.com': 92,
+      'apple.com': 90,
+      'amazon.com': 88,
+      'facebook.com': 85,
+      'twitter.com': 82,
+      'linkedin.com': 80,
+      'github.com': 78,
+      'stackoverflow.com': 75,
+      'wikipedia.org': 85,
+      'nytimes.com': 82,
+      'bbc.com': 80,
+      'cnn.com': 75,
+      'openai.com': 70,
+      'anthropic.com': 65,
+      'neuralcommandllc.com': 35,
+    }
+    if (domainScores[domain]) {
+      return domainScores[domain]
+    }
+    for (const [key, score] of Object.entries(domainScores)) {
+      if (domain.includes(key)) {
+        return score
+      }
+    }
+    const hash = domain.split('').reduce((a, b) => a + b.charCodeAt(0), 0)
+    return 20 + (hash % 25)
+  }
+
+  const generateCompleteSignalGroups = (apiData: any, componentScores: any) => {
+    const { pageSpeed, ssl, content } = apiData
+    return [
+      {
+        category: 'technical',
+        signals: [
+          {
+            id: 'ssl-certificate',
+            name: 'SSL Certificate', 
+            category: 'technical',
+            strength: ssl.score,
+            status: ssl.hasSSL ? 'good' : 'critical',
+            description: ssl.recommendation,
+            trend: 'stable',
+            impact: 'high',
+            priority: ssl.hasSSL ? 'low' : 'critical',
+            recommendations: [],
+            lastUpdated: new Date(apiData.analyzedAt)
+          },
+          {
+            id: 'page-speed',
+            name: 'Page Speed',
+            category: 'technical',
+            strength: pageSpeed.performanceScore,
+            status: (pageSpeed.performanceScore > 75 ? 'good' : pageSpeed.performanceScore > 50 ? 'warning' : 'poor'),
+            description: `Performance score: ${pageSpeed.performanceScore}%. Load time: ${(pageSpeed.loadTime / 1000).toFixed(1)}s`,
+            trend: 'stable',
+            impact: 'high',
+            priority: pageSpeed.performanceScore < 60 ? 'high' : 'medium',
+            recommendations: [],
+            lastUpdated: new Date(apiData.analyzedAt)
+          },
+          {
+            id: 'core-web-vitals',
+            name: 'Core Web Vitals',
+            category: 'technical',
+            strength: Math.round((pageSpeed.coreWebVitals.lcp < 2500 ? 80 : 40) * 0.5 + (pageSpeed.coreWebVitals.cls < 0.1 ? 80 : 40) * 0.5),
+            status: (pageSpeed.coreWebVitals.lcp < 2500 && pageSpeed.coreWebVitals.cls < 0.1) ? 'good' : 'warning',
+            description: `LCP: ${(pageSpeed.coreWebVitals.lcp / 1000).toFixed(1)}s, CLS: ${pageSpeed.coreWebVitals.cls.toFixed(2)}`,
+            trend: 'stable',
+            impact: 'high',
+            priority: 'medium',
+            recommendations: [],
+            lastUpdated: new Date(apiData.analyzedAt)
+          }
+        ],
+        overallStrength: componentScores.technical,
+        status: componentScores.technical > 75 ? 'good' : 'warning',
+        description: `Technical performance: ${componentScores.technical}%`,
+        priority: 'high'
+      },
+      {
+        category: 'content',
+        signals: [
+          {
+            id: 'title-optimization',
+            name: 'Title Tag',
+            category: 'content',
+            strength: content.hasTitle && content.titleLength >= 30 && content.titleLength <= 60 ? 90 : content.hasTitle ? 60 : 0,
+            status: (content.hasTitle && content.titleLength >= 30 && content.titleLength <= 60) ? 'good' : content.hasTitle ? 'warning' : 'poor',
+            description: content.hasTitle ? `"${content.title}" (${content.titleLength} chars)` : 'Missing title tag',
+            trend: 'stable',
+            impact: 'high',
+            priority: content.hasTitle ? 'low' : 'critical',
+            recommendations: [],
+            lastUpdated: new Date(apiData.analyzedAt)
+          },
+          {
+            id: 'meta-description',
+            name: 'Meta Description',
+            category: 'content',
+            strength: content.hasMetaDescription && content.descriptionLength >= 120 && content.descriptionLength <= 160 ? 90 : content.hasMetaDescription ? 60 : 0,
+            status: (content.hasMetaDescription && content.descriptionLength >= 120 && content.descriptionLength <= 160) ? 'good' : content.hasMetaDescription ? 'warning' : 'poor',
+            description: content.hasMetaDescription ? `"${content.description}" (${content.descriptionLength} chars)` : 'Missing meta description',
+            trend: 'stable',
+            impact: 'medium',
+            priority: content.hasMetaDescription ? 'low' : 'high',
+            recommendations: [],
+            lastUpdated: new Date(apiData.analyzedAt)
+          },
+          {
+            id: 'heading-structure',
+            name: 'Heading Structure',
+            category: 'content',
+            strength: content.headingStructure?.h1Count === 1 && content.headingStructure?.h2Count > 0 ? 90 : 60,
+            status: content.headingStructure?.h1Count === 1 && content.headingStructure?.h2Count > 0 ? 'good' : 'warning',
+            description: `H1: ${content.headingStructure?.h1Count || 0}, H2: ${content.headingStructure?.h2Count || 0}`,
+            trend: 'stable',
+            impact: 'medium',
+            priority: 'medium',
+            recommendations: [],
+            lastUpdated: new Date(apiData.analyzedAt)
+          }
+        ],
+        overallStrength: componentScores.content,
+        status: componentScores.content > 75 ? 'good' : 'warning',
+        description: `Content quality: ${componentScores.content}%`,
+        priority: 'high'
+      },
+      {
+        category: 'seo',
+        signals: [
+          {
+            id: 'seo-score',
+            name: 'SEO Score',
+            category: 'seo',
+            strength: componentScores.seo,
+            status: componentScores.seo > 75 ? 'good' : 'warning',
+            description: `SEO score: ${componentScores.seo}%`,
+            trend: 'stable',
+            impact: 'high',
+            priority: 'high',
+            recommendations: [],
+            lastUpdated: new Date(apiData.analyzedAt)
+          }
+        ],
+        overallStrength: componentScores.seo,
+        status: componentScores.seo > 75 ? 'good' : 'warning',
+        description: `SEO performance: ${componentScores.seo}%`,
+        priority: 'high'
+      },
+      {
+        category: 'backlink',
+        signals: [
+          {
+            id: 'backlink-score',
+            name: 'Backlink Score',
+            category: 'backlink',
+            strength: componentScores.backlink,
+            status: componentScores.backlink > 60 ? 'good' : 'warning',
+            description: `Backlink score: ${componentScores.backlink}%`,
+            trend: 'stable',
+            impact: 'medium',
+            priority: 'medium',
+            recommendations: [],
+            lastUpdated: new Date(apiData.analyzedAt)
+          }
+        ],
+        overallStrength: componentScores.backlink,
+        status: componentScores.backlink > 60 ? 'good' : 'warning',
+        description: `Backlink authority: ${componentScores.backlink}%`,
+        priority: 'medium'
+      }
+    ]
+  }
+  // === END: Copied from Authority tool ===
 
   const analyzeBatch = useCallback(async (urls: string[], options = { concurrent: 2 }) => {
     setIsAnalyzing(true)
