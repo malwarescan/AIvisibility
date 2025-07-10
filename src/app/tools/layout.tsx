@@ -65,7 +65,12 @@ export default function ToolsLayout({
         activeTool={activeTool}
         onToolChange={handleToolChange}
       />
-      <main className="flex-1 p-4 lg:p-8 lg:pl-72">
+      <main className="
+        p-4                    /* Mobile: 16px padding all sides */
+        sm:p-6                 /* Small screens: 24px padding */
+        lg:p-8                 /* Desktop: 32px padding top/right/bottom */
+        lg:pl-80               /* Desktop: 320px left padding (sidebar + gap) */
+      ">
         {children}
       </main>
     </div>
