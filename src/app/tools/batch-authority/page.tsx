@@ -34,20 +34,7 @@ export default function BatchAuthorityPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="flex">
-        <Sidebar 
-          tools={[
-            { id: 'authority', name: 'Authority Monitor', href: '/tools/authority' },
-            { id: 'batch-authority', name: 'Batch Authority', href: '/tools/batch-authority', active: true },
-            { id: 'auditor', name: 'AI Auditor', href: '/tools/auditor' },
-            { id: 'analytics', name: 'Analytics', href: '/tools/analytics' },
-            { id: 'connect', name: 'AgentConnect', href: '/tools/connect' },
-            { id: 'querymind', name: 'QueryMind', href: '/tools/querymind' },
-            { id: 'agentrank', name: 'AgentRank', href: '/tools/agentrank' },
-            { id: 'citationflow', name: 'CitationFlow', href: '/tools/citationflow' }
-          ]}
-          activeTool="batch-authority"
-          onToolChange={(tool) => window.location.href = `/tools/${tool}`}
-        />
+        <Sidebar />
 
         <div className="flex-1 overflow-hidden">
           <Header
