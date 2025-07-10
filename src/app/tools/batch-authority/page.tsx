@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { Header } from '@/components/tools/shared/Header'
 import { Sidebar } from '@/components/tools/shared/Sidebar'
 import { BatchUrlInput } from '@/components/tools/batch/BatchUrlInput'
+import { BatchProgress } from '@/components/tools/batch/BatchProgress'
 import { useBatchAnalysis } from '@/hooks/useBatchAnalysis'
 
 export default function BatchAuthorityPage() {
@@ -52,40 +53,14 @@ export default function BatchAuthorityPage() {
             />
 
             {/* Progress Section */}
-            {isAnalyzing && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  Analysis Progress
-                </h3>
-                <div className="space-y-4">
-                  <div className="flex justify-between text-sm text-gray-600">
-                    <span>Progress: {progress.currentProgress}%</span>
-                    <span>{progress.completedUrls} / {progress.totalUrls} URLs</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                      style={{ width: `${progress.currentProgress}%` }}
-                    />
-                  </div>
-                  {progress.currentUrl && (
-                    <p className="text-sm text-gray-600">
-                      Currently analyzing: {progress.currentUrl}
-                    </p>
-                  )}
-                  {progress.errors.length > 0 && (
-                    <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-                      <h4 className="text-sm font-medium text-red-800 mb-2">Errors:</h4>
-                      <ul className="text-sm text-red-700 space-y-1">
-                        {progress.errors.map((error, index) => (
-                          <li key={index}>{error}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
+            <BatchProgress
+              isVisible={isAnalyzing}
+              totalUrls={progress.totalUrls}
+              completedUrls={progress.completedUrls}
+              currentUrl={progress.currentUrl}
+              currentProgress={progress.currentProgress}
+              errors={progress.errors}
+            />
 
             {/* Results Section */}
             {results.length > 0 && (
