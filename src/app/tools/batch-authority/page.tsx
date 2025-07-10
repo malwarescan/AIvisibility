@@ -3,11 +3,20 @@
 import React, { useState } from 'react'
 import { Header } from '@/components/tools/shared/Header'
 import { Sidebar } from '@/components/tools/shared/Sidebar'
+import { BatchUrlInput } from '@/components/tools/batch/BatchUrlInput'
+import { useBatchAnalysis } from '@/hooks/useBatchAnalysis'
 
 export default function BatchAuthorityPage() {
   const [urls, setUrls] = useState<string[]>([''])
-  const [isAnalyzing, setIsAnalyzing] = useState(false)
-  const [batchResults, setBatchResults] = useState<any>(null)
+  const { isAnalyzing, progress, results, analyzeBatch, reset } = useBatchAnalysis()
+
+  const handleAnalyze = async (urlsToAnalyze: string[]) => {
+    try {
+      await analyzeBatch(urlsToAnalyze)
+    } catch (error) {
+      console.error('Batch analysis failed:', error)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -24,7 +33,7 @@ export default function BatchAuthorityPage() {
             { id: 'citationflow', name: 'CitationFlow', href: '/tools/citationflow' }
           ]}
           activeTool="batch-authority"
-          onToolChange={(tool) => window.location.href = `/tools/${tool}`}
+          onToolChange={(tool: string) => window.location.href = `/tools/${tool}`}
         />
 
         <div className="flex-1 overflow-hidden">
@@ -35,62 +44,80 @@ export default function BatchAuthorityPage() {
 
           <div className="p-6 space-y-6">
             {/* URL Input Section */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Website URLs to Analyze
-              </h3>
-              
-              <div className="space-y-3">
-                {urls.map((url, index) => (
-                  <div key={index} className="flex gap-3">
-                    <input
-                      type="url"
-                      value={url}
-                      onChange={(e) => {
-                        const newUrls = [...urls]
-                        newUrls[index] = e.target.value
-                        setUrls(newUrls)
-                      }}
-                      placeholder={`Website URL ${index + 1} (e.g., https://example.com)`}
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    />
-                    {urls.length > 1 && (
-                      <button
-                        onClick={() => setUrls(urls.filter((_, i) => i !== index))}
-                        className="px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg"
-                      >
-                        Remove
-                      </button>
-                    )}
+            <BatchUrlInput
+              urls={urls}
+              onChange={setUrls}
+              onAnalyze={handleAnalyze}
+              isAnalyzing={isAnalyzing}
+            />
+
+            {/* Progress Section */}
+            {isAnalyzing && (
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Analysis Progress
+                </h3>
+                <div className="space-y-4">
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>Progress: {progress.currentProgress}%</span>
+                    <span>{progress.completedUrls} / {progress.totalUrls} URLs</span>
                   </div>
-                ))}
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${progress.currentProgress}%` }}
+                    />
+                  </div>
+                  {progress.currentUrl && (
+                    <p className="text-sm text-gray-600">
+                      Currently analyzing: {progress.currentUrl}
+                    </p>
+                  )}
+                  {progress.errors.length > 0 && (
+                    <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                      <h4 className="text-sm font-medium text-red-800 mb-2">Errors:</h4>
+                      <ul className="text-sm text-red-700 space-y-1">
+                        {progress.errors.map((error, index) => (
+                          <li key={index}>{error}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
               </div>
+            )}
 
-              <div className="flex gap-3 mt-4">
-                <button
-                  onClick={() => setUrls([...urls, ''])}
-                  className="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg border border-blue-200"
-                >
-                  + Add Another URL
-                </button>
-                
-                <button
-                  onClick={() => {/* TODO: Implement batch analysis */}}
-                  disabled={isAnalyzing || !urls.some(url => url.trim())}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isAnalyzing ? 'Analyzing...' : 'Analyze All URLs'}
-                </button>
-              </div>
-            </div>
-
-            {/* Results Section - Placeholder */}
-            {batchResults && (
+            {/* Results Section */}
+            {results.length > 0 && (
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
                   Batch Analysis Results
                 </h3>
-                <p className="text-gray-600">Results will appear here...</p>
+                <div className="space-y-4">
+                  {results.map((result, index) => (
+                    <div key={index} className="p-4 border border-gray-200 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <h4 className="font-medium text-gray-900">{result.url}</h4>
+                        <span className={`px-2 py-1 text-xs rounded-full ${
+                          result.success 
+                            ? 'bg-green-100 text-green-800' 
+                            : 'bg-red-100 text-red-800'
+                        }`}>
+                          {result.success ? 'Success' : 'Failed'}
+                        </span>
+                      </div>
+                      {result.success ? (
+                        <p className="text-sm text-gray-600">
+                          Analysis completed successfully
+                        </p>
+                      ) : (
+                        <p className="text-sm text-red-600">
+                          Error: {result.error}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
