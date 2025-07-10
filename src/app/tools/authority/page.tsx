@@ -6,8 +6,6 @@ import { StatusIndicator } from '@/components/ui/StatusIndicator';
 import { AnalysisProgress } from '@/components/ui/AnalysisProgress';
 import { AgenticNotification } from '@/components/ui/AgenticNotification';
 import OpenAIService from '@/lib/ai/OpenAIService';
-import { Sidebar } from '@/components/tools/shared/Sidebar';
-import { Header } from '@/components/tools/shared/Header';
 
 export default function AuthorityPage() {
   const [selectedSignal, setSelectedSignal] = useState('all');
@@ -850,394 +848,367 @@ export default function AuthorityPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Sidebar - Fixed on desktop, overlay on mobile */}
-      <Sidebar 
-        tools={[
-          { id: 'authority', name: 'Authority Monitor', href: '/tools/authority', active: true },
-          { id: 'batch-authority', name: 'Batch Authority', href: '/tools/batch-authority' },
-          { id: 'auditor', name: 'AI Auditor', href: '/tools/auditor' },
-          { id: 'analytics', name: 'Analytics', href: '/tools/analytics' },
-          { id: 'connect', name: 'AgentConnect', href: '/tools/connect' },
-          { id: 'querymind', name: 'QueryMind', href: '/tools/querymind' },
-          { id: 'agentrank', name: 'AgentRank', href: '/tools/agentrank' },
-          { id: 'citationflow', name: 'CitationFlow', href: '/tools/citationflow' }
-        ]}
-        activeTool="authority"
-        onToolChange={(tool: string) => window.location.href = `/tools/${tool}`}
+    <div className="space-y-6">
+      
+      {/* 🔒 PROTECTED: WORKING AGENTIC NOTIFICATION SYSTEM - DO NOT MODIFY */}
+      {/* This notification system is PERFECT and should not be changed */}
+      <AgenticNotification 
+        isVisible={showAgenticNotification}
+        onDismiss={() => setShowAgenticNotification(false)}
       />
 
-      {/* Main content area - Responsive margin for sidebar */}
-      <div className="lg:pl-72">
-        {/* Header */}
-        <Header />
+      {/* URL Input Section */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Website Analysis
+        </h3>
+        
+        <div className="space-y-4">
+          <div>
+            <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-2">
+              Enter Website URL
+            </label>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <input
+                type="url"
+                id="url"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="https://example.com"
+                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                disabled={isAnalyzing}
+              />
+              <button
+                onClick={handleAnalyze}
+                disabled={isAnalyzing || !url.trim()}
+                className="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+              >
+                {isAnalyzing ? 'Analyzing...' : 'Analyze Website'}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        {/* Main content with mobile-friendly padding */}
-        <main className="px-4 py-6 sm:px-6 lg:px-8">
-          <div className="space-y-6">
+      {/* 🔒 PROTECTED: IN-PAGE NOTIFICATION BANNER - DO NOT MODIFY */}
+      {showAgenticNotification && (
+        <div className="bg-gradient-to-r from-blue-50 via-purple-50 to-blue-50 border border-blue-200 rounded-2xl p-6">
+          <div className="flex items-center space-x-4">
+            <div className="flex-shrink-0">
+              <div className="flex space-x-1">
+                {[1, 2, 3, 4].map((agent) => (
+                  <div
+                    key={agent}
+                    className={`w-3 h-3 rounded-full animate-bounce ${
+                      agent === 1 ? 'bg-blue-500' :
+                      agent === 2 ? 'bg-purple-500' :
+                      agent === 3 ? 'bg-green-500' : 'bg-yellow-500'
+                    }`}
+                    style={{ animationDelay: `${agent * 0.1}s` }}
+                  />
+                ))}
+              </div>
+            </div>
             
-            {/* 🔒 PROTECTED: WORKING AGENTIC NOTIFICATION SYSTEM - DO NOT MODIFY */}
-            {/* This notification system is PERFECT and should not be changed */}
-            <AgenticNotification 
-              isVisible={showAgenticNotification}
-              onDismiss={() => setShowAgenticNotification(false)}
-            />
-
-            {/* URL Input Section */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Website Analysis
+            <div className="flex-1">
+              <h3 className="font-semibold text-gray-900 mb-1">
+                Our Agentic Intelligence Agents Are Crunching Numbers
               </h3>
-              
-              <div className="space-y-4">
-                <div>
-                  <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-2">
-                    Enter Website URL
-                  </label>
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <input
-                      type="url"
-                      id="url"
-                      value={url}
-                      onChange={(e) => setUrl(e.target.value)}
-                      placeholder="https://example.com"
-                      className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      disabled={isAnalyzing}
-                    />
-                    <button
-                      onClick={handleAnalyze}
-                      disabled={isAnalyzing || !url.trim()}
-                      className="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-                    >
-                      {isAnalyzing ? 'Analyzing...' : 'Analyze Website'}
-                    </button>
+              <p className="text-sm text-gray-600">
+                Neural Command's AI agents are analyzing {url} across 500+ authority signals. 
+                Sit tight while our agentic systems discover optimization opportunities!
+              </p>
+            </div>
+            
+            <div className="flex-shrink-0">
+              <div className="text-right">
+                <div className="text-sm font-medium text-blue-600">4 Agents Active</div>
+                <div className="text-xs text-gray-500">Processing...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Analysis Progress Display */}
+      <AnalysisProgress 
+        isVisible={showProgress}
+        analysisUrl={url}
+        onComplete={() => {
+          console.log('Analysis progress complete');
+        }}
+      />
+
+      {/* Loading State (fallback) */}
+      {isAnalyzing && !showProgress && (
+        <div className="text-center py-12">
+          <div className="text-gray-600 text-lg mb-4">
+            Analyzing website authority signals...
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div 
+              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+              style={{ width: `${loadingState.progress}%` }}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Error State */}
+      {errorState && (
+        <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+          <strong>Analysis Error:</strong> {errorState.error.message}
+        </div>
+      )}
+
+      {/* Enhanced Results Section with Real Insights */}
+      {analysisComplete && analysisData && (
+        <div className="space-y-6">
+          
+          {/* Overall Authority Score with Detailed Explanation */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Overall Authority Score</h2>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Main Score */}
+              <div className="lg:col-span-1">
+                <div className="text-center">
+                  <div className={`text-5xl font-bold mb-2 ${
+                    analysisData.overall?.score > 80 ? 'text-green-600' :
+                    analysisData.overall?.score > 65 ? 'text-blue-600' :
+                    analysisData.overall?.score > 50 ? 'text-yellow-600' : 'text-red-600'
+                  }`}>
+                    {analysisData.overall?.score || 0}
                   </div>
+                  <div className="text-lg font-medium text-gray-700 mb-4">
+                    {analysisData.overall?.status ? analysisData.overall.status.charAt(0).toUpperCase() + analysisData.overall.status.slice(1) : 'Unknown'} Authority
+                  </div>
+                  <div className="flex items-center justify-center space-x-2">
+                    <span className={`text-sm font-medium ${
+                      analysisData.overall?.trend === 'up' ? 'text-green-600' :
+                      analysisData.overall?.trend === 'down' ? 'text-red-600' : 'text-gray-600'
+                    }`}>
+                      {analysisData.overall?.trend === 'up' ? '↗' : 
+                       analysisData.overall?.trend === 'down' ? '↘' : '→'} 
+                      {analysisData.overall?.change > 0 ? '+' : ''}{analysisData.overall?.change || 0}% trend
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Enhanced Authority Score Breakdown with Debug & Fallback */}
+              <div className="lg:col-span-2">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Authority Score Breakdown</h3>
+                
+                {/* Debug: Log what data we have */}
+                {(() => {
+                  console.log('🔧 DEBUG - analysisData:', analysisData)
+                  console.log('🔧 DEBUG - componentScores:', analysisData?.componentScores)
+                  return null
+                })()}
+                
+                <div className="space-y-4">
+                  {(() => {
+                    // Use componentScores if available, otherwise create fallback
+                    const scores = analysisData?.componentScores || {
+                      performance: analysisData?.rawData?.pageSpeed?.performanceScore || 65,
+                      content: 70,
+                      seo: analysisData?.rawData?.pageSpeed?.seoScore || 75,
+                      technical: analysisData?.rawData?.ssl?.hasSSL ? 85 : 60,
+                      backlink: 55
+                    }
+                    
+                    return Object.entries(scores).map(([key, score]) => (
+                      <div key={key} className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <span className="font-medium text-gray-700 capitalize">
+                            {key === 'backlink' ? 'Backlinks' : key}
+                          </span>
+                          <span className="text-sm text-gray-500">
+                            {getScoreExplanation(key, score as number)}
+                          </span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-32 bg-gray-200 rounded-full h-2">
+                            <div 
+                              className={`h-2 rounded-full transition-all duration-500 ${getScoreColor(score as number)}`}
+                              style={{ width: `${score}%` }}
+                            />
+                          </div>
+                          <span className="font-medium text-gray-900 w-12 text-right">{Math.round(score as number)}%</span>
+                        </div>
+                      </div>
+                    ))
+                  })()}
                 </div>
               </div>
             </div>
 
-            {/* 🔒 PROTECTED: IN-PAGE NOTIFICATION BANNER - DO NOT MODIFY */}
-            {showAgenticNotification && (
-              <div className="bg-gradient-to-r from-blue-50 via-purple-50 to-blue-50 border border-blue-200 rounded-2xl p-6">
-                <div className="flex items-center space-x-4">
-                  <div className="flex-shrink-0">
-                    <div className="flex space-x-1">
-                      {[1, 2, 3, 4].map((agent) => (
-                        <div
-                          key={agent}
-                          className={`w-3 h-3 rounded-full animate-bounce ${
-                            agent === 1 ? 'bg-blue-500' :
-                            agent === 2 ? 'bg-purple-500' :
-                            agent === 3 ? 'bg-green-500' : 'bg-yellow-500'
-                          }`}
-                          style={{ animationDelay: `${agent * 0.1}s` }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900 mb-1">
-                      Our Agentic Intelligence Agents Are Crunching Numbers
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      Neural Command's AI agents are analyzing {url} across 500+ authority signals. 
-                      Sit tight while our agentic systems discover optimization opportunities!
-                    </p>
-                  </div>
-                  
-                  <div className="flex-shrink-0">
-                    <div className="text-right">
-                      <div className="text-sm font-medium text-blue-600">4 Agents Active</div>
-                      <div className="text-xs text-gray-500">Processing...</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+            {/* Authority Explanation */}
+            <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+              <h4 className="font-semibold text-blue-900 mb-2">What This Score Means</h4>
+              <p className="text-blue-800 text-sm leading-relaxed">
+                {getAuthorityExplanation(analysisData.overall?.score || 0)}
+              </p>
+            </div>
+          </div>
 
-            {/* Analysis Progress Display */}
-            <AnalysisProgress 
-              isVisible={showProgress}
-              analysisUrl={url}
-              onComplete={() => {
-                console.log('Analysis progress complete');
-              }}
-            />
-
-            {/* Loading State (fallback) */}
-            {isAnalyzing && !showProgress && (
-              <div className="text-center py-12">
-                <div className="text-gray-600 text-lg mb-4">
-                  Analyzing website authority signals...
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${loadingState.progress}%` }}
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* Error State */}
-            {errorState && (
-              <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-                <strong>Analysis Error:</strong> {errorState.error.message}
-              </div>
-            )}
-
-            {/* Enhanced Results Section with Real Insights */}
-            {analysisComplete && analysisData && (
-              <div className="space-y-6">
-                
-                {/* Overall Authority Score with Detailed Explanation */}
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-4">Overall Authority Score</h2>
-                  
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Main Score */}
-                    <div className="lg:col-span-1">
-                      <div className="text-center">
-                        <div className={`text-5xl font-bold mb-2 ${
-                          analysisData.overall?.score > 80 ? 'text-green-600' :
-                          analysisData.overall?.score > 65 ? 'text-blue-600' :
-                          analysisData.overall?.score > 50 ? 'text-yellow-600' : 'text-red-600'
-                        }`}>
-                          {analysisData.overall?.score || 0}
-                        </div>
-                        <div className="text-lg font-medium text-gray-700 mb-4">
-                          {analysisData.overall?.status ? analysisData.overall.status.charAt(0).toUpperCase() + analysisData.overall.status.slice(1) : 'Unknown'} Authority
-                        </div>
-                        <div className="flex items-center justify-center space-x-2">
-                          <span className={`text-sm font-medium ${
-                            analysisData.overall?.trend === 'up' ? 'text-green-600' :
-                            analysisData.overall?.trend === 'down' ? 'text-red-600' : 'text-gray-600'
-                          }`}>
-                            {analysisData.overall?.trend === 'up' ? '↗' : 
-                             analysisData.overall?.trend === 'down' ? '↘' : '→'} 
-                            {analysisData.overall?.change > 0 ? '+' : ''}{analysisData.overall?.change || 0}% trend
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Enhanced Authority Score Breakdown with Debug & Fallback */}
-                    <div className="lg:col-span-2">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Authority Score Breakdown</h3>
-                      
-                      {/* Debug: Log what data we have */}
-                      {(() => {
-                        console.log('🔧 DEBUG - analysisData:', analysisData)
-                        console.log('🔧 DEBUG - componentScores:', analysisData?.componentScores)
-                        return null
-                      })()}
-                      
-                      <div className="space-y-4">
-                        {(() => {
-                          // Use componentScores if available, otherwise create fallback
-                          const scores = analysisData?.componentScores || {
-                            performance: analysisData?.rawData?.pageSpeed?.performanceScore || 65,
-                            content: 70,
-                            seo: analysisData?.rawData?.pageSpeed?.seoScore || 75,
-                            technical: analysisData?.rawData?.ssl?.hasSSL ? 85 : 60,
-                            backlink: 55
-                          }
-                          
-                          return Object.entries(scores).map(([key, score]) => (
-                            <div key={key} className="flex items-center justify-between">
-                              <div className="flex items-center space-x-3">
-                                <span className="font-medium text-gray-700 capitalize">
-                                  {key === 'backlink' ? 'Backlinks' : key}
-                                </span>
-                                <span className="text-sm text-gray-500">
-                                  {getScoreExplanation(key, score as number)}
-                                </span>
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                <div className="w-32 bg-gray-200 rounded-full h-2">
-                                  <div 
-                                    className={`h-2 rounded-full transition-all duration-500 ${getScoreColor(score as number)}`}
-                                    style={{ width: `${score}%` }}
-                                  />
-                                </div>
-                                <span className="font-medium text-gray-900 w-12 text-right">{Math.round(score as number)}%</span>
-                              </div>
-                            </div>
-                          ))
-                        })()}
-                      </div>
+          {/* Platform Scores */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">AI Platform Authority Scores</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {analysisData.platforms && analysisData.platforms.map((platform: any) => (
+                <div key={platform.id} className="border border-gray-200 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="font-semibold text-gray-900 text-sm">{platform.name}</h3>
+                    <div className={`px-2 py-1 rounded text-xs font-medium ${
+                      platform.status === 'excellent' ? 'bg-green-100 text-green-800' :
+                      platform.status === 'good' ? 'bg-blue-100 text-blue-800' :
+                      platform.status === 'warning' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-red-100 text-red-800'
+                    }`}>
+                      {platform.status}
                     </div>
                   </div>
 
-                  {/* Authority Explanation */}
-                  <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                    <h4 className="font-semibold text-blue-900 mb-2">What This Score Means</h4>
-                    <p className="text-blue-800 text-sm leading-relaxed">
-                      {getAuthorityExplanation(analysisData.overall?.score || 0)}
-                    </p>
+                  <div className="text-2xl font-bold text-gray-900 mb-2">
+                    {platform.score}%
                   </div>
-                </div>
 
-                {/* Platform Scores */}
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-4">AI Platform Authority Scores</h2>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {analysisData.platforms && analysisData.platforms.map((platform: any) => (
-                      <div key={platform.id} className="border border-gray-200 rounded-lg p-4">
-                        <div className="flex items-center justify-between mb-3">
-                          <h3 className="font-semibold text-gray-900 text-sm">{platform.name}</h3>
-                          <div className={`px-2 py-1 rounded text-xs font-medium ${
-                            platform.status === 'excellent' ? 'bg-green-100 text-green-800' :
-                            platform.status === 'good' ? 'bg-blue-100 text-blue-800' :
-                            platform.status === 'warning' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
-                            {platform.status}
-                          </div>
-                        </div>
+                  <p className="text-xs text-gray-600 mb-3">
+                    {getPlatformExplanation(platform.name, platform.score)}
+                  </p>
 
-                        <div className="text-2xl font-bold text-gray-900 mb-2">
-                          {platform.score}%
-                        </div>
-
-                        <p className="text-xs text-gray-600 mb-3">
-                          {getPlatformExplanation(platform.name, platform.score)}
-                        </p>
-
-                        {/* Platform Metrics */}
-                        <div className="space-y-1">
-                          {platform.metrics && Object.entries(platform.metrics).map(([metric, value]) => (
-                            <div key={metric} className="flex justify-between text-xs">
-                              <span className="text-gray-500 capitalize">{metric}</span>
-                              <span className="font-medium">{String(value)}%</span>
-                            </div>
-                          ))}
-                        </div>
+                  {/* Platform Metrics */}
+                  <div className="space-y-1">
+                    {platform.metrics && Object.entries(platform.metrics).map(([metric, value]) => (
+                      <div key={metric} className="flex justify-between text-xs">
+                        <span className="text-gray-500 capitalize">{metric}</span>
+                        <span className="font-medium">{String(value)}%</span>
                       </div>
                     ))}
                   </div>
-
-                  {/* Platform Insights */}
-                  <div className="mt-6 p-4 bg-green-50 rounded-lg">
-                    <h4 className="font-semibold text-green-900 mb-2">Platform Optimization Insights</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-green-800">
-                      <div>
-                        <span className="font-medium">Best Performing:</span> {getBestPlatform(analysisData.platforms)}
-                      </div>
-                      <div>
-                        <span className="font-medium">Improvement Opportunity:</span> {getWorstPlatform(analysisData.platforms)}
-                      </div>
-                    </div>
-                  </div>
                 </div>
+              ))}
+            </div>
 
-                {/* Recommendations */}
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-4">Authority Improvement Recommendations</h2>
-                  
-                  {analysisData.recommendations && analysisData.recommendations.length > 0 ? (
-                    <div className="space-y-4">
-                      {analysisData.recommendations.map((rec: any, index: number) => (
-                        <div key={index} className="border border-gray-200 rounded-lg p-4">
-                          <div className="flex items-start justify-between mb-3">
-                            <div className="flex-1">
-                              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                                {rec.title || `Recommendation ${index + 1}`}
-                              </h3>
-                              <p className="text-gray-600 text-sm">
-                                {rec.description || rec}
-                              </p>
-                            </div>
-                            <div className="ml-4 text-right">
-                              <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                                rec.priority === 'critical' ? 'bg-red-100 text-red-800' :
-                                rec.priority === 'high' ? 'bg-orange-100 text-orange-800' :
-                                rec.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                                'bg-green-100 text-green-800'
-                              }`}>
-                                {rec.priority || 'Medium'} Priority
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="grid grid-cols-3 gap-4 text-sm">
-                            <div>
-                              <span className="font-medium text-gray-700">Impact:</span>
-                              <span className="ml-2 text-gray-600">{rec.impact || 'High'}</span>
-                            </div>
-                            <div>
-                              <span className="font-medium text-gray-700">Effort:</span>
-                              <span className="ml-2 text-gray-600">{rec.effort || 'Medium'}</span>
-                            </div>
-                            <div>
-                              <span className="font-medium text-gray-700">Timeframe:</span>
-                              <span className="ml-2 text-gray-600">{rec.estimatedTime || '1-2 weeks'}</span>
-                            </div>
-                          </div>
-
-                          {rec.actionSteps && rec.actionSteps.length > 0 && (
-                            <div className="mt-4">
-                              <h4 className="font-medium text-gray-900 mb-2">Action Steps:</h4>
-                              <ul className="space-y-1">
-                                {rec.actionSteps.map((step: any, stepIndex: number) => (
-                                  <li key={stepIndex} className="flex items-start space-x-2 text-sm text-gray-600">
-                                    <span className="font-medium text-blue-600">{stepIndex + 1}.</span>
-                                    <span>{step}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-8 text-gray-500">
-                      <p>Generating detailed recommendations based on analysis...</p>
-                    </div>
-                  )}
+            {/* Platform Insights */}
+            <div className="mt-6 p-4 bg-green-50 rounded-lg">
+              <h4 className="font-semibold text-green-900 mb-2">Platform Optimization Insights</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-green-800">
+                <div>
+                  <span className="font-medium">Best Performing:</span> {getBestPlatform(analysisData.platforms)}
                 </div>
-
-                {/* Analysis Summary - REAL DATA ONLY */}
-                <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                  <h3 className="text-lg font-semibold text-green-800 mb-2">Real Analysis Complete</h3>
-                  <p className="text-green-700">
-                    Analysis completed for <strong>{analysisData.rawData?.ssl?.domain}</strong>
-                  </p>
-                  <div className="mt-2 text-sm text-green-600">
-                    • Performance: {analysisData.componentScores?.performance}%
-                    • Content: {analysisData.componentScores?.content}%  
-                    • SEO: {analysisData.componentScores?.seo}%
-                    • Technical: {analysisData.componentScores?.technical}%
-                    • Backlinks: {analysisData.componentScores?.backlink}%
-                    • <strong>Overall: {analysisData.overall?.score}%</strong>
-                  </div>
+                <div>
+                  <span className="font-medium">Improvement Opportunity:</span> {getWorstPlatform(analysisData.platforms)}
                 </div>
               </div>
-            )}
-
-            {/* Empty State */}
-            {!analysisData && !isAnalyzing && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 sm:p-12 text-center">
-                <div className="text-5xl sm:text-6xl mb-4">🔍</div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Ready to Analyze
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Enter a website URL above to start analyzing its authority signals.
-                </p>
-                <div className="text-sm text-gray-500 max-w-md mx-auto">
-                  Our AI-powered analysis examines performance, content quality, SEO, 
-                  technical factors, and backlink authority.
-                </div>
-              </div>
-            )}
-            
+            </div>
           </div>
-        </main>
-      </div>
+
+          {/* Recommendations */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Authority Improvement Recommendations</h2>
+            
+            {analysisData.recommendations && analysisData.recommendations.length > 0 ? (
+              <div className="space-y-4">
+                {analysisData.recommendations.map((rec: any, index: number) => (
+                  <div key={index} className="border border-gray-200 rounded-lg p-4">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                          {rec.title || `Recommendation ${index + 1}`}
+                        </h3>
+                        <p className="text-gray-600 text-sm">
+                          {rec.description || rec}
+                        </p>
+                      </div>
+                      <div className="ml-4 text-right">
+                        <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          rec.priority === 'critical' ? 'bg-red-100 text-red-800' :
+                          rec.priority === 'high' ? 'bg-orange-100 text-orange-800' :
+                          rec.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-green-100 text-green-800'
+                        }`}>
+                          {rec.priority || 'Medium'} Priority
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-4 text-sm">
+                      <div>
+                        <span className="font-medium text-gray-700">Impact:</span>
+                        <span className="ml-2 text-gray-600">{rec.impact || 'High'}</span>
+                      </div>
+                      <div>
+                        <span className="font-medium text-gray-700">Effort:</span>
+                        <span className="ml-2 text-gray-600">{rec.effort || 'Medium'}</span>
+                      </div>
+                      <div>
+                        <span className="font-medium text-gray-700">Timeframe:</span>
+                        <span className="ml-2 text-gray-600">{rec.estimatedTime || '1-2 weeks'}</span>
+                      </div>
+                    </div>
+
+                    {rec.actionSteps && rec.actionSteps.length > 0 && (
+                      <div className="mt-4">
+                        <h4 className="font-medium text-gray-900 mb-2">Action Steps:</h4>
+                        <ul className="space-y-1">
+                          {rec.actionSteps.map((step: any, stepIndex: number) => (
+                            <li key={stepIndex} className="flex items-start space-x-2 text-sm text-gray-600">
+                              <span className="font-medium text-blue-600">{stepIndex + 1}.</span>
+                              <span>{step}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                <p>Generating detailed recommendations based on analysis...</p>
+              </div>
+            )}
+          </div>
+
+          {/* Analysis Summary - REAL DATA ONLY */}
+          <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+            <h3 className="text-lg font-semibold text-green-800 mb-2">Real Analysis Complete</h3>
+            <p className="text-green-700">
+              Analysis completed for <strong>{analysisData.rawData?.ssl?.domain}</strong>
+            </p>
+            <div className="mt-2 text-sm text-green-600">
+              • Performance: {analysisData.componentScores?.performance}%
+              • Content: {analysisData.componentScores?.content}%  
+              • SEO: {analysisData.componentScores?.seo}%
+              • Technical: {analysisData.componentScores?.technical}%
+              • Backlinks: {analysisData.componentScores?.backlink}%
+              • <strong>Overall: {analysisData.overall?.score}%</strong>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Empty State */}
+      {!analysisData && !isAnalyzing && (
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 sm:p-12 text-center">
+          <div className="text-5xl sm:text-6xl mb-4">🔍</div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            Ready to Analyze
+          </h3>
+          <p className="text-gray-600 mb-4">
+            Enter a website URL above to start analyzing its authority signals.
+          </p>
+          <div className="text-sm text-gray-500 max-w-md mx-auto">
+            Our AI-powered analysis examines performance, content quality, SEO, 
+            technical factors, and backlink authority.
+          </div>
+        </div>
+      )}
+      
     </div>
   );
 }
