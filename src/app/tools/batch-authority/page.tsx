@@ -5,9 +5,19 @@ import { BatchUrlInput } from '@/components/tools/batch/BatchUrlInput'
 import { BatchProgress } from '@/components/tools/batch/BatchProgress'
 import { BatchComparisonTable } from '@/components/tools/batch/BatchComparisonTable'
 import { BatchExport } from '@/components/tools/batch/BatchExport'
+import { ToolProgressModal } from '@/components/ui/ToolProgressModal'
 import { useBatchAnalysis } from '@/hooks/useBatchAnalysis'
 
 export default function BatchAuthorityPage() {
+  // ADD THIS DEBUG CODE AT THE TOP OF YOUR COMPONENT
+  console.log('🔧 Environment Debug:', {
+    hasOpenAIKey: !!process.env.OPENAI_API_KEY,
+    hasPublicKey: !!process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+    keyPrefix: process.env.OPENAI_API_KEY?.substring(0, 10) || 'NOT_FOUND',
+    publicKeyPrefix: process.env.NEXT_PUBLIC_OPENAI_API_KEY?.substring(0, 10) || 'NOT_FOUND',
+    nodeEnv: process.env.NODE_ENV
+  })
+
   const [urls, setUrls] = useState<string[]>([''])
   const { isAnalyzing, progress, results, analyzeBatch, reset } = useBatchAnalysis()
 
@@ -47,6 +57,17 @@ export default function BatchAuthorityPage() {
             </button>
           )}
         </div>
+
+        {/* Tool Progress Modal */}
+        <ToolProgressModal
+          isVisible={isAnalyzing}
+          toolName="Batch Authority Analyzer"
+          currentUrl={progress.currentUrl}
+          currentProgress={progress.completedUrls}
+          currentStep={progress.currentUrl ? `Analyzing: ${progress.currentUrl}` : 'Preparing batch analysis...'}
+          totalSteps={progress.totalUrls}
+          errors={progress.errors}
+        />
 
         <div className="space-y-6">
           {/* URL Input Section */}
