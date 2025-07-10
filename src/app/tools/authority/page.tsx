@@ -5,6 +5,7 @@ import { MetricsOverview } from '@/components/tools/shared/MetricsOverview';
 import { StatusIndicator } from '@/components/ui/StatusIndicator';
 import { AnalysisProgress } from '@/components/ui/AnalysisProgress';
 import { AgenticNotification } from '@/components/ui/AgenticNotification';
+import { ToolProgressModal } from '@/components/ui/ToolProgressModal';
 import OpenAIService from '@/lib/ai/OpenAIService';
 
 export default function AuthorityPage() {
@@ -17,6 +18,12 @@ export default function AuthorityPage() {
   const [analysisData, setAnalysisData] = useState<any>(null);
   const [showProgress, setShowProgress] = useState(false);
   const [showAgenticNotification, setShowAgenticNotification] = useState(false);
+  const [progressState, setProgressState] = useState({
+    currentStep: '',
+    currentProgress: 0,
+    totalSteps: 4,
+    errors: [] as string[]
+  });
 
   // ============================================================================
   // AUTHORITY DATA GENERATION (Client-side)
@@ -606,10 +613,28 @@ export default function AuthorityPage() {
     setLoadingState({ isLoading: true, progress: 0 })
     setErrorState(undefined)
     setShowProgress(true)
+    
+    // Initialize progress state
+    setProgressState({
+      currentStep: 'Initializing analysis...',
+      currentProgress: 0,
+      totalSteps: 4,
+      errors: []
+    })
 
     try {
-      // Simulate analysis progress
-      await new Promise(resolve => setTimeout(resolve, 8000));
+      // Simulate analysis progress with detailed steps
+      setProgressState(prev => ({ ...prev, currentStep: 'Web crawling and data collection...', currentProgress: 1 }))
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      setProgressState(prev => ({ ...prev, currentStep: 'AI analysis and signal processing...', currentProgress: 2 }))
+      await new Promise(resolve => setTimeout(resolve, 3000));
+
+      setProgressState(prev => ({ ...prev, currentStep: 'Calculating authority scores...', currentProgress: 3 }))
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      setProgressState(prev => ({ ...prev, currentStep: 'Finalizing results...', currentProgress: 4 }))
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
       // Start actual analysis job
       console.log('🚀 Starting analysis job...')
@@ -766,6 +791,7 @@ export default function AuthorityPage() {
             setLoadingState({ isLoading: false, progress: 0 })
             setAnalysisComplete(true)
             setShowProgress(false)
+            setProgressState(prev => ({ ...prev, currentProgress: 0, currentStep: '' }))
           }, 500)
         } catch (transformError) {
           console.error('🔥 Data transformation error:', transformError)
@@ -777,6 +803,7 @@ export default function AuthorityPage() {
           setLoadingState({ isLoading: false, progress: 0 })
           setShowProgress(false)
           setShowAgenticNotification(false) // Hide on error
+          setProgressState(prev => ({ ...prev, currentProgress: 0, currentStep: '', errors: [...prev.errors, 'Data transformation failed'] }))
         }
       } else {
         throw new Error('Analysis did not complete successfully')
@@ -792,6 +819,7 @@ export default function AuthorityPage() {
       setLoadingState({ isLoading: false, progress: 0 })
       setShowProgress(false)
       setShowAgenticNotification(false) // Hide on error
+      setProgressState(prev => ({ ...prev, currentProgress: 0, currentStep: '', errors: [...prev.errors, error instanceof Error ? error.message : 'Analysis failed'] }))
     }
   }
 
@@ -937,6 +965,17 @@ export default function AuthorityPage() {
         onComplete={() => {
           console.log('Analysis progress complete');
         }}
+      />
+
+      {/* Tool Progress Modal */}
+      <ToolProgressModal
+        isVisible={isAnalyzing}
+        toolName="Authority Signal Monitor"
+        currentUrl={url}
+        currentProgress={progressState.currentProgress}
+        currentStep={progressState.currentStep}
+        totalSteps={progressState.totalSteps}
+        errors={progressState.errors}
       />
 
       {/* Loading State (fallback) */}
@@ -1195,7 +1234,11 @@ export default function AuthorityPage() {
       {/* Empty State */}
       {!analysisData && !isAnalyzing && (
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 sm:p-12 text-center">
-          <div className="text-5xl sm:text-6xl mb-4">🔍</div>
+          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
             Ready to Analyze
           </h3>

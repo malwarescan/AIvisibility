@@ -8,6 +8,7 @@ import {
   ExclamationTriangleIcon,
   ClockIcon
 } from '@heroicons/react/24/outline'
+import { ToolProgressModal } from '@/components/ui/ToolProgressModal'
 
 // Step 1: Define data structures (safest first step)
 interface AuditCheck {
@@ -171,6 +172,12 @@ export default function AIReadinessAuditor() {
   const [results, setResults] = useState<AuditResults | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [progressState, setProgressState] = useState({
+    currentStep: '',
+    currentProgress: 0,
+    totalSteps: 4,
+    errors: [] as string[]
+  })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -191,15 +198,35 @@ export default function AIReadinessAuditor() {
 
     setError(null)
     setIsLoading(true)
+    
+    // Initialize progress state
+    setProgressState({
+      currentStep: 'Initializing audit...',
+      currentProgress: 0,
+      totalSteps: 4,
+      errors: []
+    })
 
     try {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      // Simulate audit progress with detailed steps
+      setProgressState(prev => ({ ...prev, currentStep: 'Analyzing technical SEO...', currentProgress: 1 }))
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      setProgressState(prev => ({ ...prev, currentStep: 'Checking content optimization...', currentProgress: 2 }))
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      setProgressState(prev => ({ ...prev, currentStep: 'Evaluating performance metrics...', currentProgress: 3 }))
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      setProgressState(prev => ({ ...prev, currentStep: 'Finalizing audit results...', currentProgress: 4 }))
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       const auditResults = performAudit(url)
       setResults(auditResults)
+      setProgressState(prev => ({ ...prev, currentProgress: 0, currentStep: '' }))
     } catch (err) {
       setError('Failed to perform audit. Please try again.')
+      setProgressState(prev => ({ ...prev, currentProgress: 0, currentStep: '', errors: [...prev.errors, 'Audit failed'] }))
     } finally {
       setIsLoading(false)
     }
@@ -229,6 +256,17 @@ export default function AIReadinessAuditor() {
           </div>
         </div>
       </div>
+
+      {/* Tool Progress Modal */}
+      <ToolProgressModal
+        isVisible={isLoading}
+        toolName="AI-Readiness Auditor"
+        currentUrl={url}
+        currentProgress={progressState.currentProgress}
+        currentStep={progressState.currentStep}
+        totalSteps={progressState.totalSteps}
+        errors={progressState.errors}
+      />
 
       {!results ? (
         /* Audit Form */

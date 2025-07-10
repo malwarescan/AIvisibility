@@ -2,35 +2,37 @@
 
 import React from 'react'
 
-interface BatchProgressProps {
+interface ToolProgressModalProps {
   isVisible: boolean
-  totalUrls: number
-  completedUrls: number
+  toolName: string
   currentUrl: string
   currentProgress: number
+  currentStep: string
+  totalSteps: number
   errors: string[]
 }
 
-export function BatchProgress({ 
+export function ToolProgressModal({ 
   isVisible, 
-  totalUrls, 
-  completedUrls, 
+  toolName,
   currentUrl, 
   currentProgress,
+  currentStep,
+  totalSteps,
   errors 
-}: BatchProgressProps) {
+}: ToolProgressModalProps) {
   if (!isVisible) return null
 
-  const progressPercentage = totalUrls > 0 ? Math.round((completedUrls / totalUrls) * 100) : 0
+  const progressPercentage = Math.round((currentProgress / totalSteps) * 100)
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-gray-900">
-          Batch Analysis Progress
+          {toolName} Analysis Progress
         </h3>
         <div className="text-sm text-gray-600">
-          {completedUrls} of {totalUrls} complete
+          Step {currentProgress} of {totalSteps}
         </div>
       </div>
 
@@ -65,6 +67,23 @@ export function BatchProgress({
         </div>
       )}
 
+      {/* Current Step */}
+      {currentStep && (
+        <div className="mb-4 p-4 bg-green-50 rounded-lg">
+          <div className="flex items-center gap-3">
+            <div className="w-4 h-4 bg-green-500 rounded-full" />
+            <div>
+              <div className="text-sm font-medium text-green-900">
+                Current step:
+              </div>
+              <div className="text-sm text-green-700">
+                {currentStep}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Analysis Steps */}
       <div className="grid grid-cols-4 gap-4 mb-4">
         {[
@@ -88,22 +107,6 @@ export function BatchProgress({
         ))}
       </div>
 
-      {/* Completed URLs List */}
-      {completedUrls > 0 && (
-        <div className="mb-4">
-          <h4 className="text-sm font-medium text-gray-900 mb-2">
-            Completed URLs ({completedUrls})
-          </h4>
-          <div className="max-h-32 overflow-y-auto space-y-1">
-            {/* This will be populated with actual results */}
-            <div className="text-sm text-green-600 flex items-center gap-2">
-              <span className="w-2 h-2 bg-green-500 rounded-full" />
-              Analysis results ready...
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Errors Display */}
       {errors.length > 0 && (
         <div className="mt-4 p-4 bg-red-50 rounded-lg">
@@ -121,10 +124,10 @@ export function BatchProgress({
       )}
 
       {/* Estimated Time Remaining */}
-      {totalUrls > completedUrls && completedUrls > 0 && (
+      {currentProgress < totalSteps && currentProgress > 0 && (
         <div className="mt-4 text-center">
           <div className="text-sm text-gray-600">
-            Estimated time remaining: {Math.ceil((totalUrls - completedUrls) * 15 / 60)} minutes
+            Estimated time remaining: {Math.ceil((totalSteps - currentProgress) * 15 / 60)} minutes
           </div>
         </div>
       )}
