@@ -60,16 +60,14 @@ export default function ToolsLayout({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="flex">
-        <Sidebar 
-          tools={tools}
-          activeTool={activeTool}
-          onToolChange={handleToolChange}
-        />
-        <main className="flex-1 p-4 lg:p-8 lg:pl-8">
-          {children}
-        </main>
-      </div>
+      <Sidebar 
+        tools={tools}
+        activeTool={activeTool}
+        onToolChange={handleToolChange}
+      />
+      <main className="flex-1 p-4 lg:p-8 lg:pl-72">
+        {children}
+      </main>
     </div>
   )
 } 
