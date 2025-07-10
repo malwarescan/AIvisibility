@@ -10,7 +10,7 @@ import { useBatchAnalysis } from '@/hooks/useBatchAnalysis'
 
 export default function BatchAuthorityPage() {
   // ADD THIS DEBUG CODE AT THE TOP OF YOUR COMPONENT
-  console.log('🔧 Environment Debug:', {
+  console.log('Environment Debug:', {
     hasOpenAIKey: !!process.env.OPENAI_API_KEY,
     hasPublicKey: !!process.env.NEXT_PUBLIC_OPENAI_API_KEY,
     keyPrefix: process.env.OPENAI_API_KEY?.substring(0, 10) || 'NOT_FOUND',
@@ -39,6 +39,10 @@ export default function BatchAuthorityPage() {
 
   const successfulResults = results.filter(r => r.success)
 
+  // Calculate progress for modal (convert from URL count to step count)
+  const modalProgress = progress.totalUrls > 0 ? Math.min(4, Math.ceil((progress.completedUrls / progress.totalUrls) * 4)) : 0
+  const modalStep = progress.currentUrl ? `Analyzing: ${progress.currentUrl}` : 'Preparing batch analysis...'
+
   return (
     <div className="px-4 py-6 sm:px-6 lg:px-8">
       <div className="space-y-6">
@@ -63,9 +67,9 @@ export default function BatchAuthorityPage() {
           isVisible={isAnalyzing}
           toolName="Batch Authority Analyzer"
           currentUrl={progress.currentUrl}
-          currentProgress={progress.completedUrls}
-          currentStep={progress.currentUrl ? `Analyzing: ${progress.currentUrl}` : 'Preparing batch analysis...'}
-          totalSteps={progress.totalUrls}
+          currentProgress={modalProgress}
+          currentStep={modalStep}
+          totalSteps={4}
           errors={progress.errors}
         />
 
