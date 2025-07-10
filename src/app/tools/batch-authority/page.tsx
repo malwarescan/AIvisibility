@@ -30,7 +30,7 @@ export default function BatchAuthorityPage() {
   const successfulResults = results.filter(r => r.success)
 
   return (
-    <main className="px-4 py-6 sm:px-6 lg:px-8">
+    <div className="px-4 py-6 sm:px-6 lg:px-8">
       <div className="space-y-6">
         {/* Page Header */}
         <div className="flex items-center justify-between">
@@ -128,6 +128,6 @@ export default function BatchAuthorityPage() {
           )}
         </div>
       </div>
-    </main>
+    </div>
   )
 } 
