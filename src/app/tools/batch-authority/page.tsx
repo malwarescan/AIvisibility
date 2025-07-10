@@ -5,6 +5,7 @@ import { Header } from '@/components/tools/shared/Header'
 import { Sidebar } from '@/components/tools/shared/Sidebar'
 import { BatchUrlInput } from '@/components/tools/batch/BatchUrlInput'
 import { BatchProgress } from '@/components/tools/batch/BatchProgress'
+import { BatchComparisonTable } from '@/components/tools/batch/BatchComparisonTable'
 import { useBatchAnalysis } from '@/hooks/useBatchAnalysis'
 
 export default function BatchAuthorityPage() {
@@ -64,36 +65,7 @@ export default function BatchAuthorityPage() {
 
             {/* Results Section */}
             {results.length > 0 && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  Batch Analysis Results
-                </h3>
-                <div className="space-y-4">
-                  {results.map((result, index) => (
-                    <div key={index} className="p-4 border border-gray-200 rounded-lg">
-                      <div className="flex justify-between items-center mb-2">
-                        <h4 className="font-medium text-gray-900">{result.url}</h4>
-                        <span className={`px-2 py-1 text-xs rounded-full ${
-                          result.success 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-red-100 text-red-800'
-                        }`}>
-                          {result.success ? 'Success' : 'Failed'}
-                        </span>
-                      </div>
-                      {result.success ? (
-                        <p className="text-sm text-gray-600">
-                          Analysis completed successfully
-                        </p>
-                      ) : (
-                        <p className="text-sm text-red-600">
-                          Error: {result.error}
-                        </p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <BatchComparisonTable results={results} />
             )}
           </div>
         </div>
