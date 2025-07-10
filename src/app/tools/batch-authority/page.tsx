@@ -6,6 +6,7 @@ import { Sidebar } from '@/components/tools/shared/Sidebar'
 import { BatchUrlInput } from '@/components/tools/batch/BatchUrlInput'
 import { BatchProgress } from '@/components/tools/batch/BatchProgress'
 import { BatchComparisonTable } from '@/components/tools/batch/BatchComparisonTable'
+import { BatchExport } from '@/components/tools/batch/BatchExport'
 import { useBatchAnalysis } from '@/hooks/useBatchAnalysis'
 
 export default function BatchAuthorityPage() {
@@ -65,7 +66,10 @@ export default function BatchAuthorityPage() {
 
             {/* Results Section */}
             {results.length > 0 && (
-              <BatchComparisonTable results={results} />
+              <>
+                <BatchComparisonTable results={results} />
+                <BatchExport results={results} />
+              </>
             )}
           </div>
         </div>
