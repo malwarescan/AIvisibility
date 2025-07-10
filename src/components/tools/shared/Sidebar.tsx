@@ -51,6 +51,13 @@ const tools = [
     status: 'active'
   },
   {
+    name: 'Batch Authority Analyzer',
+    href: '/tools/batch-authority',
+    icon: ShieldCheckIcon,
+    description: 'Compare multiple domains',
+    status: 'active'
+  },
+  {
     name: 'AI-Readiness Auditor',
     href: '/tools/auditor',
     icon: WrenchScrewdriverIcon,
@@ -131,7 +138,7 @@ export const Sidebar: React.FC = () => {
             <span className="font-medium text-green-900">Platform Complete</span>
           </div>
           <p className="text-sm text-green-700">
-            All 7 AI search intelligence tools are active and ready.
+            All 8 AI search intelligence tools are active and ready.
           </p>
         </div>
       </div>
