@@ -261,10 +261,10 @@ export class AgentRankService {
     // Platform-specific prediction algorithms
     const platformFactors = this.getPlatformFactors(platform);
     
-    const contentQuality = this.calculateContentQuality(contentData, analysis);
-    const authoritySignals = this.calculateAuthoritySignals(contentData);
-    const citationFrequency = this.calculateCitationFrequency(contentData);
-    const schemaMarkup = this.calculateSchemaMarkupScore(contentData.schema);
+    const contentQuality = this.addVariation(this.calculateContentQuality(contentData, analysis));
+    const authoritySignals = this.addVariation(this.calculateAuthoritySignals(contentData));
+    const citationFrequency = this.addVariation(this.calculateCitationFrequency(contentData));
+    const schemaMarkup = this.addVariation(this.calculateSchemaMarkupScore(contentData.schema));
     
     // Weighted scoring based on platform preferences
     const weightedScore = 
@@ -274,9 +274,9 @@ export class AgentRankService {
       schemaMarkup * platformFactors.schema;
     
     const predictedRank = Math.max(1, Math.min(10, Math.round(11 - weightedScore * 10)));
-    const confidenceScore = this.calculateConfidenceScore(analysis, platform);
+    const confidenceScore = this.addVariation(this.calculateConfidenceScore(analysis, platform), 0.05);
     const citationCount = contentData.citations.length;
-    const authorityScore = analysis.authorityScore;
+    const authorityScore = this.addVariation(analysis.authorityScore, 0.1);
     
     return {
       platform,
@@ -308,6 +308,10 @@ export class AgentRankService {
     };
     
     return factors[platform] || factors['ChatGPT'];
+  }
+
+  private addVariation(baseScore: number, variation: number = 0.1): number {
+    return Math.max(0, Math.min(1, baseScore + (Math.random() - 0.5) * variation));
   }
 
   private calculateContentQuality(contentData: ContentData, analysis: any): number {

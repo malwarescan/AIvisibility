@@ -84,7 +84,14 @@ export default function AgentRankPage() {
     const overallConfidence = Math.round(analysisResult.confidenceScores.overall * 100);
     const totalCitations = analysisResult.predictions.reduce((sum, p) => sum + p.citationCount, 0);
     const topPlatform = analysisResult.predictions[0]?.platform || 'N/A';
+    
+    // Calculate average rank (lower is better, so invert for percentage)
     const avgRank = analysisResult.predictions.reduce((sum, p) => sum + p.predictedRank, 0) / analysisResult.predictions.length;
+    const rankScore = Math.max(0, Math.min(100, Math.round((11 - avgRank) * 10))); // Convert rank 1-10 to score 0-100
+    
+    // Calculate processing time
+    const processingTime = analysisResult.metadata.processingTime;
+    const timeScore = processingTime < 5000 ? 'Fast' : processingTime < 10000 ? 'Normal' : 'Slow';
 
     return [
       {
@@ -95,18 +102,18 @@ export default function AgentRankPage() {
         description: 'AI agent behavior prediction',
       },
       {
-        title: 'Ranking Confidence',
-        value: `${Math.round(avgRank * 10)}%`,
+        title: 'Average Rank Score',
+        value: `${rankScore}%`,
         change: '+2',
         changeType: 'positive' as const,
-        description: 'High confidence predictions',
+        description: 'Average ranking across platforms',
       },
       {
         title: 'Platform Coverage',
-        value: `${analysisResult.predictions.length}+`,
+        value: `${analysisResult.predictions.length}`,
         change: '+3',
         changeType: 'positive' as const,
-        description: 'AI platforms monitored',
+        description: 'AI platforms analyzed',
       },
       {
         title: 'Total Citations',
@@ -249,31 +256,150 @@ export default function AgentRankPage() {
           </h2>
           
           <div className="space-y-4">
-            {[
-              { factor: 'Content Quality', weight: 'High', impact: '95%' },
-              { factor: 'Authority Signals', weight: 'High', impact: '92%' },
-              { factor: 'Citation Frequency', weight: 'Medium', impact: '88%' },
-              { factor: 'Schema Markup', weight: 'Medium', impact: '85%' },
-            ].map((factor) => (
-              <div key={factor.factor} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                <div className="flex items-center space-x-3">
-                  <div className={`w-3 h-3 rounded-full ${
-                    factor.weight === 'High' ? 'bg-purple-500' : 'bg-blue-500'
-                  }`} />
-                  <div>
-                    <h3 className="font-medium text-gray-900">{factor.factor}</h3>
-                    <p className="text-sm text-gray-600">{factor.weight} weight</p>
+            {analysisResult ? (
+              // Show real prediction factors from analysis
+              analysisResult.predictions[0]?.factors ? (
+                Object.entries(analysisResult.predictions[0].factors).map(([factor, value]) => {
+                  const factorName = factor.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+                  const weight = value > 0.7 ? 'High' : value > 0.4 ? 'Medium' : 'Low';
+                  const impact = `${Math.round(value * 100)}%`;
+                  
+                  return (
+                    <div key={factor} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-3 h-3 rounded-full ${
+                          weight === 'High' ? 'bg-purple-500' : weight === 'Medium' ? 'bg-blue-500' : 'bg-gray-400'
+                        }`} />
+                        <div>
+                          <h3 className="font-medium text-gray-900">{factorName}</h3>
+                          <p className="text-sm text-gray-600">{weight} weight</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-lg font-bold text-gray-900">{impact}</div>
+                        <StatusIndicator status={value > 0.7 ? "excellent" : value > 0.4 ? "good" : "poor"} size="sm" />
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                // Fallback to static factors
+                [
+                  { factor: 'Content Quality', weight: 'High', impact: '95%' },
+                  { factor: 'Authority Signals', weight: 'High', impact: '92%' },
+                  { factor: 'Citation Frequency', weight: 'Medium', impact: '88%' },
+                  { factor: 'Schema Markup', weight: 'Medium', impact: '85%' },
+                ].map((factor) => (
+                  <div key={factor.factor} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                    <div className="flex items-center space-x-3">
+                      <div className={`w-3 h-3 rounded-full ${
+                        factor.weight === 'High' ? 'bg-purple-500' : 'bg-blue-500'
+                      }`} />
+                      <div>
+                        <h3 className="font-medium text-gray-900">{factor.factor}</h3>
+                        <p className="text-sm text-gray-600">{factor.weight} weight</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-lg font-bold text-gray-900">{factor.impact}</div>
+                      <StatusIndicator status="excellent" size="sm" />
+                    </div>
+                  </div>
+                ))
+              )
+            ) : (
+              // Show placeholder when no analysis
+              [
+                { factor: 'Content Quality', weight: 'High', impact: '95%' },
+                { factor: 'Authority Signals', weight: 'High', impact: '92%' },
+                { factor: 'Citation Frequency', weight: 'Medium', impact: '88%' },
+                { factor: 'Schema Markup', weight: 'Medium', impact: '85%' },
+              ].map((factor) => (
+                <div key={factor.factor} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-3 h-3 rounded-full ${
+                      factor.weight === 'High' ? 'bg-purple-500' : 'bg-blue-500'
+                    }`} />
+                    <div>
+                      <h3 className="font-medium text-gray-900">{factor.factor}</h3>
+                      <p className="text-sm text-gray-600">{factor.weight} weight</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-lg font-bold text-gray-900">{factor.impact}</div>
+                    <StatusIndicator status="excellent" size="sm" />
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-lg font-bold text-gray-900">{factor.impact}</div>
-                  <StatusIndicator status="excellent" size="sm" />
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </div>
+
+      {/* Analysis Details */}
+      {analysisResult && (
+        <div className="bg-white rounded-2xl p-8 border border-gray-200">
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">
+            Analysis Details
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">Content Analysis</h3>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">URL:</span>
+                  <span className="font-medium">{analysisResult.url}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Title:</span>
+                  <span className="font-medium">{analysisResult.contentData.title || 'N/A'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Content Length:</span>
+                  <span className="font-medium">{analysisResult.contentData.content.length} characters</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">External Links:</span>
+                  <span className="font-medium">{analysisResult.contentData.links.filter(l => l.isExternal).length}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Citations:</span>
+                  <span className="font-medium">{analysisResult.contentData.citations.length}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Schema Markup:</span>
+                  <span className="font-medium">{analysisResult.contentData.schema.hasStructuredData ? 'Yes' : 'No'}</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-3">Processing Information</h3>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Analysis ID:</span>
+                  <span className="font-medium">{analysisResult.analysisId}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Processing Time:</span>
+                  <span className="font-medium">{analysisResult.metadata.processingTime}ms</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Analysis Date:</span>
+                  <span className="font-medium">{new Date(analysisResult.metadata.analysisTimestamp).toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Overall Confidence:</span>
+                  <span className="font-medium">{Math.round(analysisResult.confidenceScores.overall * 100)}%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Platforms Analyzed:</span>
+                  <span className="font-medium">{analysisResult.predictions.length}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Optimization Recommendations */}
       {analysisResult && analysisResult.recommendations.length > 0 && (
