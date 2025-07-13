@@ -6,60 +6,116 @@ import { AutoAnimatedElement } from '@/components/AutoAnimatedElement';
 
 const tools = [
   {
-    name: 'AgentRank Simulator',
+    id: 'agentrank',
+    title: 'AgentRank Simulator',
     description: 'Predict how AI agents will rank your content across 20+ platforms',
+    icon: '🎯',
     href: '/tools/agentrank',
-    metric: '94%',
-    metricLabel: 'Prediction Accuracy',
-    status: 'excellent' as const
+    status: 'excellent' as const,
+    features: [
+      'AI ranking prediction',
+      'Multi-platform analysis',
+      'Real-time scoring',
+      'Historical trend analysis'
+    ]
   },
   {
-    name: 'CitationFlow Optimizer',
+    id: 'citationflow',
+    title: 'CitationFlow Optimizer',
     description: 'Increase citation frequency and authority signals across AI platforms',
+    icon: '📈',
     href: '/tools/citationflow',
-    metric: '300%',
-    metricLabel: 'Citation Increase',
-    status: 'excellent' as const
+    status: 'excellent' as const,
+    features: [
+      'Citation tracking',
+      'Authority signal optimization',
+      'Multi-platform monitoring',
+      'Citation opportunity identification'
+    ]
   },
   {
-    name: 'AI Search Analytics',
+    id: 'analytics',
+    title: 'AI Search Analytics',
     description: 'Track AI-specific metrics that traditional SEO tools ignore',
+    icon: '📊',
     href: '/tools/analytics',
-    metric: 'Real-time',
-    metricLabel: 'Performance Tracking',
-    status: 'good' as const
+    status: 'good' as const,
+    features: [
+      'Real-time performance tracking',
+      'AI platform-specific metrics',
+      'Conversational query analysis',
+      'Knowledge graph optimization'
+    ]
   },
   {
-    name: 'Authority Signal Monitor',
+    id: 'authority',
+    title: 'Authority Signal Monitor',
     description: 'Monitor and optimize authority signals across 20+ AI platforms',
+    icon: '🏆',
     href: '/tools/authority',
-    metric: 'A+',
-    metricLabel: 'Authority Score',
-    status: 'excellent' as const
+    status: 'excellent' as const,
+    features: [
+      'E-A-T framework assessment',
+      'Platform-specific analysis',
+      'Real-time terminal display',
+      'Authority signal optimization'
+    ]
   },
   {
-    name: 'AI-Readiness Auditor',
+    id: 'auditor',
+    title: 'AI-Readiness Auditor',
     description: 'Technical optimization for AI search engines',
+    icon: '🔍',
     href: '/tools/auditor',
-    metric: 'Comprehensive',
-    metricLabel: 'Technical Audit',
-    status: 'good' as const
+    status: 'good' as const,
+    features: [
+      'Comprehensive technical audit',
+      'AI-specific optimization',
+      'Performance analysis',
+      'Security assessment'
+    ]
   },
   {
-    name: 'QueryMind Prediction',
+    id: 'querymind',
+    title: 'QueryMind Prediction',
     description: '6-month forecasting for AI search trends and opportunities',
+    icon: '🔮',
     href: '/tools/querymind',
-    metric: '6-month',
-    metricLabel: 'Forecasting',
-    status: 'good' as const
+    status: 'good' as const,
+    features: [
+      '6-month trend forecasting',
+      'Opportunity identification',
+      'Competitive analysis',
+      'Strategic planning'
+    ]
   },
   {
-    name: 'AgentConnect Hub',
+    id: 'connect',
+    title: 'AgentConnect Hub',
     description: 'API integrations and automation for AI search optimization',
+    icon: '🔗',
     href: '/tools/connect',
-    metric: '20+',
-    metricLabel: 'Integrations',
-    status: 'average' as const
+    status: 'average' as const,
+    features: [
+      '20+ platform integrations',
+      'Automated workflows',
+      'API management',
+      'Webhook support'
+    ]
+  },
+  {
+    id: 'schema-optimizer',
+    title: 'AI Search Schema Optimizer',
+    description: 'Generate and optimize structured data for AI search engines like ChatGPT, Claude, and Perplexity',
+    icon: '🏗️',
+    href: '/tools/schema-optimizer',
+    status: 'new' as const,
+    features: [
+      'AI-powered schema generation',
+      'Multi-platform optimization',
+      'Authority signal enhancement',
+      'Real-time compatibility testing'
+    ]
   }
 ];
 
@@ -67,8 +123,8 @@ export default function ToolsPage() {
   const overallMetrics = [
     {
       title: 'Active Tools',
-      value: '7/7',
-      change: '+2 this month',
+      value: '8/8',
+      change: '+3 this month',
       changeType: 'positive' as const,
       description: 'Complete platform ready',
     },
@@ -105,7 +161,7 @@ export default function ToolsPage() {
               Neural Command Tools
             </h1>
             <p className="text-gray-600">
-              Complete AI search intelligence platform with 7 specialized optimization tools
+              Complete AI search intelligence platform with 8 specialized optimization tools
             </p>
           </div>
           <div className="flex items-center space-x-3">
@@ -197,7 +253,7 @@ export default function ToolsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {tools.map((tool, index) => (
           <AutoAnimatedElement
-            key={tool.name}
+            key={tool.id}
             animation="slideUp"
             delay={index * 0.1}
           >
@@ -206,32 +262,43 @@ export default function ToolsPage() {
                 <div className="flex items-center justify-between mb-4">
                   <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center">
                     <span className="text-blue-600 font-semibold text-lg">
-                      {tool.name.charAt(0)}
+                      {tool.icon}
                     </span>
                   </div>
                   <div className={`px-3 py-1 rounded-full text-xs font-medium ${
                     tool.status === 'excellent' ? 'bg-green-100 text-green-700' :
                     tool.status === 'good' ? 'bg-blue-100 text-blue-700' :
+                    tool.status === 'new' ? 'bg-purple-100 text-purple-700' :
                     'bg-yellow-100 text-yellow-700'
                   }`}>
-                    {tool.status}
+                    {tool.status === 'new' ? 'NEW' : tool.status}
                   </div>
                 </div>
                 
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  {tool.name}
+                  {tool.title}
                 </h3>
                 <p className="text-sm text-gray-600 mb-4">
                   {tool.description}
                 </p>
                 
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-2xl font-bold text-gray-900">{tool.metric}</p>
-                    <p className="text-xs text-gray-500">{tool.metricLabel}</p>
+                <div className="space-y-3">
+                  <div className="flex flex-wrap gap-1">
+                    {tool.features.slice(0, 2).map((feature, featureIndex) => (
+                      <span key={featureIndex} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                        {feature}
+                      </span>
+                    ))}
+                    {tool.features.length > 2 && (
+                      <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                        +{tool.features.length - 2} more
+                      </span>
+                    )}
                   </div>
-                  <div className="text-gray-400">
-                    →
+                  <div className="flex items-center justify-between">
+                    <div className="text-gray-400">
+                      →
+                    </div>
                   </div>
                 </div>
               </div>

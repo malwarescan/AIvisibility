@@ -23,6 +23,11 @@ export default function ToolsLayout({
       href: '/tools/batch-authority'
     },
     {
+      id: 'schema-optimizer',
+      name: 'Schema Optimizer',
+      href: '/tools/schema-optimizer'
+    },
+    {
       id: 'auditor',
       name: 'AI Content Auditor',
       href: '/tools/auditor'
