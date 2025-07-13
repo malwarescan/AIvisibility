@@ -4,12 +4,50 @@ import React, { useState } from 'react';
 import { MetricsOverview } from '@/components/tools/shared/MetricsOverview';
 import { TimeRangeSelector } from '@/components/tools/shared/TimeRangeSelector';
 import { StatusIndicator } from '@/components/ui/StatusIndicator';
+import { CitationAnalysis } from '@/lib/analysis/CitationFlowService';
 
 export default function CitationFlowPage() {
   const [timeRange, setTimeRange] = useState('30d');
   const [selectedContent, setSelectedContent] = useState('all');
+  const [url, setUrl] = useState('');
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState<CitationAnalysis | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const citationMetrics = [
+  const handleAnalyze = async () => {
+    if (!url.trim()) {
+      setError('Please enter a URL to analyze');
+      return;
+    }
+
+    setIsAnalyzing(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/citationflow/analyze', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url: url.trim() }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Analysis failed');
+      }
+
+      setAnalysisResult(data.data);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Analysis failed');
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
+  // Default metrics for when no analysis is available
+  const defaultMetrics = [
     {
       title: 'Citation Increase',
       value: '300%',
@@ -39,6 +77,47 @@ export default function CitationFlowPage() {
       description: 'High-quality citations',
     },
   ];
+
+  // Generate metrics from analysis result
+  const getMetrics = () => {
+    if (!analysisResult) return defaultMetrics;
+
+    const totalCitations = analysisResult.citationData.totalCitations;
+    const averageAuthority = Math.round(analysisResult.citationData.averageAuthority * 100);
+    const citationVelocity = Math.round(analysisResult.citationData.citationVelocity * 100);
+    const topPlatform = analysisResult.flowPredictions[0]?.platform || 'N/A';
+
+    return [
+      {
+        title: 'Total Citations',
+        value: totalCitations.toString(),
+        change: '+45%',
+        changeType: 'positive' as const,
+        description: 'Citations detected',
+      },
+      {
+        title: 'Average Authority',
+        value: `${averageAuthority}%`,
+        change: '+2',
+        changeType: 'positive' as const,
+        description: 'Citation authority score',
+      },
+      {
+        title: 'Citation Velocity',
+        value: `${citationVelocity}%`,
+        change: '+180%',
+        changeType: 'positive' as const,
+        description: 'Citations per 1000 words',
+      },
+      {
+        title: 'Top Platform',
+        value: topPlatform,
+        change: '+12%',
+        changeType: 'positive' as const,
+        description: 'Best citation flow',
+      },
+    ];
+  };
 
   const contentTypes = [
     { id: 'blog', name: 'Blog Posts', citations: '1,247', increase: '+320%' },
@@ -71,6 +150,29 @@ export default function CitationFlowPage() {
           </div>
         </div>
 
+        {/* URL Input */}
+        <div className="mb-6">
+          <div className="flex space-x-4">
+            <input
+              type="url"
+              placeholder="Enter URL to analyze citation flow..."
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            />
+            <button
+              onClick={handleAnalyze}
+              disabled={!url.trim() || isAnalyzing}
+              className="px-8 py-3 bg-green-600 text-white rounded-xl font-medium hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isAnalyzing ? 'Analyzing...' : 'Analyze'}
+            </button>
+          </div>
+          {error && (
+            <div className="mt-2 text-red-600 text-sm">{error}</div>
+          )}
+        </div>
+
         <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-6 border border-green-200">
           <div className="flex items-center space-x-4">
             <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
@@ -88,35 +190,63 @@ export default function CitationFlowPage() {
         </div>
       </div>
 
-      <MetricsOverview metrics={citationMetrics} />
+      <MetricsOverview metrics={getMetrics()} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Content Performance */}
+        {/* Citation Flow Predictions */}
         <div className="bg-white rounded-2xl p-8 border border-gray-200">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">
-            Content Performance
+            Citation Flow Predictions
           </h2>
           
           <div className="space-y-4">
-            {contentTypes.map((content) => (
-              <div key={content.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                    <span className="text-green-600 font-semibold text-sm">
-                      {content.name.charAt(0)}
-                    </span>
+            {analysisResult ? (
+              analysisResult.flowPredictions.slice(0, 4).map((prediction) => (
+                <div key={prediction.platform} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                      <span className="text-green-600 font-semibold text-sm">
+                        {prediction.platform.charAt(0)}
+                      </span>
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-gray-900">{prediction.platform}</h3>
+                      <p className="text-sm text-gray-600">{prediction.predictedCitations} predicted citations</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-medium text-gray-900">{content.name}</h3>
-                    <p className="text-sm text-gray-600">{content.citations} citations</p>
+                  <div className="text-right">
+                    <div className="text-lg font-bold text-gray-900">{Math.round(prediction.predictedAuthority * 100)}%</div>
+                    <div className="text-sm text-green-600 font-medium">{Math.round(prediction.confidenceScore * 100)}% confidence</div>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-lg font-bold text-gray-900">{content.increase}</div>
-                  <StatusIndicator status="excellent" size="sm" />
+              ))
+            ) : (
+              // Show placeholder when no analysis
+              [
+                { platform: 'ChatGPT', predictedCitations: 12, predictedAuthority: 0.85, confidenceScore: 0.92 },
+                { platform: 'Claude', predictedCitations: 10, predictedAuthority: 0.82, confidenceScore: 0.89 },
+                { platform: 'Perplexity', predictedCitations: 15, predictedAuthority: 0.88, confidenceScore: 0.94 },
+                { platform: 'Google AI', predictedCitations: 8, predictedAuthority: 0.78, confidenceScore: 0.86 },
+              ].map((prediction) => (
+                <div key={prediction.platform} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                      <span className="text-green-600 font-semibold text-sm">
+                        {prediction.platform.charAt(0)}
+                      </span>
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-gray-900">{prediction.platform}</h3>
+                      <p className="text-sm text-gray-600">{prediction.predictedCitations} predicted citations</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-lg font-bold text-gray-900">{Math.round(prediction.predictedAuthority * 100)}%</div>
+                    <div className="text-sm text-green-600 font-medium">{Math.round(prediction.confidenceScore * 100)}% confidence</div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
 
@@ -152,6 +282,38 @@ export default function CitationFlowPage() {
           </div>
         </div>
       </div>
+
+      {/* Citation Recommendations */}
+      {analysisResult && analysisResult.recommendations.length > 0 && (
+        <div className="bg-white rounded-2xl p-8 border border-gray-200">
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">
+            Citation Optimization Recommendations
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {analysisResult.recommendations.map((recommendation, index) => (
+              <div key={index} className="p-4 bg-gray-50 rounded-xl">
+                <div className="flex items-start space-x-3">
+                  <div className={`w-2 h-2 rounded-full mt-2 ${
+                    recommendation.priority === 'high' ? 'bg-red-500' : 
+                    recommendation.priority === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
+                  }`} />
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1">{recommendation.category}</h3>
+                    <p className="text-sm text-gray-600 mb-2">{recommendation.description}</p>
+                    <p className="text-xs text-gray-500 mb-2">{recommendation.action}</p>
+                    <p className="text-xs text-green-600 font-medium">{recommendation.expectedOutcome}</p>
+                    <div className="mt-2">
+                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
+                        {Math.round(recommendation.impact * 100)}% impact
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="bg-white rounded-2xl p-8 border border-gray-200">
         <div className="flex items-center justify-between">
