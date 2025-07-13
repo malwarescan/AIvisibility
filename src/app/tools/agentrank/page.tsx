@@ -4,10 +4,47 @@ import React, { useState } from 'react';
 import { MetricsOverview } from '@/components/tools/shared/MetricsOverview';
 import { TimeRangeSelector } from '@/components/tools/shared/TimeRangeSelector';
 import { StatusIndicator } from '@/components/ui/StatusIndicator';
+import { AnalysisResult, PlatformPrediction } from '@/lib/analysis/AgentRankService';
 
 export default function AgentRankPage() {
   const [timeRange, setTimeRange] = useState('7d');
   const [selectedAgent, setSelectedAgent] = useState('all');
+  const [url, setUrl] = useState('');
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleAnalyze = async () => {
+    if (!url.trim()) {
+      setError('Please enter a URL to analyze');
+      return;
+    }
+
+    setIsAnalyzing(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/agentrank/analyze', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url: url.trim() }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Analysis failed');
+      }
+
+      setAnalysisResult(data.data);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Analysis failed');
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
 
   const agentRankMetrics = [
     {
@@ -40,12 +77,46 @@ export default function AgentRankPage() {
     },
   ];
 
-  const agents = [
-    { id: 'chatgpt', name: 'ChatGPT', rank: '1st', confidence: '96%' },
-    { id: 'claude', name: 'Claude', rank: '2nd', confidence: '94%' },
-    { id: 'perplexity', name: 'Perplexity', rank: '3rd', confidence: '92%' },
-    { id: 'google-ai', name: 'Google AI', rank: '4th', confidence: '89%' },
-  ];
+  // Generate metrics from analysis result
+  const getMetrics = () => {
+    if (!analysisResult) return agentRankMetrics;
+
+    const overallConfidence = Math.round(analysisResult.confidenceScores.overall * 100);
+    const totalCitations = analysisResult.predictions.reduce((sum, p) => sum + p.citationCount, 0);
+    const topPlatform = analysisResult.predictions[0]?.platform || 'N/A';
+    const avgRank = analysisResult.predictions.reduce((sum, p) => sum + p.predictedRank, 0) / analysisResult.predictions.length;
+
+    return [
+      {
+        title: 'Prediction Accuracy',
+        value: `${overallConfidence}%`,
+        change: '+8%',
+        changeType: 'positive' as const,
+        description: 'AI agent behavior prediction',
+      },
+      {
+        title: 'Ranking Confidence',
+        value: `${Math.round(avgRank * 10)}%`,
+        change: '+2',
+        changeType: 'positive' as const,
+        description: 'High confidence predictions',
+      },
+      {
+        title: 'Platform Coverage',
+        value: `${analysisResult.predictions.length}+`,
+        change: '+3',
+        changeType: 'positive' as const,
+        description: 'AI platforms monitored',
+      },
+      {
+        title: 'Total Citations',
+        value: totalCitations.toString(),
+        change: '+12%',
+        changeType: 'positive' as const,
+        description: 'Citation frequency rate',
+      },
+    ];
+  };
 
   return (
     <div className="space-y-8">
@@ -71,6 +142,29 @@ export default function AgentRankPage() {
           </div>
         </div>
 
+        {/* URL Input */}
+        <div className="mb-6">
+          <div className="flex space-x-4">
+            <input
+              type="url"
+              placeholder="Enter URL to analyze..."
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            <button
+              onClick={handleAnalyze}
+              disabled={!url.trim() || isAnalyzing}
+              className="px-8 py-3 bg-purple-600 text-white rounded-xl font-medium hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isAnalyzing ? 'Analyzing...' : 'Analyze'}
+            </button>
+          </div>
+          {error && (
+            <div className="mt-2 text-red-600 text-sm">{error}</div>
+          )}
+        </div>
+
         <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-6 border border-purple-200">
           <div className="flex items-center space-x-4">
             <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center">
@@ -88,7 +182,7 @@ export default function AgentRankPage() {
         </div>
       </div>
 
-      <MetricsOverview metrics={agentRankMetrics} />
+      <MetricsOverview metrics={getMetrics()} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Agent Rankings */}
@@ -98,25 +192,53 @@ export default function AgentRankPage() {
           </h2>
           
           <div className="space-y-4">
-            {agents.map((agent) => (
-              <div key={agent.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <span className="text-purple-600 font-semibold text-sm">
-                      {agent.name.charAt(0)}
-                    </span>
+            {analysisResult ? (
+              analysisResult.predictions.slice(0, 4).map((prediction) => (
+                <div key={prediction.platform} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                      <span className="text-purple-600 font-semibold text-sm">
+                        {prediction.platform.charAt(0)}
+                      </span>
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-gray-900">{prediction.platform}</h3>
+                      <p className="text-sm text-gray-600">Predicted rank</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-medium text-gray-900">{agent.name}</h3>
-                    <p className="text-sm text-gray-600">Predicted rank</p>
+                  <div className="text-right">
+                    <div className="text-lg font-bold text-gray-900">{prediction.predictedRank}</div>
+                    <div className="text-sm text-purple-600 font-medium">{Math.round(prediction.confidenceScore * 100)}%</div>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-lg font-bold text-gray-900">{agent.rank}</div>
-                  <div className="text-sm text-purple-600 font-medium">{agent.confidence}</div>
+              ))
+            ) : (
+              // Show placeholder when no analysis
+              [
+                { platform: 'ChatGPT', predictedRank: 1, confidenceScore: 0.96 },
+                { platform: 'Claude', predictedRank: 2, confidenceScore: 0.94 },
+                { platform: 'Perplexity', predictedRank: 3, confidenceScore: 0.92 },
+                { platform: 'Google AI', predictedRank: 4, confidenceScore: 0.89 },
+              ].map((prediction) => (
+                <div key={prediction.platform} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                      <span className="text-purple-600 font-semibold text-sm">
+                        {prediction.platform.charAt(0)}
+                      </span>
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-gray-900">{prediction.platform}</h3>
+                      <p className="text-sm text-gray-600">Predicted rank</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-lg font-bold text-gray-900">{prediction.predictedRank}</div>
+                    <div className="text-sm text-purple-600 font-medium">{Math.round(prediction.confidenceScore * 100)}%</div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
 
@@ -152,6 +274,37 @@ export default function AgentRankPage() {
           </div>
         </div>
       </div>
+
+      {/* Optimization Recommendations */}
+      {analysisResult && analysisResult.recommendations.length > 0 && (
+        <div className="bg-white rounded-2xl p-8 border border-gray-200">
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">
+            Optimization Recommendations
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {analysisResult.recommendations.map((recommendation, index) => (
+              <div key={index} className="p-4 bg-gray-50 rounded-xl">
+                <div className="flex items-start space-x-3">
+                  <div className={`w-2 h-2 rounded-full mt-2 ${
+                    recommendation.priority === 'high' ? 'bg-red-500' : 
+                    recommendation.priority === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
+                  }`} />
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1">{recommendation.category}</h3>
+                    <p className="text-sm text-gray-600 mb-2">{recommendation.description}</p>
+                    <p className="text-xs text-gray-500">{recommendation.action}</p>
+                    <div className="mt-2">
+                      <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded">
+                        {Math.round(recommendation.impact * 100)}% impact
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="bg-white rounded-2xl p-8 border border-gray-200">
         <div className="flex items-center justify-between">
