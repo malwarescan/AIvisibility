@@ -14,7 +14,7 @@ export default function DocumentationPage() {
     const fetchDocumentation = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/docs/route?page=${page}`);
+        const response = await fetch(`/api/docs?page=${page}`);
         if (!response.ok) {
           throw new Error(`Failed to load documentation: ${response.status}`);
         }
