@@ -1,6 +1,6 @@
 import OpenAIService from '@/lib/ai/OpenAIService'
 
-class SchemaService {
+export class SchemaService {
   private aiService = new OpenAIService()
 
   async generateAIOptimizedSchema(url: string, schemaType: string) {
