@@ -4,16 +4,7 @@
   "framework": null,
   "installCommand": "echo 'PHP deployment - no install needed'",
   "devCommand": "php -S $PORT",
-  "functions": {
-    "src/app/api/**/*.php": {
-      "runtime": "vercel-php@0.6.0"
-    }
-  },
   "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
-    },
     {
       "source": "/(.*)",
       "destination": "/index.php"
