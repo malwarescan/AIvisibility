@@ -1,7 +1,22 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
-  "framework": "nextjs",
-  "installCommand": "npm install",
-  "regions": ["iad1"]
+  "buildCommand": "echo 'PHP deployment - no build needed'",
+  "outputDirectory": ".",
+  "framework": null,
+  "installCommand": "echo 'PHP deployment - no install needed'",
+  "devCommand": "php -S $PORT",
+  "functions": {
+    "src/app/api/**/*.php": {
+      "runtime": "vercel-php@0.6.0"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.php"
+    }
+  ]
 }

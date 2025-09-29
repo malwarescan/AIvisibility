@@ -1,14 +1,13 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "npm run build"
+buildCommand = "echo 'PHP deployment - no build needed'"
 
 [deploy]
-startCommand = "npm run start"
+startCommand = "php -S 0.0.0.0:$PORT"
 healthcheckPath = "/"
 healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
 
 [env]
-NODE_ENV = "production"
-NPM_CONFIG_PRODUCTION = "false" 
+NODE_ENV = "production" 
