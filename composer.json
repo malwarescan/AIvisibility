@@ -1,0 +1,4 @@
+{
+  "name": "nrl-cmd/site",
+  "require": { "php": "^8.2" }
+}
