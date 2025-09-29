@@ -819,8 +819,8 @@ router.push({
 #### 1. Environment Variables
 ```bash
 # .env.local
-OPENAI_API_KEY=sk-proj-AT...
-NEXT_PUBLIC_OPENAI_API_KEY=sk-proj-AT...
+OPENAI_API_KEY=your-openai-api-key-here
+NEXT_PUBLIC_OPENAI_API_KEY=your-public-openai-api-key-here
 ```
 
 #### 2. Input Validation
@@ -890,11 +890,11 @@ npm run lint         # Run ESLint
 ```bash
 # Development
 NODE_ENV=development
-OPENAI_API_KEY=sk-proj-AT...
+OPENAI_API_KEY=your-openai-api-key-here
 
 # Production
 NODE_ENV=production
-OPENAI_API_KEY=sk-proj-AT...
+OPENAI_API_KEY=your-openai-api-key-here
 ```
 
 ### Build Process
