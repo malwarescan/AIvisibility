@@ -1,33 +1,20 @@
-// next.config.ts - Self-Validating Configuration
-import type { NextConfig } from 'next'
-
-// SAFETY CHECK: Prevent dangerous experimental features
-const validateExperimentalConfig = (config: any) => {
-  if (config.experimental?.optimizeCss === true) {
-    console.error('🚨 DANGER: optimizeCss is enabled!')
-    console.error('This requires critters dependency and has caused site breakages.')
-    console.error('Set ALLOW_EXPERIMENTAL=true environment variable to override.')
-    
-    if (process.env.ALLOW_EXPERIMENTAL !== 'true') {
-      console.error('Forcing optimizeCss to false for safety.')
-      config.experimental.optimizeCss = false
-    }
-  }
-}
+import type { NextConfig } from "next";
+import withBundleAnalyzer from '@next/bundle-analyzer';
 
 const nextConfig: NextConfig = {
   experimental: {
-    optimizeCss: false, // KEEP FALSE - Required for stability
+    optimizeCss: true,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
+  images: {
+    formats: ['image/webp', 'image/avif'],
+    minimumCacheTTL: 86400,
   },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-}
+  compress: true,
+  poweredByHeader: false,
+};
 
-// Validate configuration before export
-validateExperimentalConfig(nextConfig)
+const withBundleAnalyzerConfig = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
 
-export default nextConfig
+export default withBundleAnalyzerConfig(nextConfig);
