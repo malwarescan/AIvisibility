@@ -69,9 +69,9 @@ export function BatchProgress({
       <div className="grid grid-cols-4 gap-4 mb-4">
         {[
           { step: 'Web Crawling', icon: '🌐' },
-          { step: 'AI Analysis', icon: '⚡' },
-          { step: 'Score Calculation', icon: '📈' },
-          { step: 'Results Processing', icon: '✅' }
+          { step: 'AI Analysis', icon: 'Fast' },
+          { step: 'Score Calculation', icon: 'Chart' },
+          { step: 'Results Processing', icon: 'Done' }
         ].map((item, index) => (
           <div key={index} className="text-center">
             <div className={`text-2xl mb-1 ${

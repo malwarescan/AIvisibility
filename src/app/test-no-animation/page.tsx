@@ -21,7 +21,7 @@ export default function TestNoAnimationPage() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-3xl font-semibold text-gray-900 mb-2">
-                🔧 AI-Readiness Auditor (No Animation Test)
+                AI-Readiness Auditor (No Animation Test)
               </h1>
               <p className="text-gray-600">
                 Comprehensive technical SEO audit for AI search engine optimization
@@ -130,7 +130,7 @@ export default function TestNoAnimationPage() {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                📊 Audit Reports & Monitoring
+                Audit Reports & Monitoring
               </h3>
               <p className="text-gray-600">
                 Download detailed audit report or setup automated monitoring

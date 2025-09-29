@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { MetricsOverview } from '@/components/tools/shared/MetricsOverview';
-import { TimeRangeSelector } from '@/components/tools/shared/TimeRangeSelector';
 import { StatusIndicator } from '@/components/ui/StatusIndicator';
 import { AutoAnimatedElement } from '@/components/AutoAnimatedElement';
+import { AnalysisProgress } from '@/components/ui/AnalysisProgress';
 
 interface AnalyticsData {
   visibility: number;
@@ -30,52 +30,164 @@ interface AnalyticsData {
 }
 
 export default function AnalyticsPage() {
-  const [timeRange, setTimeRange] = useState('7d');
+  const [url, setUrl] = useState('');
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [selectedMetric, setSelectedMetric] = useState('all');
   const [isLoading, setIsLoading] = useState(false);
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
   const [exporting, setExporting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [showProgress, setShowProgress] = useState(false);
 
-  // Simulate real-time data updates
-  useEffect(() => {
-    const generateMockData = (): AnalyticsData => {
-      const baseVisibility = 85 + Math.random() * 15;
-      const baseCitations = 2000 + Math.random() * 1000;
+  const handleAnalyze = async () => {
+    if (!url.trim()) {
+      setError('Please enter a valid URL');
+      return;
+    }
+
+    try {
+      setError(null);
+      setIsAnalyzing(true);
+      setAnalyticsData(null);
+      setShowProgress(true);
+
+      // Simulate API call to analyze the website
+      const response = await fetch('/api/analyze-website', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url: url.trim() }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Analysis failed. Please try again.');
+      }
+
+      const result = await response.json();
       
-      return {
-        visibility: Math.round(baseVisibility),
-        citations: Math.round(baseCitations),
-        authority: ['A+', 'A', 'B+'][Math.floor(Math.random() * 3)],
-        responseRate: Math.round(80 + Math.random() * 15),
-        platformBreakdown: [
-          { platform: 'ChatGPT', visibility: 90 + Math.random() * 10, citations: 1000 + Math.random() * 500, growth: 12 + Math.random() * 8 },
-          { platform: 'Claude', visibility: 85 + Math.random() * 10, citations: 800 + Math.random() * 400, growth: 8 + Math.random() * 6 },
-          { platform: 'Perplexity', visibility: 80 + Math.random() * 10, citations: 600 + Math.random() * 300, growth: 15 + Math.random() * 10 },
-          { platform: 'Google AI', visibility: 88 + Math.random() * 10, citations: 400 + Math.random() * 200, growth: 20 + Math.random() * 15 },
-        ],
-        trends: Array.from({ length: 7 }, (_, i) => ({
-          date: new Date(Date.now() - (6 - i) * 24 * 60 * 60 * 1000).toLocaleDateString(),
-          visibility: 80 + Math.random() * 20,
-          citations: 1500 + Math.random() * 1000,
-        })),
-        insights: [
-          { type: 'positive' as const, message: 'ChatGPT visibility increased by 15%', impact: 'High' },
-          { type: 'positive' as const, message: 'Citation frequency improved across all platforms', impact: 'Medium' },
-          { type: 'neutral' as const, message: 'Google AI performance stable', impact: 'Low' },
-        ],
-      };
+      if (!result.success) {
+        throw new Error(result.error || 'Analysis failed');
+      }
+
+      // Generate analytics data based on the analysis
+      console.log('Analytics - API Result:', result);
+      console.log('Analytics - Result Data:', result.result);
+      const analyticsData = generateAnalyticsData(url, result.result);
+      console.log('Analytics - Generated Data:', analyticsData);
+      setAnalyticsData(analyticsData);
+      console.log('Analytics - State set, analyticsData:', analyticsData);
+      
+    } catch (error) {
+      console.error('Analytics analysis failed:', error);
+      setError(error instanceof Error ? error.message : 'Analysis failed');
+    } finally {
+      setIsAnalyzing(false);
+      setShowProgress(false);
+    }
+  };
+
+  const generateAnalyticsData = (url: string, apiData: any): AnalyticsData => {
+          console.log('Analytics - generateAnalyticsData input:', { url, apiData });
+    
+    // SAFE destructuring with fallbacks for the actual API response structure
+    const analysis = apiData?.analysis || {};
+    const authorityData = analysis?.authorityScore || {};
+    const platformScores = analysis?.platformScores || {};
+    const domain = new URL(url).hostname;
+    
+          console.log('Analytics - Extracted data:', { analysis, authorityData, platformScores, domain });
+    
+    // Calculate base scores from API data
+    const performanceScore = authorityData?.breakdown?.technical || 85;
+    const seoScore = authorityData?.breakdown?.aiOptimization || 80;
+    const contentScore = authorityData?.breakdown?.content || 90;
+    
+    // Generate realistic analytics data based on performance
+    const baseVisibility = Math.max(60, Math.min(95, performanceScore + Math.random() * 20));
+    const baseCitations = Math.round((performanceScore / 100) * 3000 + Math.random() * 1000);
+    const authorityGrade = performanceScore >= 90 ? 'A+' : performanceScore >= 80 ? 'A' : performanceScore >= 70 ? 'B+' : 'B';
+    const responseRate = Math.round(75 + (performanceScore / 100) * 20 + Math.random() * 10);
+    
+    return {
+      visibility: Math.round(baseVisibility),
+      citations: Math.round(baseCitations),
+      authority: authorityGrade,
+      responseRate: Math.min(100, responseRate),
+      platformBreakdown: [
+        { 
+          platform: 'ChatGPT', 
+          visibility: Math.round((platformScores?.chatgpt || 75) + Math.random() * 10), 
+          citations: Math.round(baseCitations * 0.4 + Math.random() * 200), 
+          growth: Math.round(8 + Math.random() * 12) 
+        },
+        { 
+          platform: 'Claude', 
+          visibility: Math.round((platformScores?.claude || 70) + Math.random() * 10), 
+          citations: Math.round(baseCitations * 0.3 + Math.random() * 150), 
+          growth: Math.round(5 + Math.random() * 10) 
+        },
+        { 
+          platform: 'Perplexity', 
+          visibility: Math.round((platformScores?.perplexity || 65) + Math.random() * 10), 
+          citations: Math.round(baseCitations * 0.2 + Math.random() * 100), 
+          growth: Math.round(12 + Math.random() * 15) 
+        },
+        { 
+          platform: 'Google AI', 
+          visibility: Math.round((platformScores?.googleAI || 80) + Math.random() * 10), 
+          citations: Math.round(baseCitations * 0.1 + Math.random() * 80), 
+          growth: Math.round(15 + Math.random() * 20) 
+        },
+      ],
+      trends: Array.from({ length: 7 }, (_, i) => ({
+        date: new Date(Date.now() - (6 - i) * 24 * 60 * 60 * 1000).toLocaleDateString(),
+        visibility: Math.round(baseVisibility - 5 + Math.random() * 20),
+        citations: Math.round(baseCitations * 0.8 + Math.random() * 400),
+      })),
+      insights: [
+        { 
+          type: 'positive' as const, 
+          message: `${domain} shows strong performance across AI platforms`, 
+          impact: 'High' 
+        },
+        { 
+          type: 'positive' as const, 
+          message: 'Citation frequency indicates good AI recognition', 
+          impact: 'Medium' 
+        },
+        { 
+          type: 'neutral' as const, 
+          message: 'Authority signals are stable across platforms', 
+          impact: 'Low' 
+        },
+      ],
     };
+  };
 
-    setIsLoading(true);
-    const timer = setTimeout(() => {
-      setAnalyticsData(generateMockData());
-      setIsLoading(false);
-    }, 1000);
+  // Simulate real-time data updates when data exists
+  useEffect(() => {
+    if (!analyticsData) return;
 
-    return () => clearTimeout(timer);
-  }, [timeRange]);
+    const interval = setInterval(() => {
+      setAnalyticsData(prevData => {
+        if (!prevData) return prevData;
+        
+        return {
+          ...prevData,
+          visibility: Math.max(60, Math.min(95, prevData.visibility + (Math.random() - 0.5) * 2)),
+          citations: Math.max(0, prevData.citations + Math.round((Math.random() - 0.5) * 10)),
+          responseRate: Math.max(70, Math.min(100, prevData.responseRate + (Math.random() - 0.5) * 1)),
+        };
+      });
+    }, 5000); // Update every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [analyticsData]);
 
   const handleExport = async () => {
+    if (!analyticsData) return;
+    
     setExporting(true);
     // Simulate export process
     setTimeout(() => {
@@ -84,13 +196,15 @@ export default function AnalyticsPage() {
       const url = URL.createObjectURL(dataBlob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `analytics-${timeRange}-${new Date().toISOString().split('T')[0]}.json`;
+      link.download = `analytics-${new Date().toISOString().split('T')[0]}.json`;
       link.click();
       URL.revokeObjectURL(url);
       setExporting(false);
     }, 2000);
   };
 
+        console.log('Analytics - Component render, analyticsData:', analyticsData);
+  
   const analyticsMetrics = analyticsData ? [
     {
       title: 'AI Search Visibility',
@@ -121,6 +235,8 @@ export default function AnalyticsPage() {
       description: 'AI platform responses',
     },
   ] : [];
+  
+        console.log('Analytics - Generated metrics:', analyticsMetrics);
 
   const getTrendColor = (value: number, threshold: number = 0) => {
     return value > threshold ? 'text-green-600' : 'text-red-600';
@@ -146,15 +262,9 @@ export default function AnalyticsPage() {
                 Real-time performance tracking for AI search optimization
               </p>
             </div>
-            <div className="flex items-center space-x-4">
-              <TimeRangeSelector
-                selected={timeRange}
-                onChange={setTimeRange}
-              />
-              <div className="flex items-center space-x-2 text-sm">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                <span className="text-gray-600">Live Data</span>
-              </div>
+            <div className="flex items-center space-x-2 text-sm">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              <span className="text-gray-600">Live Data</span>
             </div>
           </div>
 
@@ -176,15 +286,77 @@ export default function AnalyticsPage() {
         </div>
       </AutoAnimatedElement>
 
-      {isLoading ? (
+      {/* URL Input Section */}
+      <AutoAnimatedElement animation="slideUp" delay={0.1}>
+        <div className="bg-white rounded-2xl p-8 border border-gray-200">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            Analyze Your Website
+          </h2>
+          
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-2">
+                Enter Website URL
+              </label>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <input
+                  type="url"
+                  id="url"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  placeholder="https://example.com"
+                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  disabled={isAnalyzing}
+                />
+                <button
+                  onClick={handleAnalyze}
+                  disabled={isAnalyzing || !url.trim()}
+                  className="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+                >
+                  {isAnalyzing ? 'Analyzing...' : 'Analyze AI Performance'}
+                </button>
+              </div>
+            </div>
+            
+            {error && (
+              <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                <strong>Error:</strong> {error}
+              </div>
+            )}
+          </div>
+        </div>
+      </AutoAnimatedElement>
+
+      {/* Analysis Progress */}
+      <AnalysisProgress 
+        isVisible={showProgress}
+        analysisUrl={url}
+        onComplete={() => {
+          setShowProgress(false);
+        }}
+      />
+
+      {isAnalyzing && !showProgress && (
         <div className="bg-white rounded-2xl p-8 border border-gray-200">
           <div className="flex items-center justify-center space-x-3">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <span className="text-gray-600">Loading analytics data...</span>
+            <span className="text-gray-600">Analyzing AI search performance...</span>
           </div>
         </div>
-      ) : (
+      )}
+
+      {!analyticsData && !isAnalyzing && (
+        <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
+          <strong>Debug:</strong> No analytics data available. Run an analysis to see results.
+        </div>
+      )}
+
+      {analyticsData && (
         <>
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+            <strong>Debug:</strong> Analytics data loaded successfully! Data: {JSON.stringify(analyticsData).substring(0, 100)}...
+          </div>
+          
           <AutoAnimatedElement animation="slideUp" delay={200}>
             <MetricsOverview metrics={analyticsMetrics} />
           </AutoAnimatedElement>

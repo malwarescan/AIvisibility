@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'URL is required' }, { status: 400 })
     }
     
-    console.log(`🧪 Testing analysis for: ${url}`)
+    console.log(`Testing analysis for: ${url}`)
     
     // Test the analysis directly
     const result = await processAnalysis({ url })
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString()
     })
   } catch (error) {
-    console.error('❌ Test analysis error:', error)
+    console.error('Test analysis error:', error)
     return NextResponse.json({
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',

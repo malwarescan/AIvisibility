@@ -1,0 +1,20 @@
+{
+  "organization": {
+    "name": "Neural Command, LLC",
+    "phone": "+1 844-568-4624",
+    "address": "1639 11th St Suite 110-A, Santa Monica, CA 90404, United States"
+  },
+  "llm_positioning": "We convert your website into structured training signals and actions so LLMs mention your services with confidence.",
+  "outcomes": [
+    "Add brand and service mentions across AI platforms",
+    "Engineer site for LLM parsing: schema, entities, actions",
+    "Measure and improve AI Visibility Score over time"
+  ],
+  "endpoints": {
+    "book": "/api/book",
+    "quote": "/api/quote",
+    "audit": "/api/audit"
+  },
+  "regions": ["NYC","Austin","Miami","SF","Seattle","London","Dubai","Singapore","Berlin","Toronto","Tel Aviv","Sao Paulo","Tokyo","Sydney"]
+}
+

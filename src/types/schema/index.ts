@@ -22,6 +22,10 @@ export interface SchemaAnalysisResult {
   aiOptimization: AIOptimizationScore
   platformScores: PlatformSchemaScores
   technicalAnalysis: TechnicalSchemaAnalysis
+  extractedSchemas: StructuredDataMarkup[]
+  schemaVersions?: SchemaVersion[]
+  qualityScore?: SchemaQualityScore
+  schemaDiff?: SchemaDiff
 }
 
 export interface SchemaType {
@@ -201,28 +205,56 @@ export interface SchemaAnalysisProgress {
   result?: SchemaAnalysisResult
 }
 
-// Export all types
-export type {
-  SchemaAnalysisRequest,
-  SchemaAnalysisResult,
-  SchemaType,
-  SchemaProperty,
-  SchemaRecommendation,
-  AIOptimizationScore,
-  PlatformSchemaScores,
-  TechnicalSchemaAnalysis,
-  SchemaValidationError,
-  SchemaOptimizationJob,
-  SchemaOptimizationResult,
-  StructuredDataMarkup,
-  OpenGraphMarkup,
-  TwitterCardMarkup,
-  AISchemaEntity,
-  ConversationalQuery,
-  KnowledgeGraphNode,
-  KnowledgeGraphRelationship,
-  SchemaGenerationRequest,
-  GeneratedSchema,
-  SchemaValidationResult,
-  SchemaAnalysisProgress
-} 
+// Schema Reverse Engineer Types
+export interface SchemaVersion {
+  id: string
+  timestamp: Date
+  version: string
+  schemas: StructuredDataMarkup[]
+  changes: SchemaChange[]
+  qualityScore: SchemaQualityScore
+}
+
+export interface SchemaQualityScore {
+  overallScore: number
+  keywordUsage: number
+  intentMatch: number
+  completeness: number
+  llmReadability: number
+  aiOptimization: number
+  factors: {
+    keywordDensity: number
+    semanticRelevance: number
+    structuralCompleteness: number
+    conversationalFlow: number
+    entityRecognition: number
+  }
+}
+
+export interface SchemaDiff {
+  previousVersion: string
+  currentVersion: string
+  changes: SchemaChange[]
+  summary: {
+    added: number
+    removed: number
+    modified: number
+    total: number
+  }
+}
+
+export interface SchemaChange {
+  type: 'added' | 'removed' | 'modified'
+  field: string
+  description: string
+  timestamp: Date
+  impact: 'low' | 'medium' | 'high'
+  details: {
+    oldValue?: string
+    newValue?: string
+    schemaType?: string
+    property?: string
+  }
+}
+
+ 

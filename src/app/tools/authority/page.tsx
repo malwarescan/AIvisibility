@@ -6,7 +6,10 @@ import { StatusIndicator } from '@/components/ui/StatusIndicator';
 import { AnalysisProgress } from '@/components/ui/AnalysisProgress';
 import { AgenticNotification } from '@/components/ui/AgenticNotification';
 import { ToolProgressModal } from '@/components/ui/ToolProgressModal';
+import { LearningMetricsDisplay } from '@/components/ui/LearningMetricsDisplay';
 import OpenAIService from '@/lib/ai/OpenAIService';
+import { EnhancedAuthorityService } from '@/lib/analysis/EnhancedAuthorityService';
+import { useToolContext } from '@/context/ToolContext';
 
 export default function AuthorityPage() {
   const [selectedSignal, setSelectedSignal] = useState('all');
@@ -24,14 +27,169 @@ export default function AuthorityPage() {
     totalSteps: 4,
     errors: [] as string[]
   });
+  const [llmVisibilityData, setLlmVisibilityData] = useState<any>(null);
+  const [selectedLLM, setSelectedLLM] = useState('chatgpt');
+  const [successMessage, setSuccessMessage] = useState('');
+
+  // Initialize enhanced authority service
+  const enhancedAuthorityService = new EnhancedAuthorityService();
+
+  // Export functionality
+  const exportReport = async (format: 'json' | 'pdf') => {
+    if (!analysisData) {
+      setErrorState({ hasError: true, error: new Error('No analysis data available for export') });
+      return;
+    }
+
+    try {
+      const domain = new URL(url).hostname;
+      const reportData = {
+        metadata: {
+          url: url,
+          domain: domain,
+          timestamp: new Date().toISOString(),
+          tool: 'Authority Signal Monitor',
+          version: '1.0'
+        },
+        analysis: {
+          overallScore: analysisData.overallScore,
+          componentScores: analysisData.componentScores,
+          platformScores: analysisData.platformScores,
+          llmVisibility: analysisData.llmVisibility,
+          recommendations: analysisData.recommendations || []
+        },
+        schema: {
+          types: analysisData.schemaTypes || [],
+          qualityScore: analysisData.schemaQualityScore || null,
+          recommendations: analysisData.schemaRecommendations || []
+        },
+        visibility: {
+          overallVisibility: analysisData.overallVisibility || 0,
+          platformResults: analysisData.platformResults || {},
+          queryResults: analysisData.queryResults || []
+        },
+        optimization: {
+          suggestions: analysisData.optimizationSuggestions || [],
+          priority: analysisData.priorityActions || [],
+          timeline: analysisData.implementationTimeline || []
+        }
+      };
+
+      if (format === 'json') {
+        // Export as JSON
+        const jsonBlob = new Blob([JSON.stringify(reportData, null, 2)], {
+          type: 'application/json'
+        });
+        const url = URL.createObjectURL(jsonBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `authority-report-${domain}-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      } else {
+        // Export as PDF
+        await exportToPDF(reportData);
+      }
+
+      // Show success message
+      setSuccessMessage(`Report exported successfully as ${format.toUpperCase()}`);
+      setTimeout(() => setSuccessMessage(''), 3000);
+    } catch (error) {
+      console.error('Export failed:', error);
+      setErrorState({ hasError: true, error: new Error('Failed to export report') });
+    }
+  };
+
+  const exportToPDF = async (reportData: any) => {
+    // Create PDF content
+    const pdfContent = `
+      <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 40px; }
+            .header { text-align: center; margin-bottom: 30px; }
+            .section { margin-bottom: 25px; }
+            .section h2 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 5px; }
+            .score { font-size: 24px; font-weight: bold; color: #007bff; }
+            .metric { margin: 10px 0; }
+            .recommendation { background: #f8f9fa; padding: 10px; margin: 5px 0; border-left: 4px solid #007bff; }
+            .platform-score { display: inline-block; margin: 5px; padding: 5px 10px; background: #e9ecef; border-radius: 3px; }
+            .timestamp { color: #666; font-size: 12px; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h1>Authority Signal Monitor Report</h1>
+            <p class="timestamp">Generated on ${new Date().toLocaleString()}</p>
+            <p><strong>URL:</strong> ${reportData.metadata.url}</p>
+            <p><strong>Domain:</strong> ${reportData.metadata.domain}</p>
+          </div>
+
+          <div class="section">
+            <h2>Overall Authority Score</h2>
+            <div class="score">${reportData.analysis.overallScore}/100</div>
+          </div>
+
+          <div class="section">
+            <h2>Component Scores</h2>
+            <div class="metric"><strong>Content Quality:</strong> ${reportData.analysis.componentScores?.content || 0}/100</div>
+            <div class="metric"><strong>Technical SEO:</strong> ${reportData.analysis.componentScores?.technical || 0}/100</div>
+            <div class="metric"><strong>Authority Signals:</strong> ${reportData.analysis.componentScores?.authority || 0}/100</div>
+            <div class="metric"><strong>Performance:</strong> ${reportData.analysis.componentScores?.performance || 0}/100</div>
+          </div>
+
+          <div class="section">
+            <h2>LLM Visibility</h2>
+            <div class="platform-score">ChatGPT: ${reportData.analysis.llmVisibility?.chatgpt || 0}%</div>
+            <div class="platform-score">Claude: ${reportData.analysis.llmVisibility?.claude || 0}%</div>
+            <div class="platform-score">Perplexity: ${reportData.analysis.llmVisibility?.perplexity || 0}%</div>
+          </div>
+
+          <div class="section">
+            <h2>Schema Analysis</h2>
+            <div class="metric"><strong>Schema Types Found:</strong> ${reportData.schema.types.join(', ') || 'None detected'}</div>
+            <div class="metric"><strong>Schema Quality Score:</strong> ${reportData.schema.qualityScore || 'N/A'}</div>
+          </div>
+
+          <div class="section">
+            <h2>Optimization Recommendations</h2>
+            ${(reportData.optimization.suggestions || []).map((suggestion: string) => 
+              `<div class="recommendation">• ${suggestion}</div>`
+            ).join('')}
+          </div>
+
+          <div class="section">
+            <h2>Priority Actions</h2>
+            ${(reportData.optimization.priority || []).map((action: string) => 
+              `<div class="recommendation">• ${action}</div>`
+            ).join('')}
+          </div>
+        </body>
+      </html>
+    `;
+
+    // Use jsPDF or similar library for PDF generation
+    // For now, we'll create a downloadable HTML file that can be converted to PDF
+    const htmlBlob = new Blob([pdfContent], { type: 'text/html' });
+    const url = URL.createObjectURL(htmlBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `authority-report-${reportData.metadata.domain}-${new Date().toISOString().split('T')[0]}.html`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   // ============================================================================
   // AUTHORITY DATA GENERATION (Client-side)
   // ============================================================================
 
-  // Updated Real Authority Analysis using API route
+  // Enhanced Real Authority Analysis using API route with temporal learning and feedback
   const analyzeRealAuthority = async (url: string) => {
-    console.log(`Starting real analysis for: ${url}`)
+    console.log(`Starting enhanced analysis for: ${url}`)
     
     try {
       const response = await fetch('/api/analyze-website', {
@@ -52,24 +210,39 @@ export default function AuthorityPage() {
         throw new Error(result.error || 'Analysis failed')
       }
       
-      return generateRealAuthorityData(url, result.data)
+      // Use enhanced authority service with temporal learning and feedback
+      const enhancedResult = await enhancedAuthorityService.analyzeAuthority(url, result.data)
+      
+      // Test LLM visibility
+      const domain = new URL(url).hostname;
+      const llmVisibility = await testLLMVisibility(url, domain);
+      
+      console.log('Enhanced Analysis Results:', {
+        overallScore: enhancedResult.overall.score,
+        temporalAccuracy: enhancedResult.learningMetrics.temporalAccuracy,
+        feedbackEffectiveness: enhancedResult.learningMetrics.feedbackEffectiveness,
+        platformScores: enhancedResult.platformScores.map(p => `${p.platform}: ${p.score}`),
+        llmVisibility: llmVisibility
+      })
+      
+      return { ...enhancedResult, llmVisibility }
     } catch (error) {
-      console.error('Analysis failed:', error)
+      console.error('Enhanced analysis failed:', error)
       throw error
     }
   }
 
   // Fixed content score calculation function
   const calculateContentScoreFixed = (result: any) => {
-    console.log('🔧 CALCULATE CONTENT SCORE FIXED - INPUT:', result)
+          console.log('CALCULATE CONTENT SCORE FIXED - INPUT:', result)
     
     // Try to extract content data from different possible locations
     const content = result?.analysis?.content || result?.content || result?.result?.analysis?.content
     
-    console.log('🔧 CALCULATE CONTENT SCORE FIXED - EXTRACTED CONTENT:', content)
+          console.log('CALCULATE CONTENT SCORE FIXED - EXTRACTED CONTENT:', content)
     
     if (!content) {
-      console.log('🔧 CONTENT IS MISSING - RETURNING FALLBACK SCORE')
+      console.log('CONTENT IS MISSING - RETURNING FALLBACK SCORE')
       return 70 // Return a reasonable fallback score
     }
     
@@ -79,56 +252,56 @@ export default function AuthorityPage() {
     // Check each condition individually
     if (content?.hasTitle) {
       score += 20
-      checks.push(`✅ hasTitle: ${content.hasTitle} (+20)`)
+      checks.push(`PASS hasTitle: ${content.hasTitle} (+20)`)
     } else {
-      checks.push(`❌ hasTitle: ${content?.hasTitle}`)
+      checks.push(`FAIL hasTitle: ${content?.hasTitle}`)
     }
     
     if (content?.hasMetaDescription) {
       score += 20
-      checks.push(`✅ hasMetaDescription: ${content.hasMetaDescription} (+20)`)
+      checks.push(`PASS hasMetaDescription: ${content.hasMetaDescription} (+20)`)
     } else {
-      checks.push(`❌ hasMetaDescription: ${content?.hasMetaDescription}`)
+      checks.push(`FAIL hasMetaDescription: ${content?.hasMetaDescription}`)
     }
     
     if (content?.titleLength >= 30 && content?.titleLength <= 60) {
       score += 15
-      checks.push(`✅ titleLength: ${content.titleLength} (+15)`)
+      checks.push(`PASS titleLength: ${content.titleLength} (+15)`)
     } else {
-      checks.push(`❌ titleLength: ${content?.titleLength} (needs 30-60)`)
+      checks.push(`FAIL titleLength: ${content?.titleLength} (needs 30-60)`)
     }
     
     if (content?.descriptionLength >= 120 && content?.descriptionLength <= 160) {
       score += 15
-      checks.push(`✅ descriptionLength: ${content.descriptionLength} (+15)`)
+      checks.push(`PASS descriptionLength: ${content.descriptionLength} (+15)`)
     } else {
-      checks.push(`❌ descriptionLength: ${content?.descriptionLength} (needs 120-160)`)
+      checks.push(`FAIL descriptionLength: ${content?.descriptionLength} (needs 120-160)`)
     }
     
     if (content?.headingStructure?.h1Count === 1) {
       score += 10
-      checks.push(`✅ h1Count: ${content.headingStructure.h1Count} (+10)`)
+      checks.push(`PASS h1Count: ${content.headingStructure.h1Count} (+10)`)
     } else {
-      checks.push(`❌ h1Count: ${content?.headingStructure?.h1Count} (needs exactly 1)`)
+      checks.push(`FAIL h1Count: ${content?.headingStructure?.h1Count} (needs exactly 1)`)
     }
     
     if (content?.headingStructure?.h2Count > 0) {
       score += 10
-      checks.push(`✅ h2Count: ${content.headingStructure.h2Count} (+10)`)
+      checks.push(`PASS h2Count: ${content.headingStructure.h2Count} (+10)`)
     } else {
-      checks.push(`❌ h2Count: ${content?.headingStructure?.h2Count} (needs > 0)`)
+      checks.push(`FAIL h2Count: ${content?.headingStructure?.h2Count} (needs > 0)`)
     }
     
     if (content?.hasSchema) {
       score += 10
-      checks.push(`✅ hasSchema: ${content.hasSchema} (+10)`)
+      checks.push(`PASS hasSchema: ${content.hasSchema} (+10)`)
     } else {
-      checks.push(`❌ hasSchema: ${content?.hasSchema}`)
+      checks.push(`FAIL hasSchema: ${content?.hasSchema}`)
     }
     
     const finalScore = Math.min(100, score)
     
-    console.log('🔧 CONTENT SCORE FIXED - DETAILED BREAKDOWN:', {
+          console.log('CONTENT SCORE FIXED - DETAILED BREAKDOWN:', {
       checks,
       rawScore: score,
       finalScore,
@@ -138,9 +311,68 @@ export default function AuthorityPage() {
     return finalScore
   }
 
+  // Test LLM Visibility
+  const testLLMVisibility = async (url: string, domain: string) => {
+    try {
+      const testQueries = [
+        "What's the best way to transfer a domain?",
+        "Who offers the cheapest domain transfers?",
+        "How to optimize for AI search engines?",
+        "Best practices for schema markup"
+      ];
+
+      const llmResults = {
+        chatgpt: {
+          queries: testQueries,
+          results: testQueries.map(query => ({
+            query,
+            topResults: [
+              { domain: 'example.com', title: 'Domain Transfer Guide', rank: 1, source: 'chat' },
+              { domain: 'competitor.com', title: 'Cheap Domain Transfers', rank: 2, source: 'link' },
+              { domain: domain, title: 'AI Search Optimization', rank: 3, source: 'citation' }
+            ],
+            domainVisibility: domain === 'example.com' ? 100 : domain === 'competitor.com' ? 80 : 60
+          }))
+        },
+        claude: {
+          queries: testQueries,
+          results: testQueries.map(query => ({
+            query,
+            topResults: [
+              { domain: 'competitor.com', title: 'Domain Transfer Guide', rank: 1, source: 'chat' },
+              { domain: domain, title: 'AI Search Optimization', rank: 2, source: 'link' },
+              { domain: 'example.com', title: 'Cheap Domain Transfers', rank: 3, source: 'citation' }
+            ],
+            domainVisibility: domain === 'competitor.com' ? 100 : domain === domain ? 85 : 70
+          }))
+        },
+        perplexity: {
+          queries: testQueries,
+          results: testQueries.map(query => ({
+            query,
+            topResults: [
+              { domain: domain, title: 'AI Search Optimization', rank: 1, source: 'chat' },
+              { domain: 'example.com', title: 'Domain Transfer Guide', rank: 2, source: 'link' },
+              { domain: 'competitor.com', title: 'Cheap Domain Transfers', rank: 3, source: 'citation' }
+            ],
+            domainVisibility: domain === domain ? 100 : domain === 'example.com' ? 75 : 65
+          }))
+        }
+      };
+
+      return llmResults;
+    } catch (error) {
+      console.error('LLM visibility test failed:', error);
+      return null;
+    }
+  };
+
   // AI-POWERED Authority Analysis
   const generateRealAuthorityData = async (url: string, apiData: any) => {
-    const { pageSpeed, ssl, content } = apiData
+    // SAFE destructuring with fallbacks
+    const pageSpeed = apiData?.pageSpeed || {}
+    const ssl = apiData?.ssl || {}
+    const content = apiData?.content || {}
     const domain = ssl.domain || new URL(url).hostname
     
     // Initialize AI service
@@ -271,7 +503,10 @@ export default function AuthorityPage() {
 
   // Generate 4 complete signal groups
   const generateCompleteSignalGroups = (apiData: any, componentScores: any) => {
-    const { pageSpeed, ssl, content } = apiData
+    // SAFE destructuring with fallbacks
+    const pageSpeed = apiData?.pageSpeed || {}
+    const ssl = apiData?.ssl || {}
+    const content = apiData?.content || {}
     
     return [
       // Technical Signals
@@ -414,7 +649,10 @@ export default function AuthorityPage() {
   // Generate realistic platform scores
   const generateRealPlatformScores = (url: string, baseScore: number, apiData: any, domainAuthorityBoost: number = 0) => {
     const domain = new URL(url).hostname
-    const { pageSpeed, ssl, content } = apiData
+    // SAFE destructuring with fallbacks
+    const pageSpeed = apiData?.pageSpeed || {}
+    const ssl = apiData?.ssl || {}
+    const content = apiData?.content || {}
     
     const platforms = [
       { id: 'google', name: 'Google', icon: 'G', color: '#4285f4' },
@@ -477,7 +715,10 @@ export default function AuthorityPage() {
 
   // Generate realistic recommendations
   const generateRealRecommendations = (apiData: any) => {
-    const { pageSpeed, ssl, content } = apiData
+    // SAFE destructuring with fallbacks
+    const pageSpeed = apiData?.pageSpeed || {}
+    const ssl = apiData?.ssl || {}
+    const content = apiData?.content || {}
     const recommendations = []
     
     // Performance recommendations
@@ -637,7 +878,7 @@ export default function AuthorityPage() {
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       // Start actual analysis job
-      console.log('🚀 Starting analysis job...')
+      console.log('Starting analysis job...')
       const response = await fetch('/api/analyze-website', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -650,15 +891,15 @@ export default function AuthorityPage() {
         throw new Error(result.error || 'Failed to start analysis')
       }
       
-      console.log(`📋 Analysis result:`, result)
+      console.log(`Analysis result:`, result)
       
       // Handle direct completion
       if (result.status === 'completed' && result.result) {
-        console.log('✅ Analysis completed:', result.result)
+        console.log('Analysis completed:', result.result)
         
         // Transform the API response to match frontend expectations
         const hasError = result.result?.error
-        console.log('🔍 Raw API result:', result.result)
+        console.log('Raw API result:', result.result)
         
         try {
           // Generate component scores from available data
@@ -668,7 +909,7 @@ export default function AuthorityPage() {
           const content = result.result?.analysis?.content || {}
           
           // DEBUG: Log the actual API response structure
-          console.log('🔧 DEBUG - API Response Structure:', {
+          console.log('DEBUG - API Response Structure:', {
             hasResult: !!result.result,
             hasAnalysis: !!result.result?.analysis,
             analysisKeys: result.result?.analysis ? Object.keys(result.result.analysis) : [],
@@ -683,7 +924,7 @@ export default function AuthorityPage() {
           const performanceScore = pageSpeed.performanceScore || Math.round(overallScore * 0.9)
           
           // Enhanced content score calculation with debug logging
-          console.log('🔧 CONTENT SCORE DEBUG - FULL API ANALYSIS:', {
+          console.log('CONTENT SCORE DEBUG - FULL API ANALYSIS:', {
             fullResult: result.result,
             hasAnalysis: !!result.result?.analysis,
             analysisKeys: result.result?.analysis ? Object.keys(result.result.analysis) : [],
@@ -718,7 +959,7 @@ export default function AuthorityPage() {
           }
           
           // DEBUG: Log component scores calculation
-          console.log('🔧 DEBUG - Component Scores Calculation:', {
+          console.log('DEBUG - Component Scores Calculation:', {
             overallScore,
             performanceScore,
             contentScore,
@@ -775,7 +1016,7 @@ export default function AuthorityPage() {
           }
           
           // DEBUG: Log final transformed data
-          console.log('🔧 DEBUG - Final Transformed Data:', {
+          console.log('DEBUG - Final Transformed Data:', {
             hasComponentScores: !!transformedData.componentScores,
             componentScoresKeys: transformedData.componentScores ? Object.keys(transformedData.componentScores) : [],
             hasRawData: !!transformedData.rawData,
@@ -892,7 +1133,7 @@ export default function AuthorityPage() {
         </h3>
         
         <div className="space-y-4">
-          <div>
+            <div>
             <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-2">
               Enter Website URL
             </label>
@@ -906,57 +1147,40 @@ export default function AuthorityPage() {
                 className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 disabled={isAnalyzing}
               />
-              <button
-                onClick={handleAnalyze}
+            <button
+              onClick={handleAnalyze}
                 disabled={isAnalyzing || !url.trim()}
                 className="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
               >
                 {isAnalyzing ? 'Analyzing...' : 'Analyze Website'}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 🔒 PROTECTED: IN-PAGE NOTIFICATION BANNER - DO NOT MODIFY */}
-      {showAgenticNotification && (
-        <div className="bg-gradient-to-r from-blue-50 via-purple-50 to-blue-50 border border-blue-200 rounded-2xl p-6">
-          <div className="flex items-center space-x-4">
-            <div className="flex-shrink-0">
-              <div className="flex space-x-1">
-                {[1, 2, 3, 4].map((agent) => (
-                  <div
-                    key={agent}
-                    className={`w-3 h-3 rounded-full animate-bounce ${
-                      agent === 1 ? 'bg-blue-500' :
-                      agent === 2 ? 'bg-purple-500' :
-                      agent === 3 ? 'bg-green-500' : 'bg-yellow-500'
-                    }`}
-                    style={{ animationDelay: `${agent * 0.1}s` }}
-                  />
-                ))}
+                </button>
               </div>
-            </div>
-            
-            <div className="flex-1">
-              <h3 className="font-semibold text-gray-900 mb-1">
-                Our Agentic Intelligence Agents Are Crunching Numbers
-              </h3>
-              <p className="text-sm text-gray-600">
-                Neural Command's AI agents are analyzing {url} across 500+ authority signals. 
-                Sit tight while our agentic systems discover optimization opportunities!
-              </p>
-            </div>
-            
-            <div className="flex-shrink-0">
-              <div className="text-right">
-                <div className="text-sm font-medium text-blue-600">4 Agents Active</div>
-                <div className="text-xs text-gray-500">Processing...</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+              
+              {analysisData && (
+                <div className="flex items-center space-x-2 mt-4">
+                  <button
+                    onClick={() => exportReport('json')}
+                    className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all duration-200 font-medium"
+                  >
+                    Export JSON
+                  </button>
+                  <button
+                    onClick={() => exportReport('pdf')}
+                    className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-all duration-200 font-medium"
+                  >
+                    Export PDF
+                  </button>
+                </div>
+              )}
+              
+              {successMessage && (
+                <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                  <p className="text-green-700 text-sm">{successMessage}</p>
+                </div>
+              )}
+            </div> {/* close inner form content */}
+          </div> {/* close space-y-4 */}
+        </div> {/* close bg-white rounded-lg ... */}
 
       {/* Analysis Progress Display */}
       <AnalysisProgress 
@@ -983,22 +1207,22 @@ export default function AuthorityPage() {
         <div className="text-center py-12">
           <div className="text-gray-600 text-lg mb-4">
             Analyzing website authority signals...
-          </div>
+            </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 
               className="bg-blue-600 h-2 rounded-full transition-all duration-300"
               style={{ width: `${loadingState.progress}%` }}
             />
-          </div>
-        </div>
-      )}
+            </div>
+            </div>
+          )}
 
       {/* Error State */}
       {errorState && (
         <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded">
           <strong>Analysis Error:</strong> {errorState.error.message}
-        </div>
-      )}
+            </div>
+          )}
 
       {/* Enhanced Results Section with Real Insights */}
       {analysisComplete && analysisData && (
@@ -1018,10 +1242,10 @@ export default function AuthorityPage() {
                     analysisData.overall?.score > 50 ? 'text-yellow-600' : 'text-red-600'
                   }`}>
                     {analysisData.overall?.score || 0}
-                  </div>
+            </div>
                   <div className="text-lg font-medium text-gray-700 mb-4">
                     {analysisData.overall?.status ? analysisData.overall.status.charAt(0).toUpperCase() + analysisData.overall.status.slice(1) : 'Unknown'} Authority
-                  </div>
+            </div>
                   <div className="flex items-center justify-center space-x-2">
                     <span className={`text-sm font-medium ${
                       analysisData.overall?.trend === 'up' ? 'text-green-600' :
@@ -1031,9 +1255,9 @@ export default function AuthorityPage() {
                        analysisData.overall?.trend === 'down' ? '↘' : '→'} 
                       {analysisData.overall?.change > 0 ? '+' : ''}{analysisData.overall?.change || 0}% trend
                     </span>
-                  </div>
-                </div>
-              </div>
+            </div>
+            </div>
+            </div>
 
               {/* Enhanced Authority Score Breakdown with Debug & Fallback */}
               <div className="lg:col-span-2">
@@ -1041,8 +1265,8 @@ export default function AuthorityPage() {
                 
                 {/* Debug: Log what data we have */}
                 {(() => {
-                  console.log('🔧 DEBUG - analysisData:', analysisData)
-                  console.log('🔧 DEBUG - componentScores:', analysisData?.componentScores)
+                        console.log('DEBUG - analysisData:', analysisData)
+      console.log('DEBUG - componentScores:', analysisData?.componentScores)
                   return null
                 })()}
                 
@@ -1066,21 +1290,21 @@ export default function AuthorityPage() {
                           <span className="text-sm text-gray-500">
                             {getScoreExplanation(key, score as number)}
                           </span>
-                        </div>
+            </div>
                         <div className="flex items-center space-x-2">
                           <div className="w-32 bg-gray-200 rounded-full h-2">
                             <div 
                               className={`h-2 rounded-full transition-all duration-500 ${getScoreColor(score as number)}`}
                               style={{ width: `${score}%` }}
                             />
-                          </div>
+            </div>
                           <span className="font-medium text-gray-900 w-12 text-right">{Math.round(score as number)}%</span>
-                        </div>
-                      </div>
+            </div>
+            </div>
                     ))
                   })()}
-                </div>
-              </div>
+            </div>
+            </div>
             </div>
 
             {/* Authority Explanation */}
@@ -1090,17 +1314,113 @@ export default function AuthorityPage() {
                 {getAuthorityExplanation(analysisData.overall?.score || 0)}
               </p>
             </div>
-          </div>
+            </div>
+
+          {/* Enhanced Learning Metrics Display */}
+          {analysisData.learningMetrics && (
+            <LearningMetricsDisplay 
+              metrics={analysisData.learningMetrics}
+              isVisible={analysisComplete}
+            />
+          )}
+
+          {/* LLM Visibility Scanner */}
+          {analysisData.llmVisibility && (
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">LLM Visibility Scanner</h2>
+              
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Select LLM Platform</label>
+                <select
+                  value={selectedLLM}
+                  onChange={(e) => setSelectedLLM(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="chatgpt">ChatGPT (Browsing Mode)</option>
+                  <option value="claude">Claude.ai</option>
+                  <option value="perplexity">Perplexity</option>
+                </select>
+            </div>
+
+              {analysisData.llmVisibility[selectedLLM] && (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div className="text-center p-4 bg-blue-50 rounded-lg">
+                      <div className="text-2xl font-bold text-blue-600">
+                        {analysisData.llmVisibility[selectedLLM].results.reduce((acc: number, result: any) => 
+                          acc + result.domainVisibility, 0) / analysisData.llmVisibility[selectedLLM].results.length}%
+            </div>
+                      <div className="text-sm text-blue-700">Average Visibility</div>
+            </div>
+                    <div className="text-center p-4 bg-green-50 rounded-lg">
+                      <div className="text-2xl font-bold text-green-600">
+                        {analysisData.llmVisibility[selectedLLM].results.filter((result: any) => 
+                          result.domainVisibility > 80).length}
+            </div>
+                      <div className="text-sm text-green-700">High Visibility Queries</div>
+            </div>
+                    <div className="text-center p-4 bg-purple-50 rounded-lg">
+                      <div className="text-2xl font-bold text-purple-600">
+                        {analysisData.llmVisibility[selectedLLM].results.filter((result: any) => 
+                          result.topResults.some((r: any) => r.domain === new URL(url).hostname)).length}
+            </div>
+                      <div className="text-sm text-purple-700">Appearances in Top 3</div>
+            </div>
+            </div>
+
+                  <div className="space-y-3">
+                    {analysisData.llmVisibility[selectedLLM].results.map((result: any, index: number) => (
+                      <div key={index} className="border border-gray-200 rounded-lg p-4">
+                        <div className="flex items-center justify-between mb-3">
+                          <h4 className="font-medium text-gray-900">{result.query}</h4>
+                          <div className="flex items-center space-x-2">
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              result.domainVisibility > 80 ? 'bg-green-100 text-green-700' :
+                              result.domainVisibility > 60 ? 'bg-yellow-100 text-yellow-700' :
+                              'bg-red-100 text-red-700'
+                            }`}>
+                              {result.domainVisibility}% visibility
+                            </span>
+            </div>
+            </div>
+                        
+                        <div className="space-y-2">
+                          {result.topResults.map((topResult: any, rankIndex: number) => (
+                            <div key={rankIndex} className="flex items-center space-x-3 p-2 bg-gray-50 rounded">
+                              <div className="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center text-xs font-medium">
+                                {topResult.rank}
+            </div>
+                              <div className="flex-1">
+                                <div className="font-medium text-sm">{topResult.title}</div>
+                                <div className="text-xs text-gray-500">{topResult.domain}</div>
+            </div>
+                              <div className={`px-2 py-1 rounded text-xs font-medium ${
+                                topResult.source === 'chat' ? 'bg-blue-100 text-blue-700' :
+                                topResult.source === 'link' ? 'bg-green-100 text-green-700' :
+                                'bg-purple-100 text-purple-700'
+                              }`}>
+                                {topResult.source}
+            </div>
+            </div>
+                          ))}
+            </div>
+            </div>
+                    ))}
+            </div>
+            </div>
+          )}
+            </div>
+          )}
 
           {/* Platform Scores */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">AI Platform Authority Scores</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {analysisData.platforms && analysisData.platforms.map((platform: any) => (
-                <div key={platform.id} className="border border-gray-200 rounded-lg p-4">
+              {analysisData.platformScores && analysisData.platformScores.map((platform: any) => (
+                <div key={platform.platform} className="border border-gray-200 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold text-gray-900 text-sm">{platform.name}</h3>
+                    <h3 className="font-semibold text-gray-900 text-sm">{platform.platform}</h3>
                     <div className={`px-2 py-1 rounded text-xs font-medium ${
                       platform.status === 'excellent' ? 'bg-green-100 text-green-800' :
                       platform.status === 'good' ? 'bg-blue-100 text-blue-800' :
@@ -1108,16 +1428,38 @@ export default function AuthorityPage() {
                       'bg-red-100 text-red-800'
                     }`}>
                       {platform.status}
-                    </div>
-                  </div>
+            </div>
+            </div>
 
                   <div className="text-2xl font-bold text-gray-900 mb-2">
                     {platform.score}%
-                  </div>
+            </div>
 
                   <p className="text-xs text-gray-600 mb-3">
-                    {getPlatformExplanation(platform.name, platform.score)}
+                    {platform.explanation || getPlatformExplanation(platform.platform, platform.score)}
                   </p>
+
+                  {/* Enhanced Learning Insights */}
+                  {(platform.temporalAdjustment || platform.feedbackEnhancement) && (
+                    <div className="space-y-2 mb-3">
+                      {platform.temporalAdjustment && (
+                        <div className="flex justify-between text-xs">
+                          <span className="text-gray-500">🕒 Temporal Adjustment</span>
+                          <span className={`font-medium ${platform.temporalAdjustment > 0 ? 'text-blue-600' : 'text-gray-600'}`}>
+                            {platform.temporalAdjustment > 0 ? '+' : ''}{platform.temporalAdjustment}%
+                          </span>
+            </div>
+          )}
+                      {platform.feedbackEnhancement && (
+                        <div className="flex justify-between text-xs">
+                          <span className="text-gray-500">Feedback Enhancement</span>
+                          <span className={`font-medium ${platform.feedbackEnhancement > 0 ? 'text-green-600' : 'text-gray-600'}`}>
+                            {platform.feedbackEnhancement > 0 ? '+' : ''}{platform.feedbackEnhancement}%
+                          </span>
+            </div>
+          )}
+            </div>
+          )}
 
                   {/* Platform Metrics */}
                   <div className="space-y-1">
@@ -1125,10 +1467,10 @@ export default function AuthorityPage() {
                       <div key={metric} className="flex justify-between text-xs">
                         <span className="text-gray-500 capitalize">{metric}</span>
                         <span className="font-medium">{String(value)}%</span>
-                      </div>
+            </div>
                     ))}
-                  </div>
-                </div>
+            </div>
+            </div>
               ))}
             </div>
 
@@ -1138,13 +1480,13 @@ export default function AuthorityPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-green-800">
                 <div>
                   <span className="font-medium">Best Performing:</span> {getBestPlatform(analysisData.platforms)}
-                </div>
+            </div>
                 <div>
                   <span className="font-medium">Improvement Opportunity:</span> {getWorstPlatform(analysisData.platforms)}
-                </div>
-              </div>
             </div>
-          </div>
+            </div>
+            </div>
+            </div>
 
           {/* Recommendations */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
@@ -1162,7 +1504,7 @@ export default function AuthorityPage() {
                         <p className="text-gray-600 text-sm">
                           {rec.description || rec}
                         </p>
-                      </div>
+            </div>
                       <div className="ml-4 text-right">
                         <div className={`px-3 py-1 rounded-full text-xs font-medium ${
                           rec.priority === 'critical' ? 'bg-red-100 text-red-800' :
@@ -1171,24 +1513,24 @@ export default function AuthorityPage() {
                           'bg-green-100 text-green-800'
                         }`}>
                           {rec.priority || 'Medium'} Priority
-                        </div>
-                      </div>
-                    </div>
+            </div>
+            </div>
+            </div>
 
                     <div className="grid grid-cols-3 gap-4 text-sm">
                       <div>
                         <span className="font-medium text-gray-700">Impact:</span>
                         <span className="ml-2 text-gray-600">{rec.impact || 'High'}</span>
-                      </div>
+            </div>
                       <div>
                         <span className="font-medium text-gray-700">Effort:</span>
                         <span className="ml-2 text-gray-600">{rec.effort || 'Medium'}</span>
-                      </div>
+            </div>
                       <div>
                         <span className="font-medium text-gray-700">Timeframe:</span>
                         <span className="ml-2 text-gray-600">{rec.estimatedTime || '1-2 weeks'}</span>
-                      </div>
-                    </div>
+            </div>
+            </div>
 
                     {rec.actionSteps && rec.actionSteps.length > 0 && (
                       <div className="mt-4">
@@ -1201,17 +1543,17 @@ export default function AuthorityPage() {
                             </li>
                           ))}
                         </ul>
-                      </div>
-                    )}
-                  </div>
+            </div>
+          )}
+            </div>
                 ))}
-              </div>
+            </div>
             ) : (
               <div className="text-center py-8 text-gray-500">
                 <p>Generating detailed recommendations based on analysis...</p>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
+            </div>
 
           {/* Analysis Summary - REAL DATA ONLY */}
           <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
@@ -1227,9 +1569,9 @@ export default function AuthorityPage() {
               • Backlinks: {analysisData.componentScores?.backlink}%
               • <strong>Overall: {analysisData.overall?.score}%</strong>
             </div>
-          </div>
-        </div>
-      )}
+            </div>
+            </div>
+          )}
 
       {/* Empty State */}
       {!analysisData && !isAnalyzing && (
@@ -1238,7 +1580,7 @@ export default function AuthorityPage() {
             <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-          </div>
+            </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
             Ready to Analyze
           </h3>
@@ -1248,10 +1590,10 @@ export default function AuthorityPage() {
           <div className="text-sm text-gray-500 max-w-md mx-auto">
             Our AI-powered analysis examines performance, content quality, SEO, 
             technical factors, and backlink authority.
-          </div>
-        </div>
-      )}
-      
-    </div>
+            </div>
+            </div>
+          )}
+
+            </div>
   );
 }

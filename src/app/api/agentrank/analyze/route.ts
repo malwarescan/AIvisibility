@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { AgentRankService } from '@/lib/analysis/AgentRankService';
+import { EnhancedAgentRankService } from '@/lib/analysis/EnhancedAgentRankService';
 
 export async function POST(request: NextRequest) {
   try {
-    const { url } = await request.json();
+    const body = await request.json();
+    const { url } = body;
 
     if (!url) {
       return NextResponse.json(
-        { error: 'URL is required' },
+        { 
+          success: false, 
+          error: 'URL is required' 
+        },
         { status: 400 }
       );
     }
@@ -17,25 +21,32 @@ export async function POST(request: NextRequest) {
       new URL(url);
     } catch {
       return NextResponse.json(
-        { error: 'Invalid URL format' },
+        { 
+          success: false, 
+          error: 'Invalid URL format' 
+        },
         { status: 400 }
       );
     }
 
-    const agentRankService = new AgentRankService();
-    const result = await agentRankService.analyzeContent(url);
+    // Initialize Enhanced AgentRank service
+    const agentRankService = new EnhancedAgentRankService();
+    
+    // Analyze content with enhanced features
+    const analysis = await agentRankService.analyzeContent(url);
 
     return NextResponse.json({
       success: true,
-      data: result
+      data: analysis
     });
 
   } catch (error) {
-    console.error('AgentRank analysis error:', error);
+    console.error('Enhanced AgentRank API error:', error);
+    
     return NextResponse.json(
       { 
-        error: 'Analysis failed',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        success: false, 
+        error: error instanceof Error ? error.message : 'Enhanced analysis failed' 
       },
       { status: 500 }
     );

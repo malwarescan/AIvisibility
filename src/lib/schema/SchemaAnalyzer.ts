@@ -34,7 +34,7 @@ export class SchemaAnalyzer {
   async analyzeSchema(request: SchemaAnalysisRequest): Promise<SchemaAnalysisResult> {
     const { url, content, options } = request
     
-    console.log(`🔍 Analyzing schema for: ${url}`)
+    console.log(`Analyzing schema for: ${url}`)
     
     try {
       // Extract schema markup from content

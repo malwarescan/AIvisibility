@@ -50,7 +50,7 @@ export function SchemaInsights({ data }: SchemaInsightsProps) {
     return (
       <div className="flex items-center justify-center h-64 text-gray-500">
         <div className="text-center">
-          <div className="h-12 w-12 mx-auto mb-4 opacity-50">🔍</div>
+          <div className="h-12 w-12 mx-auto mb-4 opacity-50">Search</div>
           <p>Generate a schema to see AI optimization insights</p>
         </div>
       </div>
@@ -61,7 +61,7 @@ export function SchemaInsights({ data }: SchemaInsightsProps) {
     switch (priority) {
       case 'high': return <span className="text-red-600">⚠️</span>
       case 'medium': return <span className="text-yellow-600">ℹ️</span>
-      case 'low': return <span className="text-green-600">✅</span>
+      case 'low': return <span className="text-green-600">Good</span>
       default: return <span className="text-gray-600">ℹ️</span>
     }
   }
@@ -82,7 +82,7 @@ export function SchemaInsights({ data }: SchemaInsightsProps) {
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <div className="flex items-center gap-2 mb-4">
             <div className="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">📈</span>
+              <span className="text-white font-bold text-sm">Chart</span>
             </div>
             <div>
               <h3 className="text-lg font-semibold text-gray-900">Overall Schema Score</h3>
@@ -101,7 +101,7 @@ export function SchemaInsights({ data }: SchemaInsightsProps) {
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <div className="flex items-center gap-2 mb-4">
             <div className="h-8 w-8 bg-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">🧠</span>
+              <span className="text-white font-bold text-sm">Fast</span>
             </div>
             <div>
               <h3 className="text-lg font-semibold text-gray-900">AI Optimization</h3>
@@ -120,7 +120,7 @@ export function SchemaInsights({ data }: SchemaInsightsProps) {
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <div className="flex items-center gap-2 mb-4">
             <div className="h-8 w-8 bg-green-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">🌐</span>
+              <span className="text-white font-bold text-sm">Target</span>
             </div>
             <div>
               <h3 className="text-lg font-semibold text-gray-900">Platform Coverage</h3>

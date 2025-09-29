@@ -50,20 +50,20 @@ export function SchemaAuditor() {
     setTerminalLogs([])
     setAuditResult(null)
     
-    addLog('🔍 Starting comprehensive schema audit...')
-    addLog('📡 Fetching page content...')
+    addLog('Starting comprehensive schema audit...')
+    addLog('Fetching page content...')
     
     try {
-      addLog('🔬 Analyzing structured data markup...')
+      addLog('Analyzing structured data markup...')
       await new Promise(resolve => setTimeout(resolve, 1500))
       
-      addLog('🤖 Evaluating AI platform compatibility...')
+      addLog('Evaluating AI platform compatibility...')
       await new Promise(resolve => setTimeout(resolve, 1000))
       
-      addLog('⚡ Running validation checks...')
+      addLog('Running validation checks...')
       await new Promise(resolve => setTimeout(resolve, 800))
       
-      addLog('📊 Generating audit report...')
+      addLog('Generating audit report...')
       await new Promise(resolve => setTimeout(resolve, 500))
 
       // Call your existing analyze-schema API
@@ -78,7 +78,7 @@ export function SchemaAuditor() {
       if (response.ok) {
         const data = await response.json()
         // Process the real API response
-        addLog('✅ Real schema audit data received')
+        addLog('Real schema audit data received')
       }
 
       // Generate comprehensive audit result
@@ -136,11 +136,11 @@ export function SchemaAuditor() {
       }
 
       setAuditResult(mockResult)
-      addLog('✅ Schema audit completed successfully')
+      addLog('Schema audit completed successfully')
       
     } catch (error) {
       console.error('Audit error:', error)
-      addLog(`❌ Error: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      addLog(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`)
     } finally {
       setIsAuditing(false)
     }
@@ -148,7 +148,7 @@ export function SchemaAuditor() {
 
   const getIssueIcon = (type: string) => {
     switch (type) {
-      case 'error': return <span className="text-red-600">❌</span>
+      case 'error': return <span className="text-red-600">Error</span>
       case 'warning': return <span className="text-yellow-600">⚠️</span>
       case 'suggestion': return <span className="text-blue-600">💡</span>
       default: return <span className="text-gray-600">ℹ️</span>
@@ -179,7 +179,7 @@ export function SchemaAuditor() {
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <div className="flex items-center gap-2 mb-4">
           <div className="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">🔍</span>
+            <span className="text-white font-bold text-sm">Search</span>
           </div>
           <div>
             <h3 className="text-lg font-semibold text-gray-900">Schema Auditor</h3>

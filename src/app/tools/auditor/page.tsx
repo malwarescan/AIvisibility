@@ -9,6 +9,7 @@ import {
   ClockIcon
 } from '@heroicons/react/24/outline'
 import { ToolProgressModal } from '@/components/ui/ToolProgressModal'
+import { AnalysisProgress } from '@/components/ui/AnalysisProgress'
 
 // Step 1: Define data structures (safest first step)
 interface AuditCheck {
@@ -178,6 +179,7 @@ export default function AIReadinessAuditor() {
     totalSteps: 4,
     errors: [] as string[]
   })
+  const [showProgress, setShowProgress] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -198,6 +200,7 @@ export default function AIReadinessAuditor() {
 
     setError(null)
     setIsLoading(true)
+    setShowProgress(true)
     
     // Initialize progress state
     setProgressState({
@@ -229,6 +232,7 @@ export default function AIReadinessAuditor() {
       setProgressState(prev => ({ ...prev, currentProgress: 0, currentStep: '', errors: [...prev.errors, 'Audit failed'] }))
     } finally {
       setIsLoading(false)
+      setShowProgress(false)
     }
   }
 
@@ -256,6 +260,15 @@ export default function AIReadinessAuditor() {
           </div>
         </div>
       </div>
+
+      {/* Analysis Progress */}
+      <AnalysisProgress 
+        isVisible={showProgress}
+        analysisUrl={url}
+        onComplete={() => {
+          setShowProgress(false);
+        }}
+      />
 
       {/* Tool Progress Modal */}
       <ToolProgressModal

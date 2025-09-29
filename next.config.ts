@@ -17,7 +17,7 @@ const validateExperimentalConfig = (config: any) => {
 
 const nextConfig: NextConfig = {
   experimental: {
-    optimizeCss: false, // ✅ KEEP FALSE - Required for stability
+    optimizeCss: false, // KEEP FALSE - Required for stability
   },
   eslint: {
     ignoreDuringBuilds: true,

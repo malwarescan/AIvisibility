@@ -80,11 +80,11 @@ export function SchemaGenerator({ onDataGenerated }: SchemaGeneratorProps) {
 
     setIsGenerating(true)
     setTerminalLogs([])
-    addLog('🚀 Starting AI-optimized schema generation...')
+    addLog('Starting AI-optimized schema generation...')
     
     try {
-      addLog('🔍 Analyzing page content...')
-      addLog('🤖 Calling OpenAI for schema optimization...')
+      addLog('Analyzing page content...')
+      addLog('Calling OpenAI for schema optimization...')
       
       const response = await fetch('/api/schema-analyze', {
         method: 'POST',
@@ -101,8 +101,8 @@ export function SchemaGenerator({ onDataGenerated }: SchemaGeneratorProps) {
       const data = await response.json()
       
       if (data.success) {
-        addLog('✅ Schema generation completed successfully')
-        addLog('📊 Calculating AI compatibility scores...')
+        addLog('Schema generation completed successfully')
+        addLog('Calculating AI compatibility scores...')
         
         setGeneratedSchema(data.result.schema)
         setAiScores(data.result.aiCompatibilityScores)
@@ -166,7 +166,7 @@ export function SchemaGenerator({ onDataGenerated }: SchemaGeneratorProps) {
           }
         }
         
-        addLog('🎯 Analysis complete - All systems ready!')
+        addLog('Analysis complete - All systems ready!')
         
         // Pass complete data to parent component
         if (onDataGenerated) {
@@ -177,7 +177,7 @@ export function SchemaGenerator({ onDataGenerated }: SchemaGeneratorProps) {
       }
     } catch (error) {
       console.error('Schema generation error:', error)
-      addLog(`❌ Error: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      addLog(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`)
       
       // Provide fallback data even on error so components still show something
       if (onDataGenerated) {
@@ -225,10 +225,37 @@ export function SchemaGenerator({ onDataGenerated }: SchemaGeneratorProps) {
     }
   }
 
-  const copySchema = () => {
+  const copySchema = async () => {
     if (generatedSchema) {
-      navigator.clipboard.writeText(JSON.stringify(generatedSchema, null, 2))
-      addLog('📋 Schema copied to clipboard')
+      try {
+        // Try modern Clipboard API first
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+          await navigator.clipboard.writeText(JSON.stringify(generatedSchema, null, 2));
+          addLog('Schema copied to clipboard');
+        } else {
+          // Fallback for older browsers or environments without Clipboard API
+          const textArea = document.createElement('textarea');
+          textArea.value = JSON.stringify(generatedSchema, null, 2);
+          textArea.style.position = 'fixed';
+          textArea.style.left = '-999999px';
+          textArea.style.top = '-999999px';
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+          
+          const successful = document.execCommand('copy');
+          document.body.removeChild(textArea);
+          
+          if (successful) {
+            addLog('Schema copied to clipboard');
+          } else {
+            addLog('Failed to copy schema to clipboard');
+          }
+        }
+      } catch (error) {
+        console.error('Failed to copy schema to clipboard:', error);
+        addLog('Failed to copy schema to clipboard');
+      }
     }
   }
 
@@ -241,7 +268,7 @@ export function SchemaGenerator({ onDataGenerated }: SchemaGeneratorProps) {
       a.download = 'schema.json'
       a.click()
       URL.revokeObjectURL(url)
-      addLog('📥 Schema downloaded')
+      addLog('Schema downloaded')
     }
   }
 
@@ -260,7 +287,7 @@ export function SchemaGenerator({ onDataGenerated }: SchemaGeneratorProps) {
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <div className="flex items-center gap-2 mb-4">
           <div className="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">⚡</span>
+            <span className="text-white font-bold text-sm">Fast</span>
           </div>
           <div>
             <h3 className="text-lg font-semibold text-gray-900">AI Schema Generator</h3>
@@ -314,7 +341,7 @@ export function SchemaGenerator({ onDataGenerated }: SchemaGeneratorProps) {
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <div className="flex items-center gap-2 mb-4">
             <div className="h-8 w-8 bg-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">🎯</span>
+              <span className="text-white font-bold text-sm">Target</span>
             </div>
             <div>
               <h3 className="text-lg font-semibold text-gray-900">AI Platform Compatibility</h3>
@@ -353,13 +380,13 @@ export function SchemaGenerator({ onDataGenerated }: SchemaGeneratorProps) {
                   onClick={copySchema}
                   className="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50"
                 >
-                  📋 Copy
+                  Copy
                 </button>
                 <button
                   onClick={downloadSchema}
                   className="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50"
                 >
-                  📥 Download
+                  Download
                 </button>
               </div>
             </div>
@@ -371,7 +398,7 @@ export function SchemaGenerator({ onDataGenerated }: SchemaGeneratorProps) {
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div className="flex items-center gap-2 mb-4">
               <div className="h-8 w-8 bg-green-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">📈</span>
+                <span className="text-white font-bold text-sm">Chart</span>
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">AI Optimization Recommendations</h3>

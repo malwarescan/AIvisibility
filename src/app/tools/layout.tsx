@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { Sidebar } from '@/components/tools/shared/Sidebar';
 
 export default function ToolsLayout({
@@ -8,56 +9,61 @@ export default function ToolsLayout({
 }: {
   children: React.ReactNode
 }) {
-  const [activeTool, setActiveTool] = useState('authority')
+  const pathname = usePathname();
+  const [activeTool, setActiveTool] = useState('')
 
-  // Define the tools array
+  // Define the tools array with Agentic SEO Flywheel structure
   const tools = [
+    {
+      id: 'ai-overview-schema-reverse-engineer',
+      name: 'AI Overview Schema Reverse Engineer',
+      href: '/tools/ai-overview-schema-reverse-engineer',
+      isFlagship: true,
+      category: 'discovery'
+    },
+    {
+      id: 'schema-scoring',
+      name: 'Schema Scoring & Validation',
+      href: '/tools/schema-scoring',
+      category: 'analysis'
+    },
     {
       id: 'authority',
       name: 'Authority Signal Monitor',
-      href: '/tools/authority'
+      href: '/tools/authority',
+      category: 'measurement'
     },
     {
-      id: 'batch-authority',
-      name: 'Batch Authority Analyzer',
-      href: '/tools/batch-authority'
-    },
-    {
-      id: 'schema-optimizer',
-      name: 'Schema Optimizer',
-      href: '/tools/schema-optimizer'
-    },
-    {
-      id: 'auditor',
-      name: 'AI Content Auditor',
-      href: '/tools/auditor'
-    },
-    {
-      id: 'analytics',
-      name: 'Performance Analytics',
-      href: '/tools/analytics'
+      id: 'agentic-visibility',
+      name: 'Agentic Visibility Scanner',
+      href: '/tools/agentic-visibility',
+      category: 'simulation'
     },
     {
       id: 'connect',
-      name: 'Agent Connect',
-      href: '/tools/connect'
+      name: 'Agentic API',
+      href: '/tools/connect',
+      category: 'scaling'
     },
     {
-      id: 'querymind',
-      name: 'QueryMind',
-      href: '/tools/querymind'
-    },
-    {
-      id: 'agentrank',
-      name: 'AgentRank',
-      href: '/tools/agentrank'
-    },
-    {
-      id: 'citationflow',
-      name: 'CitationFlow',
-      href: '/tools/citationflow'
+      id: 'flywheel',
+      name: 'SEO Flywheel (Workflow Mode)',
+      href: '/tools/flywheel',
+      category: 'workflow',
+      isWorkflow: true
     }
   ]
+
+  // Determine active tool based on current pathname
+  useEffect(() => {
+    const currentTool = tools.find(tool => pathname === tool.href);
+    if (currentTool) {
+      setActiveTool(currentTool.id);
+    } else if (pathname === '/tools') {
+      // If we're on the main tools page, don't highlight any specific tool
+      setActiveTool('');
+    }
+  }, [pathname, tools]);
 
   const handleToolChange = (toolId: string) => {
     setActiveTool(toolId)

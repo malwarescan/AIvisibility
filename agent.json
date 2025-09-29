@@ -1,0 +1,15 @@
+{
+  "name": "Neural Command Agentic Actions",
+  "version": "1.1",
+  "baseUrl": "https://neuralcommandllc.com",
+  "capabilities": [
+    {"action": "book_consult", "method": "POST", "endpoint": "/api/book", "params": ["name","email"], "description": "Book a consultation"},
+    {"action": "request_quote", "method": "POST", "endpoint": "/api/quote", "params": ["name","email","service","notes"], "description": "Request a project quote"},
+    {"action": "visibility_audit", "method": "POST", "endpoint": "/api/audit", "params": ["domain","industry","region"], "description": "Test AI visibility for a domain"}
+  ],
+  "schemas": [
+    "/services/", "/ai-consulting/{city}/", "/resources/diagnostic/", "/sitemap.xml"
+  ],
+  "alternateNames": ["Agentic SEO","ChatGPT Optimization","LLM Visibility"]
+}
+

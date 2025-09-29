@@ -10,6 +10,9 @@ interface Tool {
   href: string
   active?: boolean
   icon?: React.ReactNode
+  isFlagship?: boolean
+  isWorkflow?: boolean
+  category?: string
 }
 
 interface SidebarProps {
@@ -55,24 +58,20 @@ export function Sidebar({ tools, activeTool, onToolChange }: SidebarProps) {
   // Default icons for tools
   const getDefaultIcon = (toolId: string) => {
     const icons: Record<string, React.ReactNode> = {
+      'schema-reverse-engineer': (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+        </svg>
+      ),
       'authority': (
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       ),
-      'batch-authority': (
+      'agentic-visibility': (
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-        </svg>
-      ),
-      'auditor': (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-      ),
-      'analytics': (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
         </svg>
       ),
       'connect': (
@@ -80,19 +79,9 @@ export function Sidebar({ tools, activeTool, onToolChange }: SidebarProps) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
       ),
-      'querymind': (
+      'flywheel': (
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-        </svg>
-      ),
-      'agentrank': (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-        </svg>
-      ),
-      'citationflow': (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
         </svg>
       )
     }
@@ -128,7 +117,7 @@ export function Sidebar({ tools, activeTool, onToolChange }: SidebarProps) {
         <ul role="list" className="flex flex-1 flex-col gap-y-7">
           <li>
             <div className="text-xs font-semibold leading-6 text-gray-400 uppercase tracking-wider mb-2">
-              Tools
+              Agentic SEO Flywheel
             </div>
             <ul role="list" className="-mx-2 space-y-1">
               {navigation.map((item) => (
@@ -142,26 +131,101 @@ export function Sidebar({ tools, activeTool, onToolChange }: SidebarProps) {
                       }
                     }}
                     className={`
-                      group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold transition-all duration-200
+                      group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold transition-all duration-200 relative
                       ${item.current
                         ? 'bg-blue-50 text-blue-700 border-r-4 border-blue-700 shadow-sm'
                         : 'text-gray-700 hover:text-blue-700 hover:bg-gray-50 hover:shadow-sm'
                       }
-                      ${isMobile ? 'text-base p-4' : ''}
+                      ${isMobile ? 'text-base p-4 gap-x-4' : ''}
                     `}
                   >
                     <span className={`flex items-center ${isMobile ? 'text-xl' : ''}`}>
                       {item.icon}
                     </span>
-                    <span className="truncate">{item.name}</span>
-                    {item.current && (
-                      <span className="ml-auto">
-                        <div className="h-2 w-2 bg-blue-600 rounded-full"></div>
-                      </span>
-                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <span className="truncate">{item.name}</span>
+                        <div className="flex items-center space-x-1 ml-2 flex-shrink-0">
+                          {item.isFlagship && (
+                            <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 whitespace-nowrap ${isMobile ? 'text-xs' : ''}`}>
+                              Flagship
+                            </span>
+                          )}
+                          {item.isWorkflow && (
+                            <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 whitespace-nowrap ${isMobile ? 'text-xs' : ''}`}>
+                              Workflow
+                            </span>
+                          )}
+                          {item.current && (
+                            <div className="h-2 w-2 bg-blue-600 rounded-full ml-1"></div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
                   </Link>
                 </li>
               ))}
+            </ul>
+          </li>
+
+          {/* Documentation Section */}
+          <li>
+            <div className="text-xs font-semibold leading-6 text-gray-400 uppercase tracking-wider mb-2">
+              Documentation
+            </div>
+            <ul role="list" className="-mx-2 space-y-1">
+              <li>
+                <Link
+                  href="/docs/web-pages"
+                  className="group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold transition-all duration-200 text-gray-700 hover:text-blue-700 hover:bg-gray-50 hover:shadow-sm"
+                >
+                  <span className={`flex items-center ${isMobile ? 'text-xl' : ''}`}>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                  </span>
+                  <span className="truncate">User Documentation</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/docs/web-pages?page=authority-signal-monitor.html"
+                  className="group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold transition-all duration-200 text-gray-700 hover:text-blue-700 hover:bg-gray-50 hover:shadow-sm"
+                >
+                  <span className={`flex items-center ${isMobile ? 'text-xl' : ''}`}>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </span>
+                  <span className="truncate">Authority Monitor Guide</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/docs/web-pages?page=schema-reverse-engineer.html"
+                  className="group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold transition-all duration-200 text-gray-700 hover:text-blue-700 hover:bg-gray-50 hover:shadow-sm"
+                >
+                  <span className={`flex items-center ${isMobile ? 'text-xl' : ''}`}>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                    </svg>
+                  </span>
+                  <span className="truncate">Schema Optimizer Guide</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/docs/web-pages?page=batch-authority-analyzer.html"
+                  className="group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold transition-all duration-200 text-gray-700 hover:text-blue-700 hover:bg-gray-50 hover:shadow-sm"
+                >
+                  <span className={`flex items-center ${isMobile ? 'text-xl' : ''}`}>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                  </span>
+                  <span className="truncate">Batch Analysis Guide</span>
+                </Link>
+              </li>
             </ul>
           </li>
 

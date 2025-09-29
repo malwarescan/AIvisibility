@@ -1,0 +1,36 @@
+RewriteEngine On
+
+# Force trailing slash for directories
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !\.
+RewriteRule ^(.+[^/])$ /$1/ [R=301,L]
+
+# Pretty routes
+RewriteRule ^sitemap\.xml$ sitemap.xml.php [L]
+RewriteRule ^agent\.json$ agent.json [L]
+RewriteRule ^meta\.json$ meta.json [L]
+
+# Pages
+RewriteRule ^about/?$ index.php?page=about [L,QSA]
+RewriteRule ^services/?$ index.php?page=services [L,QSA]
+RewriteRule ^services/([a-z0-9-]+)/?$ index.php?page=service&slug=$1 [L,QSA]
+RewriteRule ^services/([a-z0-9-]+)/([a-z0-9-]+)/?$ index.php?page=service-city&slug=$1&city=$2 [L,QSA]
+RewriteRule ^states/([a-z0-9-]+)/?$ index.php?page=state&state=$1 [L,QSA]
+RewriteRule ^ai-consulting/([a-z0-9-]+)/?$ index.php?page=city-service&city=$1 [L,QSA]
+RewriteRule ^resources/?$ index.php?page=resources [L,QSA]
+RewriteRule ^resources/diagnostic/?$ index.php?page=resources/diagnostic [L,QSA]
+RewriteRule ^process-audit/?$ index.php?page=process-audit [L,QSA]
+RewriteRule ^audit-results/?$ index.php?page=audit-results [L,QSA]
+RewriteRule ^contact/?$ index.php?page=contact [L,QSA]
+RewriteRule ^thanks/?$ index.php?page=thanks [L,QSA]
+
+# APIs
+RewriteRule ^api/book/?$ api/book.php [L,QSA]
+RewriteRule ^api/quote/?$ api/quote.php [L,QSA]
+RewriteRule ^api/audit/?$ api/audit.php [L,QSA]
+
+# Fallback to home
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^$ index.php?page=home [L,QSA]
+

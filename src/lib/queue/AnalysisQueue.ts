@@ -40,7 +40,7 @@ if (useRedis) {
     
     queueEvents = new QueueEvents('authority-analysis', { connection })
     
-    console.log('✅ Redis connection established')
+    console.log('Redis connection established')
       } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown Redis connection error'
       console.warn('⚠️ Redis connection failed, using fallback mode:', errorMessage)
@@ -96,7 +96,7 @@ export interface AnalysisResult {
 export const processAnalysis = async (jobData: AnalysisJob): Promise<AnalysisResult> => {
   const { url, userId } = jobData
   
-  console.log(`🔧 Processing AI analysis for: ${url}`)
+  console.log(`Processing AI analysis for: ${url}`)
   
   try {
     // Initialize services
@@ -105,20 +105,20 @@ export const processAnalysis = async (jobData: AnalysisJob): Promise<AnalysisRes
     const crawler = new WebsiteCrawler()
     
     // Initialize browser
-    console.log(`📊 Initializing browser...`)
+    console.log(`Initializing browser...`)
     await crawler.initBrowser()
     
     // Crawl website for real data
-    console.log(`📊 Crawling website...`)
+    console.log(`Crawling website...`)
     const websiteData = await crawler.crawlWebsite(url)
     
     // Extract real content from crawled data
     const realContent = await crawler.extractMainContent(websiteData)
     
-    console.log(`📊 Analyzing technical factors...`)
-    console.log(`📊 AI content analysis...`)
-    console.log(`📊 AI authority scoring...`)
-    console.log(`📊 Generating AI recommendations...`)
+    console.log(`Analyzing technical factors...`)
+    console.log(`AI content analysis...`)
+    console.log(`AI authority scoring...`)
+    console.log(`Generating AI recommendations...`)
     
     // Get AI-powered analysis with real crawled content
     const contentAnalysis = await aiService.analyzeContentQuality(realContent, url)
@@ -164,7 +164,7 @@ export const processAnalysis = async (jobData: AnalysisJob): Promise<AnalysisRes
     }
     
   } catch (error) {
-    console.error(`❌ Analysis failed for ${url}:`, error)
+    console.error(`Analysis failed for ${url}:`, error)
     
     // Generate fallback data based on domain
     const domain = new URL(url).hostname
@@ -242,7 +242,7 @@ export class AnalysisQueueManager {
         delay: jobData.priority === 'low' ? 5000 : 0,
       })
       
-      console.log(`✅ Added analysis job ${job.id || 'unknown'} for URL: ${jobData.url}`)
+      console.log(`Added analysis job ${job.id || 'unknown'} for URL: ${jobData.url}`)
       return job.id || 'unknown'
     } else {
       // Fallback: process immediately
@@ -268,18 +268,18 @@ export class AnalysisQueueManager {
             progress: 100,
             result
           })
-          console.log(`✅ Job ${currentJobId} completed successfully`)
+          console.log(`Job ${currentJobId} completed successfully`)
         } catch (error) {
           inMemoryJobs.set(currentJobId, {
             ...inMemoryJobs.get(currentJobId),
             status: 'failed',
             error: error instanceof Error ? error.message : 'Unknown error'
           })
-          console.log(`❌ Job ${currentJobId} failed:`, error)
+          console.log(`Job ${currentJobId} failed:`, error)
         }
       }, 100)
       
-      console.log(`✅ Added analysis job ${jobId} for URL: ${jobData.url} (fallback mode)`)
+      console.log(`Added analysis job ${jobId} for URL: ${jobData.url} (fallback mode)`)
       return jobId
     }
   }
@@ -416,17 +416,17 @@ export const startWorker = () => {
     }, { connection })
     
     worker.on('completed', (job) => {
-      console.log(`✅ Job ${job.id || 'unknown'} completed`)
+      console.log(`Job ${job.id || 'unknown'} completed`)
     })
     
     worker.on('failed', (job, err) => {
-      console.log(`❌ Job ${job?.id || 'unknown'} failed:`, err.message)
+      console.log(`Job ${job?.id || 'unknown'} failed:`, err.message)
     })
     
-    console.log('🚀 Redis worker started')
+    console.log('Redis worker started')
     return worker
   } else {
-    console.log('🚀 Fallback worker mode active')
+    console.log('Fallback worker mode active')
     return null
   }
 }

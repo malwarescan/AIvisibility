@@ -1,69 +1,101 @@
 'use client';
 
 import React from 'react';
-import { AutoAnimatedElement } from '@/components/AutoAnimatedElement';
 import { MetricsOverview } from '@/components/tools/shared/MetricsOverview';
-import { TimeRangeSelector } from '@/components/tools/shared/TimeRangeSelector';
 import { StatusIndicator } from '@/components/ui/StatusIndicator';
+import { AutoAnimatedElement } from '@/components/AutoAnimatedElement';
 
 export default function TestComponentsPage() {
   const testMetrics = [
     {
       title: 'Test Metric 1',
-      value: '100%',
-      change: '+5%',
+      value: '85%',
+      change: '+12%',
       changeType: 'positive' as const,
       description: 'Test description 1',
     },
     {
       title: 'Test Metric 2',
-      value: '85%',
-      change: '-2%',
-      changeType: 'negative' as const,
+      value: '1,234',
+      change: '+5%',
+      changeType: 'positive' as const,
       description: 'Test description 2',
+    },
+    {
+      title: 'Test Metric 3',
+      value: 'A+',
+      change: '+2',
+      changeType: 'positive' as const,
+      description: 'Test description 3',
+    },
+    {
+      title: 'Test Metric 4',
+      value: '92%',
+      change: '-3%',
+      changeType: 'negative' as const,
+      description: 'Test description 4',
     },
   ];
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-900 mb-6">Component Import Test</h1>
-      
-      <div className="space-y-6">
-        {/* Test AutoAnimatedElement */}
-        <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">AutoAnimatedElement Test</h2>
-          <AutoAnimatedElement animation="slideUp">
-            <div className="bg-blue-500 text-white p-4 rounded-lg">
-              If you see this blue box with animation, AutoAnimatedElement works!
-            </div>
-          </AutoAnimatedElement>
+    <div className="space-y-8">
+      <AutoAnimatedElement animation="slideUp">
+        <div className="bg-white rounded-2xl p-8 border border-gray-200">
+          <h1 className="text-3xl font-semibold text-gray-900 mb-2">
+            Component Test Page
+          </h1>
+          <p className="text-gray-600">
+            Test various components and their functionality
+          </p>
         </div>
+      </AutoAnimatedElement>
 
-        {/* Test StatusIndicator */}
-        <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">StatusIndicator Test</h2>
-          <div className="space-y-2">
-            <StatusIndicator status="excellent" label="Excellent Status" />
-            <StatusIndicator status="good" label="Good Status" />
-            <StatusIndicator status="average" label="Average Status" />
-          </div>
-        </div>
-
-        {/* Test TimeRangeSelector */}
-        <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">TimeRangeSelector Test</h2>
-          <TimeRangeSelector 
-            selected="7d" 
-            onChange={(range) => alert(`Selected: ${range}`)} 
-          />
-        </div>
-
-        {/* Test MetricsOverview */}
-        <div className="bg-white p-6 rounded-xl border border-gray-200">
+      {/* Test MetricsOverview */}
+      <AutoAnimatedElement animation="slideUp" delay={200}>
+        <div className="bg-white rounded-2xl p-8 border border-gray-200">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">MetricsOverview Test</h2>
           <MetricsOverview metrics={testMetrics} />
         </div>
-      </div>
+      </AutoAnimatedElement>
+
+      {/* Test StatusIndicator */}
+      <AutoAnimatedElement animation="slideUp" delay={400}>
+        <div className="bg-white rounded-2xl p-8 border border-gray-200">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">StatusIndicator Test</h2>
+          <div className="space-y-4">
+            <StatusIndicator status="success" message="Test success message" />
+            <StatusIndicator status="error" message="Test error message" />
+            <StatusIndicator status="warning" message="Test warning message" />
+            <StatusIndicator status="info" message="Test info message" />
+          </div>
+        </div>
+      </AutoAnimatedElement>
+
+      {/* Test AutoAnimatedElement */}
+      <AutoAnimatedElement animation="slideUp" delay={600}>
+        <div className="bg-white rounded-2xl p-8 border border-gray-200">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">AutoAnimatedElement Test</h2>
+          <div className="space-y-4">
+            <AutoAnimatedElement animation="fadeIn" delay={0}>
+              <div className="p-4 bg-blue-50 rounded-lg">
+                <p className="text-blue-700">Fade In Animation</p>
+              </div>
+            </AutoAnimatedElement>
+            
+            <AutoAnimatedElement animation="slideUp" delay={200}>
+              <div className="p-4 bg-green-50 rounded-lg">
+                <p className="text-green-700">Slide Up Animation</p>
+              </div>
+            </AutoAnimatedElement>
+            
+            <AutoAnimatedElement animation="scale" delay={400}>
+              <div className="p-4 bg-purple-50 rounded-lg">
+                <p className="text-purple-700">Scale Animation</p>
+              </div>
+            </AutoAnimatedElement>
+          </div>
+        </div>
+      </AutoAnimatedElement>
     </div>
   );
 } 

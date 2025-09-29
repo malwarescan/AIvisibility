@@ -30,15 +30,15 @@ export function useBatchAnalysis() {
 
   // EXACT COPY from Authority tool - Fixed content score calculation function
   const calculateContentScoreFixed = (result: any) => {
-    console.log('🔧 CALCULATE CONTENT SCORE FIXED - INPUT:', result)
+    console.log('CALCULATE CONTENT SCORE FIXED - INPUT:', result)
     
     // Try to extract content data from different possible locations
     const content = result?.analysis?.content || result?.content || result?.result?.analysis?.content
     
-    console.log('🔧 CALCULATE CONTENT SCORE FIXED - EXTRACTED CONTENT:', content)
+    console.log('CALCULATE CONTENT SCORE FIXED - EXTRACTED CONTENT:', content)
     
     if (!content) {
-      console.log('🔧 CONTENT IS MISSING - RETURNING FALLBACK SCORE')
+      console.log('CONTENT IS MISSING - RETURNING FALLBACK SCORE')
       return 70 // Return a reasonable fallback score
     }
     
@@ -48,56 +48,56 @@ export function useBatchAnalysis() {
     // Check each condition individually
     if (content?.hasTitle) {
       score += 20
-      checks.push(`✅ hasTitle: ${content.hasTitle} (+20)`)
+      checks.push(`hasTitle: ${content.hasTitle} (+20)`)
     } else {
-      checks.push(`❌ hasTitle: ${content?.hasTitle}`)
+      checks.push(`hasTitle: ${content?.hasTitle}`)
     }
     
     if (content?.hasMetaDescription) {
       score += 20
-      checks.push(`✅ hasMetaDescription: ${content.hasMetaDescription} (+20)`)
+      checks.push(`hasMetaDescription: ${content.hasMetaDescription} (+20)`)
     } else {
-      checks.push(`❌ hasMetaDescription: ${content?.hasMetaDescription}`)
+      checks.push(`hasMetaDescription: ${content?.hasMetaDescription}`)
     }
     
     if (content?.titleLength >= 30 && content?.titleLength <= 60) {
       score += 15
-      checks.push(`✅ titleLength: ${content.titleLength} (+15)`)
+      checks.push(`titleLength: ${content.titleLength} (+15)`)
     } else {
-      checks.push(`❌ titleLength: ${content?.titleLength} (needs 30-60)`)
+      checks.push(`titleLength: ${content?.titleLength} (needs 30-60)`)
     }
     
     if (content?.descriptionLength >= 120 && content?.descriptionLength <= 160) {
       score += 15
-      checks.push(`✅ descriptionLength: ${content.descriptionLength} (+15)`)
+      checks.push(`descriptionLength: ${content.descriptionLength} (+15)`)
     } else {
-      checks.push(`❌ descriptionLength: ${content?.descriptionLength} (needs 120-160)`)
+      checks.push(`descriptionLength: ${content?.descriptionLength} (needs 120-160)`)
     }
     
     if (content?.headingStructure?.h1Count === 1) {
       score += 10
-      checks.push(`✅ h1Count: ${content.headingStructure.h1Count} (+10)`)
+      checks.push(`h1Count: ${content.headingStructure.h1Count} (+10)`)
     } else {
-      checks.push(`❌ h1Count: ${content?.headingStructure?.h1Count} (needs exactly 1)`)
+      checks.push(`h1Count: ${content?.headingStructure?.h1Count} (needs exactly 1)`)
     }
     
     if (content?.headingStructure?.h2Count > 0) {
       score += 10
-      checks.push(`✅ h2Count: ${content.headingStructure.h2Count} (+10)`)
+      checks.push(`h2Count: ${content.headingStructure.h2Count} (+10)`)
     } else {
-      checks.push(`❌ h2Count: ${content?.headingStructure?.h2Count} (needs > 0)`)
+      checks.push(`h2Count: ${content?.headingStructure?.h2Count} (needs > 0)`)
     }
     
     if (content?.hasSchema) {
       score += 10
-      checks.push(`✅ hasSchema: ${content.hasSchema} (+10)`)
+      checks.push(`hasSchema: ${content.hasSchema} (+10)`)
     } else {
-      checks.push(`❌ hasSchema: ${content?.hasSchema}`)
+      checks.push(`hasSchema: ${content?.hasSchema}`)
     }
     
     const finalScore = Math.min(100, score)
     
-    console.log('🔧 CONTENT SCORE FIXED - DETAILED BREAKDOWN:', {
+    console.log('CONTENT SCORE FIXED - DETAILED BREAKDOWN:', {
       checks,
       rawScore: score,
       finalScore,
@@ -110,7 +110,7 @@ export function useBatchAnalysis() {
   // EXACT COPY from Authority tool - AI-POWERED Authority Analysis
   const generateRealAuthorityData = async (url: string, apiData: any) => {
     try {
-      console.log('🔧 Batch Analysis - API Data:', apiData)
+      console.log('Batch Analysis - API Data:', apiData)
       
       // SAFE destructuring with fallbacks
       const pageSpeed = apiData?.pageSpeed || {}
@@ -308,7 +308,10 @@ export function useBatchAnalysis() {
 
   // EXACT COPY from Authority tool - Generate 4 complete signal groups
   const generateCompleteSignalGroups = (apiData: any, componentScores: any) => {
-    const { pageSpeed, ssl, content } = apiData
+    // SAFE destructuring with fallbacks
+    const pageSpeed = apiData?.pageSpeed || {}
+    const ssl = apiData?.ssl || {}
+    const content = apiData?.content || {}
     
     return [
       // Technical Signals
@@ -451,7 +454,10 @@ export function useBatchAnalysis() {
   // EXACT COPY from Authority tool - Generate realistic platform scores
   const generateRealPlatformScores = (url: string, baseScore: number, apiData: any, domainAuthorityBoost: number = 0) => {
     const domain = new URL(url).hostname
-    const { pageSpeed, ssl, content } = apiData
+    // SAFE destructuring with fallbacks
+    const pageSpeed = apiData?.pageSpeed || {}
+    const ssl = apiData?.ssl || {}
+    const content = apiData?.content || {}
     
     const platforms = [
       { id: 'google', name: 'Google', icon: 'G', color: '#4285f4' },
