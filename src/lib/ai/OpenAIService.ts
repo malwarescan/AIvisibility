@@ -1190,4 +1190,5 @@ class OpenAIService {
   }
 }
 
-export default OpenAIService 
+export default OpenAIService;
+export { OpenAIService };

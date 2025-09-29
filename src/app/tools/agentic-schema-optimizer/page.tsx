@@ -1,3 +1,5 @@
+"use client"
+
 import SchemaInputForm from './components/SchemaInputForm'
 import SchemaDiffViewer from './components/SchemaDiffViewer'
 import OptimizedSchemaOutput from './components/OptimizedSchemaOutput'
