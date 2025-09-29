@@ -1,9 +1,8 @@
 {
-  "buildCommand": "echo 'PHP deployment - no build needed'",
+  "buildCommand": "echo 'Static PHP files - no build needed'",
   "outputDirectory": ".",
   "framework": null,
-  "installCommand": "echo 'PHP deployment - no install needed'",
-  "devCommand": "php -S $PORT",
+  "installCommand": "echo 'No install needed'",
   "rewrites": [
     {
       "source": "/(.*)",
