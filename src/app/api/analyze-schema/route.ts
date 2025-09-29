@@ -4,7 +4,7 @@ import { EnhancedSchemaService } from '@/lib/schema/EnhancedSchemaService';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { url, schemaType = 'Article', options } = body;
+    const { url, schemaType = 'Article' } = body;
 
     if (!url) {
       return NextResponse.json(

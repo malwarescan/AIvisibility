@@ -7,7 +7,7 @@ interface SchemaError {
   severity: 'error' | 'warning' | 'info';
   fix?: {
     type: 'add' | 'modify' | 'remove';
-    value?: any;
+    value?: unknown;
     description: string;
   };
 }
@@ -21,14 +21,14 @@ interface SchemaValidationResult {
 }
 
 interface SchemaOptimizationRequest {
-  schema: any;
+  schema: Record<string, unknown>;
   url: string;
   goal?: string;
 }
 
 interface SchemaOptimizationResponse {
   success: boolean;
-  optimizedSchema: any;
+  optimizedSchema: Record<string, unknown>;
   validation: SchemaValidationResult;
   improvements: string[];
   error?: string;
@@ -63,7 +63,7 @@ const validationRules = {
 };
 
 // Schema validation function
-function validateSchema(schema: any, url: string): SchemaValidationResult {
+function validateSchema(schema: Record<string, unknown>, url: string): SchemaValidationResult {
   const errors: SchemaError[] = [];
   const warnings: SchemaError[] = [];
   const suggestions: SchemaError[] = [];
@@ -232,8 +232,8 @@ function validateSchema(schema: any, url: string): SchemaValidationResult {
 }
 
 // Get default values for missing properties
-function getDefaultValue(property: string, schemaType: string): any {
-  const defaults: Record<string, any> = {
+function getDefaultValue(property: string, schemaType: string): unknown {
+  const defaults: Record<string, unknown> = {
     name: 'Page Title',
     description: 'Page description',
     url: 'https://example.com',
@@ -255,7 +255,7 @@ function getDefaultValue(property: string, schemaType: string): any {
 }
 
 // Apply fixes to schema
-function applyFixes(schema: any, fixes: SchemaError[]): any {
+function applyFixes(schema: Record<string, unknown>, fixes: SchemaError[]): Record<string, unknown> {
   const fixedSchema = JSON.parse(JSON.stringify(schema));
 
   fixes.forEach(fix => {
@@ -282,7 +282,7 @@ function applyFixes(schema: any, fixes: SchemaError[]): any {
 }
 
 // Optimize schema based on goal
-function optimizeSchema(schema: any, goal: string, url: string): any {
+function optimizeSchema(schema: Record<string, unknown>, goal: string, url: string): Record<string, unknown> {
   const optimized = JSON.parse(JSON.stringify(schema));
 
   switch (goal) {

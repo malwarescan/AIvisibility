@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Normalize weights for specific tool or all tools
-    const results: any[] = [];
+    const results: Array<{ toolId: string; weights: Record<string, number> }> = [];
     
     if (toolId) {
       // Normalize specific tool
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const normalizer = new PlatformWeightNormalizer();
     

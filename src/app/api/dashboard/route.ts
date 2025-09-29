@@ -370,7 +370,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   return NextResponse.json({
     message: 'Dashboard API',
     endpoints: {

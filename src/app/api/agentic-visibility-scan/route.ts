@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { url, domain, platforms } = body;
+    const { url, domain } = body;
 
     // Simulate agentic visibility scanning across LLM platforms
     const testQueries = [
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     };
 
     const overallVisibility = Math.round(
-      Object.values(platformResults).reduce((acc: number, platform: any) => 
+      Object.values(platformResults).reduce((acc: number, platform: { averageVisibility: number }) =>
         acc + platform.averageVisibility, 0) / Object.keys(platformResults).length
     );
 

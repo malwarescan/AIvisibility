@@ -1,6 +1,6 @@
 // src/app/api/analyze-website/route.ts
 import { NextRequest, NextResponse } from 'next/server'
-import { analysisQueue, AnalysisQueueManager, processAnalysis } from '@/lib/queue/AnalysisQueue'
+import { AnalysisQueueManager, processAnalysis } from '@/lib/queue/AnalysisQueue'
 
 export async function POST(request: NextRequest) {
   try {

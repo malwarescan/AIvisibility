@@ -87,12 +87,11 @@ export async function GET(request: NextRequest) {
     const scoringWeights = rafLayer.getScoringWeights();
 
     // Filter interactions if platform specified
-    let filteredInteractions = interactions;
-    if (platform) {
-      filteredInteractions = interactions.filter(i => i.platform === platform);
-    }
+    const filteredInteractions = platform
+      ? interactions.filter(i => i.platform === platform)
+      : interactions;
 
-    let result: any = {
+    const result = {
       interactions: filteredInteractions,
       feedbackAnalyses,
       scoringWeights,

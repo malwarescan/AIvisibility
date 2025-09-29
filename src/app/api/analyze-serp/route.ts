@@ -58,7 +58,7 @@ async function searchGoogle(query: string) {
   return data.items || [];
 }
 
-async function analyzeForAIOverview(query: string, searchResults: any[]) {
+async function analyzeForAIOverview(query: string, searchResults: Array<{ title: string; link: string; snippet: string }>) {
   const resultsText = searchResults.map((item, index) => 
     `${index + 1}. ${item.title}\n   URL: ${item.link}\n   Snippet: ${item.snippet}\n`
   ).join('\n');
@@ -116,7 +116,7 @@ Only include sources with confidence > 0.7. Be selective - AI Overviews typicall
   }
 }
 
-async function enrichWithSchemaData(sources: any[]) {
+async function enrichWithSchemaData(sources: Array<{ url: string; title: string; confidence: number; reason: string }>) {
   const enriched = [];
   
   for (const source of sources) {
@@ -145,18 +145,18 @@ async function enrichWithSchemaData(sources: any[]) {
   return enriched;
 }
 
-function extractSchemaTypes(schema: any): string[] {
+function extractSchemaTypes(schema: Record<string, unknown>): string[] {
   const types = [];
   
   if (schema['@type']) {
-    types.push(schema['@type']);
+    types.push(schema['@type'] as string);
   }
   
   // Check for nested schemas
   if (schema.mainEntity && Array.isArray(schema.mainEntity)) {
-    schema.mainEntity.forEach((entity: any) => {
+    schema.mainEntity.forEach((entity: Record<string, unknown>) => {
       if (entity['@type']) {
-        types.push(entity['@type']);
+        types.push(entity['@type'] as string);
       }
     });
   }

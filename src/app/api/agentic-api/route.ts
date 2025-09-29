@@ -15,10 +15,10 @@ interface WebhookDestination {
 
 interface SchemaData {
   url: string;
-  schema: any;
+  schema: Record<string, unknown>;
   schemaType: string;
   timestamp: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export async function POST(request: NextRequest) {
@@ -211,7 +211,7 @@ function saveDestination(destination: WebhookDestination): NextResponse {
       message: 'Destination saved successfully',
       destination,
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json({
       success: false,
       error: 'Failed to save destination',
@@ -229,7 +229,7 @@ function deleteDestination(destinationId: string): NextResponse {
       success: true,
       message: 'Destination deleted successfully',
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json({
       success: false,
       error: 'Failed to delete destination',
