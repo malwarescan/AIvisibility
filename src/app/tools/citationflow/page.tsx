@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { MetricsOverview } from '@/components/tools/shared/MetricsOverview';
-import { StatusIndicator } from '@/components/ui/StatusIndicator';
+// import { StatusIndicator } from '@/components/ui/StatusIndicator'; // Not currently used
 import { AutoAnimatedElement } from '@/components/AutoAnimatedElement';
 
 interface CitationData {
@@ -28,10 +28,10 @@ interface CitationData {
 }
 
 export default function CitationFlowPage() {
-  const [selectedMetric, setSelectedMetric] = useState('all');
+  // const [selectedMetric, setSelectedMetric] = useState('all'); // Not currently used
   const [isLoading, setIsLoading] = useState(false);
   const [citationData, setCitationData] = useState<CitationData | null>(null);
-  const [exporting, setExporting] = useState(false);
+  // const [exporting, setExporting] = useState(false); // Not currently used
 
   // Simulate real-time data updates
   useEffect(() => {
@@ -71,21 +71,21 @@ export default function CitationFlowPage() {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleExport = async () => {
-    setExporting(true);
-    // Simulate export process
-    setTimeout(() => {
-      const dataStr = JSON.stringify(citationData, null, 2);
-      const dataBlob = new Blob([dataStr], { type: 'application/json' });
-      const url = URL.createObjectURL(dataBlob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `citationflow-${new Date().toISOString().split('T')[0]}.json`;
-      link.click();
-      URL.revokeObjectURL(url);
-      setExporting(false);
-    }, 2000);
-  };
+  // const handleExport = async () => { // Not currently used
+  //   setExporting(true);
+  //   // Simulate export process
+  //   setTimeout(() => {
+  //     const dataStr = JSON.stringify(citationData, null, 2);
+  //     const dataBlob = new Blob([dataStr], { type: 'application/json' });
+  //     const url = URL.createObjectURL(dataBlob);
+  //     const link = document.createElement('a');
+  //     link.href = url;
+  //     link.download = `citationflow-${new Date().toISOString().split('T')[0]}.json`;
+  //     link.click();
+  //     URL.revokeObjectURL(url);
+  //     setExporting(false);
+  //   }, 2000);
+  // };
 
   const citationMetrics = citationData ? [
     {
@@ -118,9 +118,9 @@ export default function CitationFlowPage() {
     },
   ] : [];
 
-  const getGrowthColor = (value: number) => {
-    return value > 0 ? 'text-green-600' : 'text-red-600';
-  };
+  // const getGrowthColor = (value: number) => { // Not currently used
+  //   return value > 0 ? 'text-green-600' : 'text-red-600';
+  // };
 
   const getOpportunityColor = (potential: number) => {
     if (potential >= 30) return 'text-green-600';

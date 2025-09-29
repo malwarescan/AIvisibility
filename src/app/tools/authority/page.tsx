@@ -1,24 +1,20 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MetricsOverview } from '@/components/tools/shared/MetricsOverview';
-import { StatusIndicator } from '@/components/ui/StatusIndicator';
 import { AnalysisProgress } from '@/components/ui/AnalysisProgress';
 import { AgenticNotification } from '@/components/ui/AgenticNotification';
 import { ToolProgressModal } from '@/components/ui/ToolProgressModal';
 import { LearningMetricsDisplay } from '@/components/ui/LearningMetricsDisplay';
 import OpenAIService from '@/lib/ai/OpenAIService';
 import { EnhancedAuthorityService } from '@/lib/analysis/EnhancedAuthorityService';
-import { useToolContext } from '@/context/ToolContext';
 
 export default function AuthorityPage() {
-  const [selectedSignal, setSelectedSignal] = useState('all');
   const [url, setUrl] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [loadingState, setLoadingState] = useState({ isLoading: false, progress: 0 });
   const [errorState, setErrorState] = useState<{ hasError: boolean; error: Error } | undefined>(undefined);
   const [analysisComplete, setAnalysisComplete] = useState(false);
-  const [analysisData, setAnalysisData] = useState<any>(null);
+  const [analysisData, setAnalysisData] = useState<Record<string, unknown> | null>(null);
   const [showProgress, setShowProgress] = useState(false);
   const [showAgenticNotification, setShowAgenticNotification] = useState(false);
   const [progressState, setProgressState] = useState({
@@ -27,7 +23,7 @@ export default function AuthorityPage() {
     totalSteps: 4,
     errors: [] as string[]
   });
-  const [llmVisibilityData, setLlmVisibilityData] = useState<any>(null);
+  // const [llmVisibilityData, setLlmVisibilityData] = useState<Record<string, unknown> | null>(null); // Not currently used
   const [selectedLLM, setSelectedLLM] = useState('chatgpt');
   const [successMessage, setSuccessMessage] = useState('');
 
@@ -247,7 +243,7 @@ export default function AuthorityPage() {
     }
     
     let score = 0
-    let checks = []
+    const checks = []
     
     // Check each condition individually
     if (content?.hasTitle) {

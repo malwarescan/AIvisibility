@@ -3,7 +3,7 @@ import puppeteer from 'puppeteer';
 
 interface ExtractedSchema {
   type: string;
-  properties: Record<string, any>;
+  properties: Record<string, unknown>;
   nested?: ExtractedSchema[];
   source: string;
   confidence?: number;
@@ -111,21 +111,21 @@ export async function POST(request: NextRequest) {
       // Extract nested schemas
       const nested: ExtractedSchema[] = [];
       
-      const extractNested = (obj: any, path: string = '') => {
+      const extractNested = (obj: Record<string, unknown>, path: string = '') => {
         if (obj && typeof obj === 'object') {
           Object.entries(obj).forEach(([key, value]) => {
-                         if (value && typeof value === 'object' && (value as any)['@type']) {
+                         if (value && typeof value === 'object' && (value as Record<string, unknown>)['@type']) {
                nested.push({
-                 type: (value as any)['@type'],
+                 type: (value as Record<string, unknown>)['@type'] as string,
                  properties: value,
                  source: `${schema.source}-${path}-${key}`,
                  confidence: 0.8
                });
              } else if (Array.isArray(value)) {
                value.forEach((item, index) => {
-                 if (item && typeof item === 'object' && (item as any)['@type']) {
+                 if (item && typeof item === 'object' && (item as Record<string, unknown>)['@type']) {
                    nested.push({
-                     type: (item as any)['@type'],
+                     type: (item as Record<string, unknown>)['@type'] as string,
                      properties: item,
                      source: `${schema.source}-${path}-${key}-${index}`,
                      confidence: 0.8

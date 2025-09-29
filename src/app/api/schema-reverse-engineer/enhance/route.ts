@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateEnhancedSchema, generateMetaFromUrl } from '@/lib/schema/metaGenerator';
+import { generateEnhancedSchema } from '@/lib/schema/metaGenerator';
 
 export async function POST(request: NextRequest) {
   try {

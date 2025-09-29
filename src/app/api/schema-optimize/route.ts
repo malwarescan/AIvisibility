@@ -33,8 +33,8 @@ interface OptimizedSchemaResult {
   optimizedSchema: string;
   improvements: Array<{
     field: string;
-    originalValue: any;
-    optimizedValue: any;
+    originalValue: unknown;
+    optimizedValue: unknown;
     reason: string;
     impact: number;
   }>;
@@ -56,7 +56,7 @@ interface GeneratedSchemaResult {
   schemaType: string;
   fields: Array<{
     field: string;
-    value: any;
+    value: unknown;
     importance: 'required' | 'recommended' | 'optional';
     description: string;
   }>;

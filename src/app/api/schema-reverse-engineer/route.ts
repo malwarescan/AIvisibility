@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { SchemaAnalysisRequest, SchemaAnalysisResult, SchemaQualityScore, SchemaDiff, SchemaVersion } from '@/types/schema';
+import { SchemaAnalysisRequest, SchemaAnalysisResult } from '@/types/schema';
 
 export async function POST(request: NextRequest) {
   try {
     const body: SchemaAnalysisRequest = await request.json();
-    const { url, options } = body;
+    const { url } = body;
 
     // Simulate real-time schema scraping and analysis
     const analysisResult: SchemaAnalysisResult = {

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import OpenAIService from '@/lib/ai/OpenAIService';
 
 const AGENTS = ['chatgpt', 'claude', 'perplexity', 'google'] as const;
-type Agent = typeof AGENTS[number];
+// type Agent = typeof AGENTS[number]; // Not currently used
 
 interface FieldRating {
   [agent: string]: number;
@@ -54,10 +54,10 @@ export async function POST(request: NextRequest) {
     let parsedSchema;
     try {
       parsedSchema = typeof schema === 'string' ? JSON.parse(schema) : schema;
-    } catch (error) {
+    } catch {
       return NextResponse.json(
-        { 
-          success: false, 
+        {
+          success: false,
           error: 'Invalid JSON-LD schema format',
           code: 'INVALID_SCHEMA'
         },
@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   return NextResponse.json({
     message: 'Schema Agent Consensus API',
     endpoints: {
@@ -115,7 +115,7 @@ export async function GET(request: NextRequest) {
 /**
  * Get feedback from all AI agents
  */
-async function getMultiAgentFeedback(openAIService: OpenAIService, schema: any): Promise<ConsensusResult['agentFeedback']> {
+async function getMultiAgentFeedback(openAIService: OpenAIService, schema: Record<string, unknown>): Promise<ConsensusResult['agentFeedback']> {
   const feedback: ConsensusResult['agentFeedback'] = {};
   
   // Get feedback from each agent in parallel
@@ -152,7 +152,7 @@ async function getMultiAgentFeedback(openAIService: OpenAIService, schema: any):
 /**
  * Analyze consensus across all agents
  */
-async function analyzeConsensus(schema: any, agentFeedback: ConsensusResult['agentFeedback']): Promise<ConsensusResult> {
+async function analyzeConsensus(schema: Record<string, unknown>, agentFeedback: ConsensusResult['agentFeedback']): Promise<ConsensusResult> {
   // Extract all unique fields mentioned across agents
   const allFields = new Set<string>();
   Object.values(agentFeedback).forEach(feedback => {
@@ -230,7 +230,7 @@ function extractFieldName(feedbackText: string): string | null {
 /**
  * Calculate rating for a specific field based on agent feedback
  */
-function calculateFieldRating(field: string, feedback: any): number {
+function calculateFieldRating(field: string, feedback: { valuableFields: string[]; missingFields: string[]; rating: number }): number {
   const fieldLower = field.toLowerCase();
   
   // Check if field is in valuable fields
@@ -257,7 +257,7 @@ function calculateFieldRating(field: string, feedback: any): number {
 /**
  * Calculate overall consensus score
  */
-function calculateConsensusScore(fieldRatings: { [field: string]: FieldRating }, agreementMatrix: AgreementMatrix): number {
+function calculateConsensusScore(fieldRatings: { [field: string]: FieldRating }, _agreementMatrix: AgreementMatrix): number {
   const fields = Object.keys(fieldRatings);
   if (fields.length === 0) return 0;
   
@@ -283,10 +283,10 @@ function calculateConsensusScore(fieldRatings: { [field: string]: FieldRating },
  * Generate recommended changes based on consensus analysis
  */
 function generateRecommendedChanges(
-  schema: any, 
-  fieldRatings: { [field: string]: FieldRating }, 
-  agreementMatrix: AgreementMatrix,
-  agentFeedback: ConsensusResult['agentFeedback']
+  schema: Record<string, unknown>,
+  fieldRatings: { [field: string]: FieldRating },
+  _agreementMatrix: AgreementMatrix,
+  _agentFeedback: ConsensusResult['agentFeedback']
 ): RecommendedChange[] {
   const changes: RecommendedChange[] = [];
   const schemaFields = extractSchemaFields(schema);
@@ -295,7 +295,7 @@ function generateRecommendedChanges(
   Object.entries(fieldRatings).forEach(([field, ratings]) => {
     const avgRating = Object.values(ratings).reduce((sum, rating) => sum + rating, 0) / Object.values(ratings).length;
     const lowRatingAgents = Object.entries(ratings)
-      .filter(([agent, rating]) => rating < 50)
+      .filter(([, rating]) => rating < 50)
       .map(([agent]) => agent);
     
     if (avgRating < 60 && lowRatingAgents.length >= 2) {
@@ -320,10 +320,10 @@ function generateRecommendedChanges(
 /**
  * Extract field names from schema
  */
-function extractSchemaFields(schema: any): string[] {
+function extractSchemaFields(schema: Record<string, unknown>): string[] {
   const fields: string[] = [];
-  
-  function extractFields(obj: any, prefix = '') {
+
+  function extractFields(obj: Record<string, unknown>, prefix = '') {
     if (typeof obj === 'object' && obj !== null) {
       Object.keys(obj).forEach(key => {
         if (key !== '@context' && key !== '@type' && key !== '@id') {
@@ -400,7 +400,7 @@ Respond only with valid JSON in the exact format specified above.`;
 /**
  * Parse agent feedback from OpenAI response
  */
-function parseAgentFeedback(response: string, agent: string): any {
+function parseAgentFeedback(response: string, agent: string): { agent: string; valuableFields: string[]; missingFields: string[]; summary: string } {
   try {
     // Try to extract JSON from the response
     const jsonMatch = response.match(/\{[\s\S]*\}/);

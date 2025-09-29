@@ -6,9 +6,8 @@ import { URLManager } from '@/components/tools/ai-overview-schema-reverse-engine
 import { SchemaAnalysisDashboard } from '@/components/tools/ai-overview-schema-reverse-engineer/SchemaAnalysisDashboard';
 import { SchemaGenerator } from '@/components/tools/ai-overview-schema-reverse-engineer/SchemaGenerator';
 import { CodeEditor } from '@/components/tools/ai-overview-schema-reverse-engineer/CodeEditor';
-import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { Alert } from '@/components/ui/Alert';
-import { CheckCircle, Circle, ArrowRight, Play, Target, Database, FileText, Download } from 'lucide-react';
+import { CheckCircle, Play, Target, Database, FileText, Download } from 'lucide-react';
 
 // Types
 interface URLData {
@@ -23,7 +22,7 @@ interface URLData {
 
 interface ParsedSchema {
   type: string;
-  properties: Record<string, any>;
+  properties: Record<string, unknown>;
   nested?: ParsedSchema[];
   source: string;
   confidence?: number;
@@ -57,7 +56,7 @@ interface UserContent {
   ratings?: number;
   price?: string;
   availability?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 type WorkflowStep = 'query' | 'urls' | 'analysis' | 'generation' | 'export';

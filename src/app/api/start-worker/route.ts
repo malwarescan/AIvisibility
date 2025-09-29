@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server'
 import { startWorker } from '@/lib/queue/AnalysisQueue'
 
-let worker: any = null
+let worker: { close: () => void } | null = null
 
 export async function POST() {
   try {

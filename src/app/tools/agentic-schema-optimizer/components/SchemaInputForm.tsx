@@ -1,9 +1,20 @@
+interface SchemaInputFormProps {
+  query: string;
+  setQuery: (query: string) => void;
+  competitorUrl: string;
+  setCompetitorUrl: (url: string) => void;
+  userUrl: string;
+  setUserUrl: (url: string) => void;
+  onFetchSERP: () => void;
+  onExtractSchema: () => void;
+}
+
 export default function SchemaInputForm({
   query, setQuery,
   competitorUrl, setCompetitorUrl,
   userUrl, setUserUrl,
   onFetchSERP, onExtractSchema
-}: any) {
+}: SchemaInputFormProps) {
   return (
     <div className="space-y-4">
       <input

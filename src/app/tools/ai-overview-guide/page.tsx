@@ -17,9 +17,9 @@ export default function AiOverviewGuidePage() {
             <strong>Define and Input Your Target Search Query</strong>
             <p className="mt-2 text-gray-600">Begin with a clear, high-intent search phrase relevant to your business or content goals. Examples:</p>
             <ul className="list-disc pl-6 mt-1 text-sm text-gray-700">
-              <li>"transfer domain to cheaper registrar"</li>
-              <li>"how to transfer domain with no downtime"</li>
-              <li>"domain transfer step-by-step guide"</li>
+              <li>&quot;transfer domain to cheaper registrar&quot;</li>
+              <li>&quot;how to transfer domain with no downtime&quot;</li>
+              <li>&quot;domain transfer step-by-step guide&quot;</li>
             </ul>
           </li>
           <li>
@@ -34,7 +34,7 @@ export default function AiOverviewGuidePage() {
             <strong>Extract and Analyze Schema Markup</strong>
             <ul className="list-disc pl-6 mt-2 text-sm text-gray-700">
               <li>Use online tools like <a href="https://validator.schema.org" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">Schema Markup Validator</a> or <a href="https://technicalseo.com/tools/schema-markup-generator/" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">TechnicalSEO Schema Markup Generator</a>.</li>
-              <li>Or manually extract by viewing page source and searching for <code>&lt;script type="application/ld+json"&gt;</code>.</li>
+              <li>Or manually extract by viewing page source and searching for <code>&lt;script type=&quot;application/ld+json&quot;&gt;</code>.</li>
               <li>Schema types to look for: <span className="font-mono">FAQPage</span>, <span className="font-mono">HowTo</span>, <span className="font-mono">WebPage</span>, <span className="font-mono">Organization</span>, <span className="font-mono">Product</span>, <span className="font-mono">BreadcrumbList</span>.</li>
             </ul>
           </li>
@@ -59,7 +59,7 @@ export default function AiOverviewGuidePage() {
           <li>
             <strong>Implement Schema on Your Page</strong>
             <ul className="list-disc pl-6 mt-2 text-sm text-gray-700">
-              <li>Insert your <code>&lt;script type="application/ld+json"&gt;</code> block in the <code>&lt;head&gt;</code> or just before <code>&lt;/body&gt;</code>.</li>
+              <li>Insert your <code>&lt;script type=&quot;application/ld+json&quot;&gt;</code> block in the <code>&lt;head&gt;</code> or just before <code>&lt;/body&gt;</code>.</li>
               <li>Validate your schema using Google’s Rich Results Test or Schema Markup Validator.</li>
               <li>Confirm that the schema matches the visible content on your page.</li>
             </ul>

@@ -142,7 +142,7 @@ Provide your analysis in this JSON format:
     // Simple rule-based fallback
     let type: QueryIntent['type'] = 'informational';
     let confidence = 0.6;
-    let reasoning = 'Fallback analysis based on query patterns';
+    const reasoning = 'Fallback analysis based on query patterns';
     
     if (words.some(word => ['buy', 'purchase', 'download', 'sign', 'register'].includes(word))) {
       type = 'transactional';
@@ -242,8 +242,8 @@ Provide your response in this JSON format:
   private generateFallbackRewrite(query: string, intent: QueryIntent, platform: string): ConversationalRewrite {
     let rewrittenQuery = query;
     let conversationalStyle: ConversationalRewrite['conversationalStyle'] = 'educational';
-    let reasoning = 'Fallback rewrite based on platform patterns';
-    let improvementScore = 0.5;
+    const reasoning = 'Fallback rewrite based on platform patterns';
+    const improvementScore = 0.5;
     
     // Platform-specific fallback patterns
     switch (platform) {

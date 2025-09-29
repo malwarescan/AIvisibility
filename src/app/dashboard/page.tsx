@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { AppleCard } from '@/components/apple/AppleCard';
 import { MetricsOverview } from '@/components/tools/shared/MetricsOverview';
 import { ToolProgressModal } from '@/components/ui/ToolProgressModal';
@@ -108,11 +108,11 @@ export default function DashboardPage() {
     return 'text-red-600';
   };
 
-  const getScoreStatus = (score: number) => {
-    if (score >= 80) return 'excellent';
-    if (score >= 60) return 'good';
-    return 'poor';
-  };
+  // const getScoreStatus = (score: number) => { // Not currently used
+  //   if (score >= 80) return 'excellent';
+  //   if (score >= 60) return 'good';
+  //   return 'poor';
+  // };
 
   // Schema Score helper functions
   const getSchemaScoreValue = (insights: ToolInsight[]) => {
@@ -464,7 +464,7 @@ export default function DashboardPage() {
                 Schema Optimizer, CitationFlow, Authority Analyzer, Analytics, and SERP Analysis tools.
               </p>
               <p>
-                Use the insights and recommendations to improve your content's performance
+                Use the insights and recommendations to improve your content&apos;s performance
                 across all AI search platforms and agents.
               </p>
             </div>

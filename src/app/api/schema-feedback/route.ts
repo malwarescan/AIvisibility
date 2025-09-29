@@ -159,7 +159,7 @@ Respond only with valid JSON in the exact format specified above.`;
 /**
  * Parse agent feedback from OpenAI response
  */
-function parseAgentFeedback(response: string, agent: string): any {
+function parseAgentFeedback(response: string, agent: string): { agent: string; valuableFields: string[]; missingFields: string[]; summary: string } {
   try {
     // Try to extract JSON from the response
     const jsonMatch = response.match(/\{[\s\S]*\}/);

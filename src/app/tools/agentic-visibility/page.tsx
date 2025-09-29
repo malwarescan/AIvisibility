@@ -122,7 +122,7 @@ export default function AgenticVisibilityPage() {
             Agentic Visibility Scanner
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Analyze your domain's presence across AI agents and optimize for maximum visibility
+            Analyze your domain&apos;s presence across AI agents and optimize for maximum visibility
             in the AI-powered search landscape.
           </p>
         </div>

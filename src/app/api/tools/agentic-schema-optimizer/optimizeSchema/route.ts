@@ -4,7 +4,7 @@ import { create } from 'jsondiffpatch';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { competitorSchema, userSchema, options } = body;
+    const { competitorSchema, userSchema } = body;
 
     if (!competitorSchema || !userSchema) {
       return NextResponse.json(

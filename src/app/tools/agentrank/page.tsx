@@ -28,7 +28,7 @@ interface AgentRankData {
 }
 
 export default function AgentRankPage() {
-  const [selectedMetric, setSelectedMetric] = useState('all');
+  // const [selectedMetric, setSelectedMetric] = useState('all'); // Not currently used
   const [isLoading, setIsLoading] = useState(false);
   const [agentRankData, setAgentRankData] = useState<AgentRankData | null>(null);
   const [exporting, setExporting] = useState(false);

@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 
 export async function POST(req: NextRequest) {
   // In production, use SerpAPI or scraping here
-  const { query } = await req.json();
+  // const { query } = await req.json(); // Not currently used
   // Placeholder: return static URLs
   return Response.json({
     success: true,

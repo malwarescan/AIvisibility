@@ -26,13 +26,13 @@ interface SchemaOptimizationRequest {
   goal?: string;
 }
 
-interface SchemaOptimizationResponse {
-  success: boolean;
-  optimizedSchema: Record<string, unknown>;
-  validation: SchemaValidationResult;
-  improvements: string[];
-  error?: string;
-}
+// interface SchemaOptimizationResponse { // Not currently used
+//   success: boolean;
+//   optimizedSchema: Record<string, unknown>;
+//   validation: SchemaValidationResult;
+//   improvements: string[];
+//   error?: string;
+// }
 
 // Common schema validation rules
 const validationRules = {
@@ -232,7 +232,7 @@ function validateSchema(schema: Record<string, unknown>, url: string): SchemaVal
 }
 
 // Get default values for missing properties
-function getDefaultValue(property: string, schemaType: string): unknown {
+function getDefaultValue(property: string, _schemaType: string): unknown { // schemaType not currently used
   const defaults: Record<string, unknown> = {
     name: 'Page Title',
     description: 'Page description',
@@ -254,32 +254,32 @@ function getDefaultValue(property: string, schemaType: string): unknown {
   return defaults[property] || '';
 }
 
-// Apply fixes to schema
-function applyFixes(schema: Record<string, unknown>, fixes: SchemaError[]): Record<string, unknown> {
-  const fixedSchema = JSON.parse(JSON.stringify(schema));
-
-  fixes.forEach(fix => {
-    if (fix.fix) {
-      switch (fix.fix.type) {
-        case 'add':
-          if (fix.fix.value !== undefined) {
-            fixedSchema[fix.path] = fix.fix.value;
-          }
-          break;
-        case 'modify':
-          if (fix.fix.value !== undefined) {
-            fixedSchema[fix.path] = fix.fix.value;
-          }
-          break;
-        case 'remove':
-          delete fixedSchema[fix.path];
-          break;
-      }
-    }
-  });
-
-  return fixedSchema;
-}
+// Apply fixes to schema - not currently used
+// function applyFixes(schema: Record<string, unknown>, fixes: SchemaError[]): Record<string, unknown> {
+//   const fixedSchema = JSON.parse(JSON.stringify(schema));
+//
+//   fixes.forEach(fix => {
+//     if (fix.fix) {
+//       switch (fix.fix.type) {
+//         case 'add':
+//           if (fix.fix.value !== undefined) {
+//             fixedSchema[fix.path] = fix.fix.value;
+//           }
+//           break;
+//         case 'modify':
+//           if (fix.fix.value !== undefined) {
+//             fixedSchema[fix.path] = fix.fix.value;
+//           }
+//           break;
+//         case 'remove':
+//           delete fixedSchema[fix.path];
+//           break;
+//       }
+//     }
+//   });
+//
+//   return fixedSchema;
+// }
 
 // Optimize schema based on goal
 function optimizeSchema(schema: Record<string, unknown>, goal: string, url: string): Record<string, unknown> {

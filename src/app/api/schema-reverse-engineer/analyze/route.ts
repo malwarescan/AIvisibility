@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
         const itemtype = $(element).attr('itemtype');
         if (itemtype) {
           const schemaType = itemtype.split('/').pop() || 'Thing';
-          const properties: Record<string, any> = {};
+          const properties: Record<string, unknown> = {};
           
           $(element).find('[itemprop]').each((_, propElement) => {
             const propName = $(propElement).attr('itemprop');
@@ -139,7 +139,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-function extractNestedSchemas(obj: any, nestedSchemas: ParsedSchema[], path: string) {
+function extractNestedSchemas(obj: Record<string, unknown>, nestedSchemas: ParsedSchema[], path: string) {
   if (!obj || typeof obj !== 'object') return;
 
   Object.entries(obj).forEach(([key, value]) => {

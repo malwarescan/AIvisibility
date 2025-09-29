@@ -262,9 +262,9 @@ function validatePropertyValues(schema: any, result: ValidationResult) {
   }
 }
 
-function checkCommonIssues(schema: any, result: ValidationResult) {
+function checkCommonIssues(schema: Record<string, unknown>, result: ValidationResult) {
   // Check for missing required properties based on schema type
-  const schemaType = schema['@type'];
+  // const schemaType = schema['@type']; // Not currently used
   
   // Check for potential duplicate properties
   if (schema.name && schema.title) {

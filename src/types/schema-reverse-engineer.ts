@@ -10,7 +10,7 @@ export interface URLData {
 
 export interface ParsedSchema {
   type: string;
-  properties: Record<string, any>;
+  properties: Record<string, unknown>;
   nested?: ParsedSchema[];
   source: string;
   path?: string;
@@ -19,7 +19,7 @@ export interface ParsedSchema {
 export interface SchemaNode {
   id: string;
   type: string;
-  properties: Record<string, any>;
+  properties: Record<string, unknown>;
   children?: SchemaNode[];
   isExpanded?: boolean;
   path: string;
@@ -73,7 +73,7 @@ export interface UserContent {
     email?: string;
     address?: string;
   };
-  customFields?: Record<string, any>;
+  customFields?: Record<string, unknown>;
 }
 
 export interface SchemaExtractionResult {

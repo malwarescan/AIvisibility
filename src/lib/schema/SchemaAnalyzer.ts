@@ -15,14 +15,18 @@ import {
 } from '@/types/schema'
 
 export class SchemaAnalyzer {
-  private aiService: any
+  private aiService: any // Will be properly typed once OpenAIService is imported
 
   constructor() {
     // Initialize AI service for schema analysis
     this.aiService = null
     try {
-      const { OpenAIService } = require('../ai/OpenAIService')
-      this.aiService = new OpenAIService()
+      // Dynamic import to avoid issues if AI service is not available
+      import('../ai/OpenAIService').then(({ OpenAIService }) => {
+        this.aiService = new OpenAIService()
+      }).catch(() => {
+        console.warn('AI service not available for schema analysis')
+      })
     } catch (error) {
       console.warn('AI service not available for schema analysis')
     }

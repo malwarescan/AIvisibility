@@ -113,7 +113,7 @@ export interface StructuredDataMarkup {
   type: 'json-ld' | 'microdata' | 'rdfa'
   content: string
   schemaType: string
-  properties: Record<string, any>
+  properties: Record<string, unknown>
   aiOptimized: boolean
 }
 
@@ -141,7 +141,7 @@ export interface TwitterCardMarkup {
 export interface AISchemaEntity {
   name: string
   type: string
-  properties: Record<string, any>
+  properties: Record<string, unknown>
   relationships: string[]
   confidence: number
 }
@@ -157,7 +157,7 @@ export interface ConversationalQuery {
 export interface KnowledgeGraphNode {
   entity: string
   type: string
-  properties: Record<string, any>
+  properties: Record<string, unknown>
   relationships: KnowledgeGraphRelationship[]
   aiRelevance: number
 }
@@ -166,7 +166,7 @@ export interface KnowledgeGraphRelationship {
   source: string
   target: string
   type: string
-  properties: Record<string, any>
+  properties: Record<string, unknown>
 }
 
 // Schema Generation Types
@@ -182,7 +182,7 @@ export interface SchemaGenerationRequest {
 export interface GeneratedSchema {
   type: string
   markup: string
-  properties: Record<string, any>
+  properties: Record<string, unknown>
   aiOptimization: string[]
   implementation: string
   validation: SchemaValidationResult

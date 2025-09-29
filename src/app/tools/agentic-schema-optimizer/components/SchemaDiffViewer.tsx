@@ -1,4 +1,11 @@
-export default function SchemaDiffViewer({ competitorSchema, userSchema, diff, mergedSchema }: any) {
+interface SchemaDiffViewerProps {
+  competitorSchema: Record<string, unknown>;
+  userSchema: Record<string, unknown>;
+  diff: Record<string, unknown>;
+  mergedSchema: Record<string, unknown>;
+}
+
+export default function SchemaDiffViewer({ competitorSchema, userSchema, diff, mergedSchema }: SchemaDiffViewerProps) {
   return (
     <div className="bg-white rounded-xl p-4 border space-y-6">
       <h2 className="text-xl font-bold mb-2">Schema Diff & Merge</h2>

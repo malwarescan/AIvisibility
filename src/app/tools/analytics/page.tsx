@@ -32,8 +32,8 @@ interface AnalyticsData {
 export default function AnalyticsPage() {
   const [url, setUrl] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [selectedMetric, setSelectedMetric] = useState('all');
-  const [isLoading, setIsLoading] = useState(false);
+  // const [selectedMetric, setSelectedMetric] = useState('all'); // Not currently used
+  // const [isLoading, setIsLoading] = useState(false); // Not currently used
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
   const [exporting, setExporting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -87,7 +87,7 @@ export default function AnalyticsPage() {
     }
   };
 
-  const generateAnalyticsData = (url: string, apiData: any): AnalyticsData => {
+  const generateAnalyticsData = (url: string, apiData: Record<string, unknown>): AnalyticsData => {
           console.log('Analytics - generateAnalyticsData input:', { url, apiData });
     
     // SAFE destructuring with fallbacks for the actual API response structure
@@ -100,8 +100,8 @@ export default function AnalyticsPage() {
     
     // Calculate base scores from API data
     const performanceScore = authorityData?.breakdown?.technical || 85;
-    const seoScore = authorityData?.breakdown?.aiOptimization || 80;
-    const contentScore = authorityData?.breakdown?.content || 90;
+    // const seoScore = authorityData?.breakdown?.aiOptimization || 80; // Not currently used
+    // const contentScore = authorityData?.breakdown?.content || 90; // Not currently used
     
     // Generate realistic analytics data based on performance
     const baseVisibility = Math.max(60, Math.min(95, performanceScore + Math.random() * 20));

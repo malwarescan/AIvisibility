@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { OpenAIService } from '@/lib/ai/OpenAIService'
 
 export default function TestAIPage() {
-  const [result, setResult] = useState<any>(null)
+  const [result, setResult] = useState<Record<string, unknown> | null>(null)
   const [loading, setLoading] = useState(false)
 
   const testAI = async () => {

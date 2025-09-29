@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 interface ParsedSchema {
   type: string;
-  properties: Record<string, any>;
+  properties: Record<string, unknown>;
   nested?: ParsedSchema[];
   source: string;
   confidence?: number;
@@ -18,15 +18,15 @@ interface UserContent {
   author?: string;
   datePublished?: string;
   keywords?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
-interface GeneratedSchema {
-  jsonLd: string;
-  schemaTypes: string[];
-  validation: ValidationResult;
-  suggestions: string[];
-}
+// interface GeneratedSchema { // Not currently used
+//   jsonLd: string;
+//   schemaTypes: string[];
+//   validation: ValidationResult;
+//   suggestions: string[];
+// }
 
 interface ValidationResult {
   isValid: boolean;
@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
 }
 
 function analyzeSchemas(schemas: ParsedSchema[]) {
-  const typePatterns: Record<string, any> = {};
+  const typePatterns: Record<string, { count: number; properties: Record<string, number>; required: Set<string> }> = {};
   const commonProperties: Record<string, number> = {};
   const richElements: string[] = [];
 
@@ -104,7 +104,7 @@ function analyzeSchemas(schemas: ParsedSchema[]) {
     typePatterns[schema.type].count++;
     
     // Analyze properties
-    Object.entries(schema.properties).forEach(([key, value]) => {
+    Object.entries(schema.properties).forEach(([key]) => {
       if (!commonProperties[key]) {
         commonProperties[key] = 0;
       }
@@ -133,15 +133,15 @@ function analyzeSchemas(schemas: ParsedSchema[]) {
   };
 }
 
-function generateOptimizedSchema(analysis: any, userContent: UserContent, query: string) {
+function generateOptimizedSchema(analysis: Record<string, unknown>, userContent: UserContent, query: string) {
   // Find the most common schema type
   const mostCommonType = Object.entries(analysis.typePatterns)
-    .sort(([,a]: any, [,b]: any) => b.count - a.count)[0][0];
+    .sort(([,a]: { count: number }, [,b]: { count: number }) => b.count - a.count)[0][0];
   
   const typePattern = analysis.typePatterns[mostCommonType];
   
   // Start with the base schema structure
-  const schema: any = {
+  const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": mostCommonType
   };
@@ -217,13 +217,13 @@ function generateOptimizedSchema(analysis: any, userContent: UserContent, query:
   return JSON.stringify(schema, null, 2);
 }
 
-function getAdditionalProperties(typePattern: any, commonProperties: Record<string, number>) {
-  const additional: any = {};
+function getAdditionalProperties(typePattern: { count: number; properties: Record<string, number> }, _commonProperties: Record<string, number>) {
+  const additional: Record<string, unknown> = {};
   
   // Add properties that appear frequently in this schema type
   Object.entries(typePattern.properties)
-    .filter(([, count]: any) => count > typePattern.count * 0.5) // Appears in more than 50% of schemas
-    .forEach(([prop, count]: any) => {
+    .filter(([, count]: number) => count > typePattern.count * 0.5) // Appears in more than 50% of schemas
+    .forEach(([prop]: [string, number]) => {
       if (!additional[prop]) {
         // Add placeholder or default value based on property type
         switch (prop) {
@@ -294,7 +294,7 @@ function validateSchema(schemaJson: string): ValidationResult {
       }
     }
     
-  } catch (error) {
+  } catch {
     result.isValid = false;
     result.errors.push('Invalid JSON format');
   }
@@ -302,7 +302,7 @@ function validateSchema(schemaJson: string): ValidationResult {
   return result;
 }
 
-function generateSuggestions(schemaJson: string, userContent: UserContent, analysis: any): string[] {
+function generateSuggestions(schemaJson: string, userContent: UserContent, analysis: Record<string, unknown>): string[] {
   const suggestions: string[] = [];
   const schema = JSON.parse(schemaJson);
   

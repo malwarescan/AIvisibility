@@ -1,6 +1,13 @@
 import { validateSchema } from '@/lib/validateSchema'
 
-export default function OptimizedSchemaOutput({ schema, onCopy, onValidate, onDownload }: any) {
+interface OptimizedSchemaOutputProps {
+  schema: Record<string, unknown>;
+  onCopy: () => void;
+  onValidate: () => void;
+  onDownload: () => void;
+}
+
+export default function OptimizedSchemaOutput({ schema, onCopy, onValidate, onDownload }: OptimizedSchemaOutputProps) {
   const result = validateSchema(schema)
 
   return (
