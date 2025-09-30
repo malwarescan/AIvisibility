@@ -7,11 +7,6 @@
       <a href="/about/">About</a>
       <a href="/contact/">Contact</a>
     </nav>
-    <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
   </div>
 </header>
 

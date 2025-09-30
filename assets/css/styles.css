@@ -314,12 +314,6 @@ footer { border-top: 1px solid var(--border); }
   gap: 1.5rem;
 }
 
-.header .nav {
-  margin-left: auto;
-}
-
-
-
 .header h1 {
   margin: 0;
   font-size: 0.95rem;
