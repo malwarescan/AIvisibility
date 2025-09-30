@@ -10,6 +10,13 @@ if (!defined('NC_NAME')) {
     define('NC_BASEURL', 'https://neuralcommandllc.com');
     define('NC_EMAIL', 'info@neuralcommandllc.com');
     define('NC_EMAIL_FROM', 'noreply@neuralcommandllc.com');
+    define('NC_ALLOWED_HOSTS', [
+        'nrlcmd.com',
+        'www.nrlcmd.com',
+        'neuralcommandllc.com',
+        'www.neuralcommandllc.com',
+        'aivisibility-production.up.railway.app',
+    ]);
 }
 
 // Canonical services with pricing packages (slug => [name, short, packages, faqs])
