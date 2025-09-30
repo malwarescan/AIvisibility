@@ -2,26 +2,34 @@
   display: none;
 }
 @layer components {
-  .trace-border-btn,
-  .home__card,
-  .home__panel {
+  .trace-border-btn {
     position: relative;
-    display: block;
-    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.3rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #f8fafc;
+    background: rgba(15, 23, 42, 0.92);
+    border: 1px solid rgba(148, 163, 184, 0.22);
     border-radius: var(--trace-radius, 0.5rem);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.18s ease-out, box-shadow 0.18s ease-out, border-color 0.18s ease-out;
+    z-index: 0;
     isolation: isolate;
-    --trace-color: rgba(59, 130, 246, 1);
+    --trace-color: #06b6d4;
     --trace-speed: 2.2s;
     --trace-radius: 0.5rem;
     --trace-fill: rgba(15, 23, 42, 0.96);
   }
 
   .trace-border-btn::before,
-  .home__card::before,
-  .home__panel::before,
-  .trace-border-btn::after,
-  .home__card::after,
-  .home__panel::after {
+  .trace-border-btn::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -30,71 +38,69 @@
     transition: opacity 0.25s ease, transform 0.25s ease;
   }
 
-  .trace-border-btn::before,
-  .home__card::before,
-  .home__panel::before {
+  .trace-border-btn::before {
+    inset: 0;
+    border-radius: inherit;
     background:
       conic-gradient(
         from 0turn,
-        var(--trace-color) 0deg 40deg,
-        transparent 40deg 360deg
+        var(--trace-color) 0deg 48deg,
+        transparent 48deg 360deg
       );
     transform-origin: center;
     animation: trace-border-spin var(--trace-speed) linear infinite;
-    animation-play-state: running;
-    opacity: 1;
-    filter: drop-shadow(0 0 18px rgba(59, 130, 246, 0.45));
-    z-index: 1;
-  }
-
-  .trace-border-btn::after,
-  .home__card::after,
-  .home__panel::after {
-    inset: 0;
-    border-radius: inherit;
-    background: rgba(15, 23, 42, 0.92);
-    z-index: 0;
-  }
-
-  .trace-border-btn .trace-border-label,
-  .home__card > *,
-  .home__panel > * {
-    position: relative;
+    animation-play-state: paused;
+    opacity: 0;
+    filter: drop-shadow(0 0 18px rgba(6, 182, 212, 0.45));
     z-index: 2;
   }
 
-  .home__card,
-  .home__panel {
-    background: transparent;
-    border: 1px solid rgba(59, 130, 246, 0.25);
+  .trace-border-btn::after {
+    inset: 0;
+    border-radius: inherit;
+    background: var(--trace-fill);
+    z-index: 1;
   }
 
-  .home__card::after,
-  .home__panel::after {
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.88));
+  .trace-border-btn .trace-border-label {
+    position: relative;
+    z-index: 3;
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
   }
 
-  .home__card::before,
-  .home__panel::before {
-    animation-duration: 3.4s;
+  .trace-border-btn:hover,
+  .trace-border-btn:focus-visible {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 36px rgba(14, 116, 144, 0.25);
+    border-color: rgba(94, 234, 212, 0.45);
   }
 
-  .home__card::after {
-    box-shadow:
-      0 0 0 1px rgba(15, 23, 42, 0.6),
-      4px 4px 0 0 rgba(59, 130, 246, 0.35),
-      -4px 4px 0 0 rgba(59, 130, 246, 0.25),
-      4px -4px 0 0 rgba(59, 130, 246, 0.25);
-    image-rendering: pixelated;
+  .trace-border-btn:focus-visible {
+    outline: 3px solid rgba(125, 211, 252, 0.35);
+    outline-offset: 3px;
   }
 
-  .home__panel::after {
-    box-shadow:
-      0 0 0 1px rgba(15, 23, 42, 0.6),
-      6px 6px 0 0 rgba(59, 130, 246, 0.3),
-      -6px 6px 0 0 rgba(59, 130, 246, 0.2),
-      6px -6px 0 0 rgba(59, 130, 246, 0.2);
-    image-rendering: pixelated;
+  .trace-border-btn:hover::before,
+  .trace-border-btn:focus-visible::before {
+    opacity: 1;
+    animation-play-state: running;
+  }
+
+  .trace-border-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none;
+  }
+
+  .trace-border-btn:disabled::before {
+    animation-play-state: paused;
+    opacity: 0;
+  }
+
+  .trace-border-btn:disabled::after {
+    opacity: 0.85;
   }
 }
 
@@ -792,12 +798,12 @@ li {
 }
 
 .home__panel {
-  background: transparent;
-  border: none;
+  background: #F2F2F2;
+  border: 2px solid #D9D9D9;
   border-radius: 8px;
   padding: 2rem;
   margin-bottom: 2.5rem;
-  box-shadow: none;
+  box-shadow: 0 4px 0 #B0B0B0;
 }
 
 .home__title {
@@ -860,11 +866,11 @@ li {
 }
 
 .home__card {
-  background: transparent;
-  border: none;
+  background: #FFFFFF;
+  border: 1px solid #D1D1D1;
   border-radius: 6px;
   padding: 1.5rem;
-  box-shadow: none;
+  box-shadow: 0 3px 0 #D1D1D1;
 }
 
 .home__card header {
