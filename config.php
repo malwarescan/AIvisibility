@@ -8,7 +8,7 @@ if (!defined('NC_NAME')) {
     define('NC_LINKEDIN', 'https://www.linkedin.com/company/neural-command/');
     define('NC_GKP', 'https://g.co/kgs/EP6p5de');
     define('NC_BASEURL', 'https://neuralcommandllc.com');
-    define('NC_EMAIL', 'info@neuralcommandllc.com');
+    define('NC_EMAIL', 'hirejoelm@gmail.com');
     define('NC_EMAIL_FROM', 'noreply@neuralcommandllc.com');
     define('NC_ALLOWED_HOSTS', [
         'nrlcmd.com',

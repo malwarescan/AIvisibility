@@ -1,7 +1,7 @@
 <?php
 // API Configuration
-// Replace with your actual OpenAI API key
-define('OPENAI_API_KEY', 'sk-proj-your-api-key-here');
+// Pull the OpenAI API key from environment variables
+define('OPENAI_API_KEY', getenv('OPENAI_API_KEY') ?: '');
 
 // API Settings
 define('OPENAI_MODEL', 'gpt-4');
