@@ -617,7 +617,7 @@ form textarea:focus {
 }
 
 /* Buttons - Clean and Professional with IBM Plex Mono */
-button, .btn, input[type="submit"], form button {
+button:not(.trace-border-btn), .btn, input[type="submit"], form button:not(.trace-border-btn) {
   background: var(--primary) !important;
   color: white !important;
   border: 1px solid var(--primary) !important;
@@ -635,12 +635,12 @@ button, .btn, input[type="submit"], form button {
   opacity: 1 !important;
 }
 
-button:hover, .btn:hover, input[type="submit"]:hover, form button:hover {
+button:not(.trace-border-btn):hover, .btn:hover, input[type="submit"]:hover, form button:not(.trace-border-btn):hover {
   background: var(--text) !important;
   border-color: var(--text) !important;
 }
 
-button:focus, .btn:focus, input[type="submit"]:focus, form button:focus {
+button:not(.trace-border-btn):focus, .btn:focus, input[type="submit"]:focus, form button:not(.trace-border-btn):focus {
   outline: none !important;
   box-shadow: 0 0 0 2px rgba(0,123,255,0.2) !important;
 }
