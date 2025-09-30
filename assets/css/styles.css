@@ -65,27 +65,28 @@ body::after {
 }
 
 body::before {
-  inset: -12vh -12vw;
+  inset: -18vh -18vw;
   background-image:
-    repeating-linear-gradient(120deg, rgba(15, 23, 42, 0.08) 0px, rgba(15, 23, 42, 0.08) 1px, transparent 1px, transparent 28px),
-    repeating-linear-gradient(-120deg, rgba(71, 85, 105, 0.06) 0px, rgba(71, 85, 105, 0.06) 1px, transparent 1px, transparent 24px);
-  background-size: 240px 240px, 200px 200px;
-  opacity: 0.55;
+    repeating-linear-gradient(115deg, rgba(15, 23, 42, 0.11) 0px, rgba(15, 23, 42, 0.11) 1px, transparent 1px, transparent 28px),
+    repeating-linear-gradient(-115deg, rgba(71, 85, 105, 0.08) 0px, rgba(71, 85, 105, 0.08) 1px, transparent 1px, transparent 26px);
+  background-size: 320px 320px, 260px 260px;
+  opacity: 0.42;
   mix-blend-mode: multiply;
-  transform: translate3d(var(--mesh-offset-x), var(--mesh-offset-y), 0);
-  -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.35) 68%, rgba(0,0,0,0) 100%);
-  mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.35) 68%, rgba(0,0,0,0) 100%);
+  transform: translate3d(calc(var(--mesh-offset-x) * 0.35), calc(var(--mesh-offset-y) * 0.35), 0) rotate(11deg);
+  -webkit-mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.35) 65%, rgba(0, 0, 0, 0) 100%);
+  mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.35) 65%, rgba(0, 0, 0, 0) 100%);
 }
 
 body::after {
-  inset: -20vh -20vw;
+  inset: -22vh -22vw;
   background:
-    radial-gradient(60% 50% at 18% 24%, rgba(59, 130, 246, 0.16), transparent 70%),
-    radial-gradient(62% 55% at 72% 72%, rgba(236, 72, 153, 0.12), transparent 72%),
-    radial-gradient(50% 45% at 42% 78%, rgba(16, 185, 129, 0.1), transparent 70%);
-  filter: blur(140px);
-  opacity: 0.4;
-  transform: translate3d(calc(var(--mesh-offset-x) * -0.35), calc(var(--mesh-offset-y) * -0.35), 0);
+    radial-gradient(58% 50% at 18% 26%, rgba(59, 130, 246, 0.14), transparent 70%),
+    radial-gradient(60% 50% at 70% 72%, rgba(236, 72, 153, 0.1), transparent 72%),
+    radial-gradient(48% 45% at 44% 78%, rgba(16, 185, 129, 0.08), transparent 70%);
+  filter: blur(150px);
+  opacity: 0.32;
+  transform: translate3d(calc(var(--mesh-offset-x) * -0.25), calc(var(--mesh-offset-y) * -0.25), 0) rotate(-8deg);
+  mix-blend-mode: screen;
   z-index: -2;
 }
 
