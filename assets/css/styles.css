@@ -362,11 +362,12 @@ footer { border-top: 1px solid var(--border); }
   display: none;
   flex-direction: column;
   background: transparent !important;
-  border: none !important;
+    border: none !important;
   cursor: pointer;
   padding: .5rem;
   gap: 3px;
   color: var(--text) !important;
+    box-shadow: none !important;
 }
 
 /* Ensure mobile menu button is hidden on desktop */
@@ -392,6 +393,8 @@ footer { border-top: 1px solid var(--border); }
     background: transparent !important;
     border: none !important;
     color: var(--text) !important;
+    box-shadow: none !important;
+    outline: none !important;
   }
 }
 
