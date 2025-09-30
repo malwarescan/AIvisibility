@@ -68,39 +68,45 @@ body::after {
 }
 
 body::before {
-  inset: -18vh -18vw;
+  inset: -20vh -20vw;
   background-image:
-    repeating-linear-gradient(115deg, rgba(15, 23, 42, 0.11) 0px, rgba(15, 23, 42, 0.11) 1px, transparent 1px, transparent 28px),
-    repeating-linear-gradient(-115deg, rgba(71, 85, 105, 0.08) 0px, rgba(71, 85, 105, 0.08) 1px, transparent 1px, transparent 26px);
-  background-size: 320px 320px, 260px 260px;
-  opacity: calc(0.25 + (var(--mesh-depth) * 0.25));
-  mix-blend-mode: multiply;
+    radial-gradient(circle, rgba(180, 255, 140, 0.42) 0%, rgba(180, 255, 140, 0.08) 42%, transparent 70%),
+    radial-gradient(circle, rgba(252, 255, 188, 0.38) 0%, rgba(252, 255, 188, 0.08) 45%, transparent 68%),
+    radial-gradient(circle, rgba(240, 255, 220, 0.28) 0%, rgba(240, 255, 220, 0.05) 40%, transparent 60%),
+    repeating-linear-gradient(112deg, rgba(170, 255, 130, 0.36) 0px, rgba(170, 255, 130, 0.36) 1px, transparent 1px, transparent 28px),
+    repeating-linear-gradient(-112deg, rgba(249, 255, 179, 0.26) 0px, rgba(249, 255, 179, 0.26) 1px, transparent 1px, transparent 26px);
+  background-size: 220px 220px, 260px 260px, 320px 320px, 340px 340px, 300px 300px;
+  background-position: 0 0, 140px 120px, 80px 60px, 0 0, 60px 40px;
+  opacity: calc(0.2 + (var(--mesh-depth) * 0.34));
+  mix-blend-mode: screen;
   transform:
-    perspective(1400px)
+    perspective(1450px)
     rotateX(var(--mesh-rotate-x))
     rotateY(var(--mesh-rotate-y))
-    rotateZ(11deg)
-    translate3d(calc(var(--mesh-offset-x) * 0.35), calc(var(--mesh-offset-y) * 0.35), 0);
+    rotateZ(12deg)
+    translate3d(calc(var(--mesh-offset-x) * 0.4), calc(var(--mesh-offset-y) * 0.4), 0);
   -webkit-mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.35) 65%, rgba(0, 0, 0, 0) 100%);
   mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.35) 65%, rgba(0, 0, 0, 0) 100%);
-  box-shadow: 0 28px calc(120px * var(--mesh-depth)) rgba(15, 23, 42, 0.08);
+  filter: drop-shadow(0 26px calc(120px * var(--mesh-depth)) rgba(175, 255, 140, 0.22));
 }
 
 body::after {
-  inset: -22vh -22vw;
-  background:
-    radial-gradient(58% 50% at 18% 26%, rgba(59, 130, 246, 0.14), transparent 70%),
-    radial-gradient(60% 50% at 70% 72%, rgba(236, 72, 153, 0.1), transparent 72%),
-    radial-gradient(48% 45% at 44% 78%, rgba(16, 185, 129, 0.08), transparent 70%);
-  filter: blur(150px);
-  opacity: calc(0.24 + (var(--mesh-depth) * 0.2));
+  inset: -24vh -24vw;
+  background-image:
+    radial-gradient(58% 52% at 18% 26%, rgba(188, 255, 160, 0.24), transparent 72%),
+    radial-gradient(60% 56% at 70% 74%, rgba(242, 255, 190, 0.18), transparent 70%),
+    radial-gradient(40% 45% at 48% 82%, rgba(255, 255, 225, 0.16), transparent 68%),
+    linear-gradient(140deg, rgba(195, 255, 155, 0.18) 0%, rgba(255, 255, 180, 0.05) 38%, rgba(255, 255, 255, 0) 70%);
+  background-blend-mode: screen;
+  filter: blur(170px);
+  opacity: calc(0.18 + (var(--mesh-depth) * 0.26));
   transform:
-    perspective(1600px)
-    rotateX(calc(var(--mesh-rotate-x) * -0.6))
-    rotateY(calc(var(--mesh-rotate-y) * -0.6))
-    rotateZ(-7deg)
-    translate3d(calc(var(--mesh-offset-x) * -0.25), calc(var(--mesh-offset-y) * -0.25), 0);
-  mix-blend-mode: screen;
+    perspective(1650px)
+    rotateX(calc(var(--mesh-rotate-x) * -0.58))
+    rotateY(calc(var(--mesh-rotate-y) * -0.58))
+    rotateZ(-9deg)
+    translate3d(calc(var(--mesh-offset-x) * -0.28), calc(var(--mesh-offset-y) * -0.28), 0);
+  mix-blend-mode: lighten;
   z-index: -2;
 }
 
