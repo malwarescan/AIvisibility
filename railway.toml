@@ -3,7 +3,7 @@ builder = "NIXPACKS"
 buildCommand = "echo 'PHP deployment - no build needed'"
 
 [deploy]
-startCommand = "php -S 0.0.0.0:$PORT"
+startCommand = "php -S 0.0.0.0:$PORT router.php"
 healthcheckPath = "/"
 healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
