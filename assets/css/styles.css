@@ -1,3 +1,80 @@
+::-webkit-scrollbar {
+  display: none;
+}
+@layer components {
+  .trace-border-btn {
+    @apply relative inline-flex items-center justify-center overflow-hidden px-5 py-3 text-sm font-semibold tracking-wide transition-transform duration-150 ease-out bg-slate-950 text-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-200 ring-offset-slate-900 rounded-lg;
+    border-radius: var(--trace-radius, 0.5rem);
+    --trace-color: #06b6d4;
+    --trace-speed: 2.2s;
+    --trace-radius: 0.5rem;
+    --trace-fill: rgba(15, 23, 42, 0.96);
+  }
+
+  .trace-border-btn::before,
+  .trace-border-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .trace-border-btn::before {
+    background: conic-gradient(
+      from 0turn,
+      var(--trace-color) 0deg 40deg,
+      transparent 40deg 360deg
+    );
+    transform-origin: center;
+    animation: trace-border-spin var(--trace-speed) linear infinite;
+    animation-play-state: paused;
+    opacity: 0;
+    filter: drop-shadow(0 0 18px rgba(6, 182, 212, 0.35));
+  }
+
+  .trace-border-btn::after {
+    inset: 2px;
+    border-radius: calc(var(--trace-radius, 0.5rem) - 2px);
+    background: var(--trace-fill);
+    z-index: 0;
+  }
+
+  .trace-border-label {
+    @apply relative z-10 flex items-center gap-1;
+  }
+
+  .trace-border-btn:hover,
+  .trace-border-btn:focus-visible {
+    @apply -translate-y-0.5;
+  }
+
+  .trace-border-btn:hover::before,
+  .trace-border-btn:focus-visible::before {
+    opacity: 1;
+    animation-play-state: running;
+  }
+
+  .trace-border-btn:disabled {
+    @apply cursor-not-allowed opacity-60 translate-y-0;
+  }
+
+  .trace-border-btn:disabled::before {
+    animation-play-state: paused;
+    opacity: 0;
+  }
+
+  .trace-border-btn:disabled::after {
+    opacity: 0.85;
+  }
+}
+
+@keyframes trace-border-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 .home__badge {
   display: inline-block;
   background: #E8E8E8;
