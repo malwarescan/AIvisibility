@@ -23,6 +23,9 @@ if (!empty($breadcrumbs ?? [])) {
   <link rel="canonical" href="<?= esc(canonical($_SERVER['REQUEST_URI'])) ?>" />
   <link rel="preload" href="/assets/css/styles.css" as="style" />
   <link rel="stylesheet" href="/assets/css/styles.css" />
+  <script defer src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script defer src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script defer src="/js/react-app.js"></script>
 <?php foreach($lds as $ld): ?>
   <script type="application/ld+json"><?= json_encode($ld, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) ?></script>
 <?php endforeach; ?>

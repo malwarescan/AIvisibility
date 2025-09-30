@@ -4,6 +4,7 @@ $breadcrumbs = [
 ];
 ?>
 <main class="container py-8 home">
+  <div id="react-root" class="mb-8"></div>
   <div class="home__panel">
     <div class="home__badge">terminal mode</div>
     <h1 class="home__title">neuralCommand(get visible)</h1>
