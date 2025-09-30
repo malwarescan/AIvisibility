@@ -14,8 +14,8 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: #f8fafc;
-    background: transparent;
-    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.92);
+    border: 1px solid rgba(148, 163, 184, 0.22);
     border-radius: var(--trace-radius, 0.5rem);
     overflow: hidden;
     cursor: pointer;
@@ -39,31 +39,35 @@
   }
 
   .trace-border-btn::before {
-    inset: -2px;
+    inset: 0;
+    border-radius: inherit;
     background:
       conic-gradient(
         from 0turn,
-        var(--trace-color) 0deg 38deg,
-        transparent 38deg 360deg
+        var(--trace-color) 0deg 48deg,
+        transparent 48deg 360deg
       );
     transform-origin: center;
     animation: trace-border-spin var(--trace-speed) linear infinite;
     animation-play-state: paused;
     opacity: 0;
-    filter: drop-shadow(0 0 18px rgba(6, 182, 212, 0.35));
-    z-index: 0;
+    filter: drop-shadow(0 0 18px rgba(6, 182, 212, 0.45));
+    z-index: 2;
   }
 
   .trace-border-btn::after {
-    inset: 3px;
-    border-radius: calc(var(--trace-radius, 0.5rem) - 3px);
+    inset: 0;
+    border-radius: inherit;
     background: var(--trace-fill);
-    z-index: -1;
+    z-index: 1;
   }
 
-  .trace-border-btn > * {
+  .trace-border-btn .trace-border-label {
     position: relative;
-    z-index: 1;
+    z-index: 3;
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
   }
 
   .trace-border-btn:hover,
