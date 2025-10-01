@@ -19,6 +19,14 @@ if (!defined('NC_NAME')) {
     ]);
 }
 
+if (!defined('NC_SMTP_HOST')) {
+    define('NC_SMTP_HOST', getenv('SMTP_HOST') ?: '');
+    define('NC_SMTP_PORT', getenv('SMTP_PORT') ?: 587);
+    define('NC_SMTP_USER', getenv('SMTP_USER') ?: '');
+    define('NC_SMTP_PASS', getenv('SMTP_PASS') ?: '');
+    define('NC_SMTP_SECURE', getenv('SMTP_SECURE') ?: 'tls');
+}
+
 // Canonical services with pricing packages (slug => [name, short, packages, faqs])
 $SERVICES = [
   'generative-engine-optimization' => [
