@@ -26,7 +26,6 @@ $breadcrumbs = [
         <span class="home__panel-radar-ping home__panel-radar-ping--two"></span>
         <span class="home__panel-radar-ping home__panel-radar-ping--three"></span>
       </div>
-      <span class="sr-only">Sonar animation representing real-time AI visibility signals expanding outward.</span>
     </aside>
   </div>
 
