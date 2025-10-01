@@ -19,14 +19,34 @@ $breadcrumbs = [
       </div>
     </div>
 
-    <aside class="home__panel-right" aria-label="AI visibility sonar display">
-      <div class="home__panel-radar" aria-hidden="true">
+    <aside class="home__panel-right" aria-label="AI visibility sonar summary">
+      <span class="home__panel-pill">Live AI Visibility Feed</span>
+      <div class="home__panel-radar" role="presentation">
         <span class="home__panel-radar-line"></span>
         <span class="home__panel-radar-ping home__panel-radar-ping--one"></span>
         <span class="home__panel-radar-ping home__panel-radar-ping--two"></span>
         <span class="home__panel-radar-ping home__panel-radar-ping--three"></span>
       </div>
-      <span class="sr-only">Sonar animation representing real-time AI visibility signals expanding outward.</span>
+      <ul class="home__panel-signals">
+        <li>
+          <strong>92%</strong>
+          <span>AI engines detect structured schema coverage after our crawl sweep.</span>
+        </li>
+        <li>
+          <strong>37</strong>
+          <span>Tracked prompts now cite your brand inside ChatGPT, Claude, and Perplexity.</span>
+        </li>
+        <li>
+          <strong>+18%</strong>
+          <span>Growth in trusted agent actions triggered from `/agent.json` endpoints.</span>
+        </li>
+      </ul>
+      <div class="home__panel-footnote">
+        <svg viewBox="0 0 16 16" aria-hidden="true" class="home__panel-footnote-icon">
+          <path d="M15 7.5a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Zm-1.5 0A6 6 0 1 0 1.5 7.5a6 6 0 0 0 12 0Zm-5.25 3.25a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 1.5 0v3ZM8 4a.875.875 0 1 1 0 1.75A.875.875 0 0 1 8 4Z"/>
+        </svg>
+        <span>Real-time sonar confirms when you’re “visible” enough for generative engines to trust you.</span>
+      </div>
     </aside>
   </div>
 
