@@ -28,15 +28,9 @@ $successData = $_SESSION['contact_success'] ?? null;
         We received your message and will respond within 24 hours. Keep an eye on your inbox for next steps from the Neural Command team.
       </p>
 
-      <?php if ($successData && $successData['email_sent']): ?>
       <div class="mb-6 p-3 bg-green-50 border border-green-200 rounded-lg">
-        <p class="text-green-800 text-sm">✓ Email notification sent to our team.</p>
+        <p class="text-green-800 text-sm">Thanks! Our team has your request and will follow up shortly.</p>
       </div>
-      <?php elseif ($successData && !$successData['email_sent']): ?>
-      <div class="mb-6 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-        <p class="text-yellow-800 text-sm">⚠ Email notification failed, but your request was recorded.</p>
-      </div>
-      <?php endif; ?>
     </div>
 
     <?php if ($successData): ?>
