@@ -22,9 +22,6 @@ final class Canonical {
     }
     return self::withSlash('/'.implode('/',$parts));
   }
-  public static function absoluteCanonical(string $path): string {
-    return self::absolute($path);
-  }
   public static function strip(array $q): array {
     $out=[]; foreach($q as $k=>$v){ if(!in_array(strtolower((string)$k), self::STRIP, true)) $out[$k]=$v; } return $out;
   }

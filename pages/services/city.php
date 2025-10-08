@@ -5,11 +5,15 @@ require_once __DIR__.'/../../bootstrap/canonical.php';
 require_once __DIR__.'/../../lib/links.php';
 require_once __DIR__.'/../../lib/schema.php';
 require_once __DIR__.'/../../lib/schema_builders.php';
+require_once __DIR__.'/../../lib/content_tokens.php';
 
 $service = Canonical::kebab($service);
 $city    = Canonical::kebab($city);
 $path    = "/services/$service/$city/";
 $canonical = Canonical::absoluteCanonical($path);
+
+// Generate deterministic content sections
+$sections = compose_content($service, $city, $canonical);
 
 $serviceName = ucwords(str_replace('-', ' ', $service));
 $cityName    = ucwords(str_replace('-', ' ', $city));
@@ -40,7 +44,7 @@ $breadcrumbJson = build_breadcrumb_schema([
 // WebPage
 $webPageJson = build_webpage_schema($canonical, $pageTitle, $pageDesc);
 
-// FAQPage
+// FAQPage (enriched with token content)
 $faqJson = [
   '@context'=>'https://schema.org',
   '@type'=>'FAQPage',
@@ -50,6 +54,11 @@ $faqJson = [
       '@type'=>'Question',
       'name'=>"What does $serviceName include?",
       'acceptedAnswer'=>['@type'=>'Answer','text'=>"We deliver $serviceName tailored to $cityName with full schema coverage, crawl clarity, and agentic SEO."]
+    ],
+    [
+      '@type'=>'Question',
+      'name'=>"How is $serviceName adapted for $cityName?",
+      'acceptedAnswer'=>['@type'=>'Answer','text'=>$sections['faq_local']]
     ],
     [
       '@type'=>'Question',
@@ -90,82 +99,91 @@ $faqJson = [
   <?= render_jsonld($faqJson) ?>
 </head>
 <body>
-  <h1><?= htmlspecialchars($serviceName.' in '.$cityName, ENT_QUOTES) ?></h1>
+  <h1><?= htmlspecialchars("$serviceName in $cityName", ENT_QUOTES) ?></h1>
   
-  <section>
-    <h2>Professional <?= htmlspecialchars($serviceName, ENT_QUOTES) ?> for <?= htmlspecialchars($cityName, ENT_QUOTES) ?> Businesses</h2>
-    <p>We deliver comprehensive <?= htmlspecialchars($serviceName, ENT_QUOTES) ?> services to <?= htmlspecialchars($cityName, ENT_QUOTES) ?> organizations seeking to dominate AI recommendation channels. Our approach combines technical schema implementation, agentic SEO strategies, and crawl optimization to ensure your business becomes the default recommendation in ChatGPT, Google AI Mode, Claude, and Perplexity.</p>
-    
-    <p><?= htmlspecialchars($cityName, ENT_QUOTES) ?> businesses face unique market dynamics that require specialized AI visibility strategies. We understand the local competitive landscape and implement solutions tailored to your specific market conditions.</p>
+  <!-- Intro Section: Deterministic, unique per URL -->
+  <section class="intro">
+    <p><?= htmlspecialchars($sections['intro'], ENT_QUOTES) ?></p>
   </section>
   
-  <section>
-    <h2>Why Choose Neural Command for <?= htmlspecialchars($serviceName, ENT_QUOTES) ?> in <?= htmlspecialchars($cityName, ENT_QUOTES) ?>?</h2>
-    <ul>
-      <li><strong>Local Market Expertise:</strong> Deep understanding of <?= htmlspecialchars($cityName, ENT_QUOTES) ?> business environment and competitive dynamics</li>
-      <li><strong>Programmatic Schema:</strong> Complete LocalBusiness, Service, and FAQ schema markup optimized for <?= htmlspecialchars($cityName, ENT_QUOTES) ?> search patterns</li>
-      <li><strong>Canonical Rigor:</strong> HTTPS, lowercase URLs, and trailing slash consistency to prevent duplicate content issues</li>
-      <li><strong>Hub-Linked Architecture:</strong> Shallow crawl paths ensure Google and AI systems can efficiently discover your content</li>
-      <li><strong>Agentic SEO Playbook:</strong> Custom strategies that make AI systems trust and recommend your business first</li>
-      <li><strong>Performance-First:</strong> Fast TTFB and optimized delivery for better crawl efficiency</li>
-      <li><strong>Measurable Results:</strong> Track visibility improvements across Google, Bing, and LLM-based recommendation engines</li>
-    </ul>
+  <!-- Strategic Angles -->
+  <section class="angles">
+    <h2>Our Strategic Approach</h2>
+    <p><?= htmlspecialchars($sections['angles'], ENT_QUOTES) ?></p>
   </section>
   
-  <section>
-    <h2>Our <?= htmlspecialchars($serviceName, ENT_QUOTES) ?> Services Include</h2>
-    <p>When you work with Neural Command in <?= htmlspecialchars($cityName, ENT_QUOTES) ?>, you get end-to-end implementation:</p>
-    <ul>
-      <li>Complete schema coverage (LocalBusiness + Service + Organization + FAQPage)</li>
-      <li>AI training signals optimized for <?= htmlspecialchars($cityName, ENT_QUOTES) ?> market</li>
-      <li>Authority building specific to your local competitive landscape</li>
-      <li>Internal linking structure for maximum crawl efficiency</li>
-      <li>JSON-LD implementation with license and creator attribution</li>
-      <li>Canonical URL enforcement across all pages</li>
-      <li>Sitemap optimization for efficient discovery</li>
-      <li>Ongoing monitoring and optimization</li>
-    </ul>
+  <!-- Expected Outcomes -->
+  <section class="outcomes">
+    <h2>What You Should Expect</h2>
+    <p><?= htmlspecialchars($sections['outcomes'], ENT_QUOTES) ?></p>
   </section>
   
-  <section>
+  <!-- Local Context -->
+  <section class="local-signals">
+    <h2>Local Context for <?= htmlspecialchars($cityName, ENT_QUOTES) ?></h2>
+    <p><?= htmlspecialchars($sections['locals'], ENT_QUOTES) ?></p>
+  </section>
+  
+  <!-- Execution Process -->
+  <section class="process">
+    <h2>How We Execute</h2>
+    <?= $sections['process'] ?>
+  </section>
+  
+  <!-- Proof Points -->
+  <section class="proof">
+    <h2>Technical Foundation We Deliver</h2>
+    <?= $sections['proof'] ?>
+  </section>
+  
+  <!-- Related Services -->
+  <section class="related-services">
     <h2>Related Services in <?= htmlspecialchars($cityName, ENT_QUOTES) ?></h2>
-    <p>Explore our other AI visibility services available in <?= htmlspecialchars($cityName, ENT_QUOTES) ?>:</p>
+    <p>Explore our complementary AI visibility services available in <?= htmlspecialchars($cityName, ENT_QUOTES) ?>:</p>
     <ul>
       <?php 
-      $relatedServices = ['agentic-seo', 'ai-consulting', 'schema-optimizer', 'chatgpt-seo', 'generative-engine-optimization'];
+      $relatedServices = ['agentic-seo', 'ai-consulting', 'schema-optimizer', 'chatgpt-seo', 'generative-engine-optimization', 'ai-discovery-services'];
+      $count = 0;
       foreach($relatedServices as $relService):
-        if ($relService === $service) continue;
+        if ($relService === $service || $count >= 5) continue;
         $relUrl = link_service_city($relService, $city);
         $relName = ucwords(str_replace('-', ' ', $relService));
+        $count++;
       ?>
       <li><a href="<?= htmlspecialchars($relUrl, ENT_QUOTES) ?>"><?= htmlspecialchars($relName.' in '.$cityName, ENT_QUOTES) ?></a></li>
       <?php endforeach; ?>
     </ul>
   </section>
   
-  <section>
+  <!-- Nearby Cities (from token system) -->
+  <?php if (!empty($sections['nearby'])): ?>
+  <section class="nearby-cities">
     <h2>Serving <?= htmlspecialchars($cityName, ENT_QUOTES) ?> and Nearby Areas</h2>
-    <p>In addition to <?= htmlspecialchars($cityName, ENT_QUOTES) ?>, we also serve businesses in surrounding cities with the same high-quality <?= htmlspecialchars($serviceName, ENT_QUOTES) ?> services:</p>
+    <p>We also provide <?= htmlspecialchars($serviceName, ENT_QUOTES) ?> to businesses in these nearby cities:</p>
     <ul>
-      <?php 
-      // Show a few related cities (simplified - you'd have a proper lookup)
-      $nearbyCities = array_slice(array_keys($CITIES), 0, 5);
-      foreach($nearbyCities as $nearbySlug):
-        if ($nearbySlug === $city) continue;
-        $nearbyData = $CITIES[$nearbySlug];
+      <?php foreach ($sections['nearby'] as $nearbySlug): 
         $nearbyUrl = link_service_city($service, $nearbySlug);
+        $nearbyDisplay = ucwords(str_replace('-', ' ', $nearbySlug));
       ?>
-      <li><a href="<?= htmlspecialchars($nearbyUrl, ENT_QUOTES) ?>"><?= htmlspecialchars($serviceName.' in '.$nearbyData['name'], ENT_QUOTES) ?></a></li>
+      <li><a href="<?= htmlspecialchars($nearbyUrl, ENT_QUOTES) ?>"><?= htmlspecialchars($serviceName.' in '.$nearbyDisplay, ENT_QUOTES) ?></a></li>
       <?php endforeach; ?>
     </ul>
   </section>
+  <?php endif; ?>
   
-  <section>
-    <h2>Get Started with <?= htmlspecialchars($serviceName, ENT_QUOTES) ?> in <?= htmlspecialchars($cityName, ENT_QUOTES) ?></h2>
-    <p>Ready to dominate AI recommendation channels in <?= htmlspecialchars($cityName, ENT_QUOTES) ?>? Contact Neural Command today to discuss how our <?= htmlspecialchars($serviceName, ENT_QUOTES) ?> services can transform your AI visibility.</p>
-    <p><strong>Phone:</strong> +1-844-568-4624<br>
-    <strong>Email:</strong> hello@neuralcommandllc.com</p>
-    <p><a href="<?= Canonical::absolute('/contact/') ?>">Contact Us</a> | <a href="<?= Canonical::absolute('/services/') ?>">All Services</a></p>
+  <!-- CTA Section -->
+  <section class="cta">
+    <h2>Next Step: <?= htmlspecialchars($sections['cta'], ENT_QUOTES) ?></h2>
+    <p>Ready to transform your AI visibility in <?= htmlspecialchars($cityName, ENT_QUOTES) ?>? Contact Neural Command to discuss how our <?= htmlspecialchars($serviceName, ENT_QUOTES) ?> services can deliver measurable results.</p>
+    <p>
+      <strong>Phone:</strong> <a href="tel:+18445684624">+1-844-568-4624</a><br>
+      <strong>Email:</strong> <a href="mailto:hello@neuralcommandllc.com">hello@neuralcommandllc.com</a>
+    </p>
+    <p>
+      <a href="<?= htmlspecialchars(Canonical::absolute('/contact/'), ENT_QUOTES) ?>">Contact Us</a> | 
+      <a href="<?= htmlspecialchars(Canonical::absolute('/services/'), ENT_QUOTES) ?>">View All Services</a> |
+      <a href="<?= htmlspecialchars(link_service_hub($service), ENT_QUOTES) ?>">More <?= htmlspecialchars($serviceName, ENT_QUOTES) ?> Cities</a>
+    </p>
   </section>
 </body>
 </html>
