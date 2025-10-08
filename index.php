@@ -35,20 +35,21 @@ switch (true) {
         $setPage('about');
         break;
     case $path === '/services/':
-        $setPage('services');
-        break;
+        require __DIR__.'/pages/services/index.php';
+        exit;
     case preg_match('#^/services/([^/]+)/([^/]+)/$#', $path, $m):
-        $setPage('service-city', [
-            'slug' => $m[1],
-            'city' => $m[2],
-        ]);
-        break;
+        $service = $m[1];
+        $city = $m[2];
+        require __DIR__.'/pages/services/city.php';
+        exit;
     case preg_match('#^/services/([^/]+)/$#', $path, $m):
-        $setPage('service', ['slug' => $m[1]]);
-        break;
-    case preg_match('#^/states/([^/]+)/$#', $path, $m):
-        $setPage('state', ['state' => $m[1]]);
-        break;
+        $_GET['service'] = $m[1];
+        require __DIR__.'/pages/services/service-hub.php';
+        exit;
+    case preg_match('#^/services/state/([a-z]{2})/$#', $path, $m):
+        $_GET['state'] = $m[1];
+        require __DIR__.'/pages/services/state-hub.php';
+        exit;
     case preg_match('#^/city-service/([^/]+)/$#', $path, $m):
         $setPage('city-service', ['city' => $m[1]]);
         break;
