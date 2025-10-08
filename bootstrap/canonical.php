@@ -14,8 +14,9 @@ final class Canonical {
   public static function normalizePath(string $p): string {
     $p = preg_replace('#/+#','/',$p);
     $parts = array_filter(explode('/',$p), fn($x)=>$x!=='');
+    $parts = array_values($parts); // Re-index after filter
     $parts = array_map(fn($x)=>self::kebab($x), $parts);
-    if (count($parts)>=3 && $parts[0]==='services') {
+    if (count($parts)>=3 && isset($parts[0],$parts[1],$parts[2]) && $parts[0]==='services') {
       $parts[1]=self::kebab($parts[1]);
       $parts[2]=self::kebab(str_replace('_','-',$parts[2]));
     }

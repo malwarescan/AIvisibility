@@ -6,8 +6,8 @@ require_once __DIR__.'/../lib/links.php';
 $rows=[];
 $csv = __DIR__.'/../data/matrix.csv';
 if (is_file($csv) && ($h=fopen($csv,'r'))) {
-  $head=fgetcsv($h);
-  while(($r=fgetcsv($h))!==false){ $rows[] = array_combine($head,$r); }
+  $head=fgetcsv($h, 0, ',', '"', '');
+  while(($r=fgetcsv($h, 0, ',', '"', ''))!==false){ $rows[] = array_combine($head,$r); }
   fclose($h);
 }
 $per = 45000;

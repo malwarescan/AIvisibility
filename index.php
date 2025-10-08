@@ -80,7 +80,11 @@ switch (true) {
         $setPage('case-studies/'.$m[1]);
         break;
     case $path === '/sitemap.xml':
-        require __DIR__.'/public/sitemap.xml.php';
+        require __DIR__.'/public/sitemap.index.php';
+        exit;
+    case preg_match('#^/sitemaps/sitemap-(\d+)\.xml$#', $path, $m):
+        $_GET['page'] = $m[1];
+        require __DIR__.'/public/sitemap.page.php';
         exit;
     case $path === '/robots.txt':
         require __DIR__.'/public/robots.txt.php';
