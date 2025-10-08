@@ -8,7 +8,7 @@ require __DIR__.'/lib/util.php';
 require __DIR__.'/lib/seo.php';
 require __DIR__.'/lib/links.php';
 
-Canonical::ensureCanonicalRedirect();
+Canonical::guard();
 
 // Send license link header for HTML pages
 if (PHP_SAPI !== 'cli') {
