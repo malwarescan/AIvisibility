@@ -4,7 +4,7 @@ buildCommand = "echo 'PHP deployment - no build needed'"
 
 [deploy]
 startCommand = "php -S 0.0.0.0:$PORT index.php"
-healthcheckPath = "/"
+healthcheckPath = "/health.php"
 healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
