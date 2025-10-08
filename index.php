@@ -1,6 +1,11 @@
 <?php
 declare(strict_types=1);
 
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+ini_set('log_errors', '1');
+
 require __DIR__.'/config.php';
 require __DIR__.'/bootstrap/canonical.php';
 require __DIR__.'/bootstrap/config.php';
