@@ -101,7 +101,14 @@ function resolve_route(string $uri): array {
             $result['page'] = 'case-studies/healthcare-practice-ai-dominance';
             break;
         case $path === '/sitemap.xml':
-            $result['include'] = __DIR__ . '/../sitemap.xml.php';
+            $result['include'] = __DIR__ . '/../public/sitemap.index.php';
+            break;
+        case preg_match('#^/sitemaps/sitemap-(\d+)\.xml$#', $path, $matches):
+            $_GET['page'] = $matches[1];
+            $result['include'] = __DIR__ . '/../public/sitemap.page.php';
+            break;
+        case $path === '/robots.txt':
+            $result['include'] = __DIR__ . '/../public/robots.txt.php';
             break;
         case $path === '/agent.json':
             $result['include'] = __DIR__ . '/../agent.json';
