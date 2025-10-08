@@ -10,7 +10,7 @@ require_once __DIR__.'/../bootstrap/config.php';
 function schema_add_license(array $json): array {
   $creativeWorkTypes = [
     'CreativeWork','WebPage','Article','FAQPage','HowTo','SoftwareApplication',
-    'CollectionPage','AboutPage','ItemPage','Blog','BlogPosting','TechArticle'
+    'CollectionPage','AboutPage','ItemPage','Blog','BlogPosting','TechArticle','Dataset'
   ];
   
   $type = is_string($json['@type'] ?? null) ? $json['@type'] : null;
@@ -28,7 +28,7 @@ function schema_add_license(array $json): array {
 function schema_add_creator(array $json): array {
   $creativeWorkTypes = [
     'CreativeWork','WebPage','Article','FAQPage','HowTo','SoftwareApplication',
-    'CollectionPage','AboutPage','ItemPage','Blog','BlogPosting','TechArticle'
+    'CollectionPage','AboutPage','ItemPage','Blog','BlogPosting','TechArticle','Dataset'
   ];
   
   $type = is_string($json['@type'] ?? null) ? $json['@type'] : null;

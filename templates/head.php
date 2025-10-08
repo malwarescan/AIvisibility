@@ -1,6 +1,13 @@
 <?php
-$lds = [ ld_localbusiness(), ld_website(), ld_software(), ld_agentic_dataset() ];
+require_once __DIR__.'/../lib/schema.php';
 
+// Non-CreativeWork schemas (render directly)
+$nonCreativeSchemas = [ ld_localbusiness(), ld_website() ];
+
+// CreativeWork schemas (use render_jsonld for license & creator)
+$creativeSchemas = [ ld_software(), ld_agentic_dataset() ];
+
+// Breadcrumbs (non-CreativeWork)
 if (!empty($breadcrumbs ?? [])) {
   $breadcrumbItems = [];
   foreach ($breadcrumbs as $crumb) {
@@ -9,7 +16,7 @@ if (!empty($breadcrumbs ?? [])) {
     }
   }
   if ($breadcrumbItems) {
-    $lds[] = build_breadcrumb_jsonld($breadcrumbItems);
+    $nonCreativeSchemas[] = build_breadcrumb_jsonld($breadcrumbItems);
   }
 }
 ?>
@@ -26,9 +33,17 @@ if (!empty($breadcrumbs ?? [])) {
   <script defer src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script defer src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script defer src="/js/react-app.js"></script>
-<?php foreach($lds as $ld): ?>
+<?php 
+// Render non-CreativeWork schemas directly
+foreach($nonCreativeSchemas as $ld): ?>
   <script type="application/ld+json"><?= json_encode($ld, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) ?></script>
 <?php endforeach; ?>
+<?php 
+// Render CreativeWork schemas with license & creator
+foreach($creativeSchemas as $schema): 
+  echo render_jsonld($schema);
+endforeach; 
+?>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const nav = document.querySelector('.header .nav');
