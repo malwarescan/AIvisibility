@@ -8,13 +8,13 @@
       <h3 class="font-mono font-semibold mb-2">Core</h3>
       <div class="scrollbox">
         <ul class="space-y-1">
-          <li><a href="/" class="underline">Home</a></li>
-          <li><a href="/about/" class="underline">About</a></li>
-          <li><a href="/services/" class="underline">Services</a></li>
-          <li><a href="/contact/" class="underline">Contact</a></li>
-          <li><a href="/sitemap.xml" class="underline">Sitemap</a></li>
-          <li><a href="/agent.json" class="underline">Agent JSON</a></li>
-          <li><a href="/meta.json" class="underline">Meta JSON</a></li>
+          <li><a href="<?= Canonical::absolute('/') ?>" class="underline">Home</a></li>
+          <li><a href="<?= Canonical::absolute('/about/') ?>" class="underline">About</a></li>
+          <li><a href="<?= Canonical::absolute('/services/') ?>" class="underline">Services</a></li>
+          <li><a href="<?= Canonical::absolute('/contact/') ?>" class="underline">Contact</a></li>
+          <li><a href="<?= Canonical::absolute('/sitemap.xml') ?>" class="underline">Sitemap</a></li>
+          <li><a href="<?= Canonical::absolute('/agent.json') ?>" class="underline">Agent JSON</a></li>
+          <li><a href="<?= Canonical::absolute('/meta.json') ?>" class="underline">Meta JSON</a></li>
         </ul>
       </div>
     </nav>
@@ -26,7 +26,7 @@
         <ul class="space-y-1">
           <?php foreach($SERVICES as $slug=>$svc): ?>
             <li>
-              <a href="/services/<?= esc($slug) ?>/" class="underline">
+              <a href="<?= Canonical::absolute('/services/'.$slug.'/') ?>" class="underline">
                 <?= esc($svc['name']) ?>
               </a>
             </li>
@@ -43,7 +43,7 @@
           <?php foreach($CITIES as $cityKey=>$cityData): ?>
             <?php foreach($SERVICES as $slug=>$svc): ?>
               <li>
-                <a href="/services/<?= esc($slug) ?>/<?= esc($cityKey) ?>/" class="underline">
+                <a href="<?= link_service_city($slug, $cityKey) ?>" class="underline">
                   <?= esc($svc['name']) ?> — <?= esc($cityData['name']) ?>
                 </a>
               </li>

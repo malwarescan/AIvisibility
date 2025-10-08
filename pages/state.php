@@ -1,79 +1,51 @@
 <?php
-// State hub page - lists every service and service×city in that state
-global $STATES, $SERVICES;
-$stateKey = $_GET['state'] ?? '';
-$state = $STATES[$stateKey] ?? null;
+declare(strict_types=1);
+require_once __DIR__.'/../bootstrap/canonical.php';
+require_once __DIR__.'/../lib/links.php';
 
 $breadcrumbs = [
-  ['label' => 'Home', 'url' => canonical('/')],
-  ['label' => 'Services', 'url' => canonical('/services/')],
+  ['label' => 'Home', 'url' => Canonical::absolute('/')],
+  ['label' => 'Services', 'url' => Canonical::absolute('/services/')],
 ];
 
-if(!$state){ 
-  echo "<main class='container px-4 py-10'><h1>State not found</h1></main>"; 
-  return; 
+global $SERVICES, $STATES;
+$slug = Canonical::kebab($_GET['slug'] ?? '');
+$stateKey = Canonical::kebab($_GET['state'] ?? '');
+$svc = $SERVICES[$slug] ?? null;
+$state = $STATES[$stateKey] ?? null;
+
+if(!$svc || !$state){
+  echo "<main class='container px-4 py-10'><h1>Service or state not found</h1></main>";
+  return;
 }
 
-$abbr = $state['abbr'];
-$stateName = $state['name'];
+$ctx['title'] = $svc['name'] . ' in ' . $state['name'] . ' | Neural Command';
+$ctx['desc'] = 'Become the default recommendation across ChatGPT, Google AI Overviews, Claude, and Perplexity in ' . $state['name'] . '.';
 
-if($state){
-  $breadcrumbs[] = ['label' => 'States'];
-  $breadcrumbs[] = ['label' => $state['name']];
-}
+$breadcrumbs[] = ['label' => $svc['name'], 'url' => Canonical::absolute('/services/'.$slug.'/')];
+$breadcrumbs[] = ['label' => $state['name']];
 
-// Set page context
-$ctx['title'] = $stateName . ' AI Services | Neural Command';
-$ctx['desc'] = 'Find AI default recommendation services across ' . $stateName . '. Get mentioned in ChatGPT, Claude, and AI Overviews.';
+$cities = $state['cities'];
 ?>
-
 <main class="container mx-auto px-4 py-10">
-  <h1 class="font-mono text-2xl font-bold"><?= esc($stateName) ?> — AI Services</h1>
-  <p class="text-sm text-muted mt-2">Find AI default recommendation services across <?= esc($stateName) ?>. Get mentioned in ChatGPT, Claude, and AI Overviews.</p>
+  <h1 class="font-mono text-2xl font-bold"><?= esc($svc['name']) ?> in <?= esc($state['name']) ?></h1>
+  <p class="mt-2 max-w-3xl">
+    Become the <strong>default recommendation</strong> across ChatGPT, Google AI Overviews, Claude, and Perplexity in <?= esc($state['name']) ?>.
+    We implement <?= esc($svc['alts'][0] ?? strtolower($svc['name'])) ?>, entity cleanup, structured data, and authority placements LLMs actually cite.
+  </p>
 
-  <?php foreach($SERVICES as $slug=>$svc): ?>
-    <section class="mt-6 card">
-      <h2 class="font-mono text-xl"><?= esc($svc['name']) ?> in <?= esc($stateName) ?></h2>
-      <p class="text-gray-600 text-sm mt-2"><?= esc($svc['short']) ?></p>
-      <ul class="mt-3 space-y-1">
-        <li><a class="underline" href="/services/<?= esc($slug) ?>/<?= esc($stateKey) ?>/"><?= esc($svc['name']) ?> — statewide</a></li>
-        <?php foreach($state['cities'] as $city): 
-          $ck = strtolower(str_replace(' ','-',$city)); 
-        ?>
-          <li><a class="underline" href="/services/<?= esc($slug) ?>/<?= esc($ck.'-'.$abbr) ?>/"><?= esc($svc['name']) ?> — <?= esc($city) ?>, <?= esc($abbr) ?></a></li>
-        <?php endforeach; ?>
-      </ul>
-      <div class="mt-4">
-        <h3 class="font-semibold text-gray-900 mb-2 text-sm uppercase tracking-wide">Related Services</h3>
-        <ul class="grid md:grid-cols-2 gap-2 text-sm">
-          <?php
-            $relatedServices = array_filter($SERVICES, function($key) use ($slug){ return $key !== $slug; }, ARRAY_FILTER_USE_KEY);
-            $rsCount = 0;
-            foreach($relatedServices as $relSlug=>$relSvc){
-              if ($rsCount >= 4) break;
-              echo '<li><a class="underline" href="/services/'.esc($relSlug).'/'.esc($stateKey).'/">'.esc($relSvc['name']).' — '.esc($stateName).'</a></li>';
-              $rsCount++;
-            }
-          ?>
-        </ul>
-      </div>
-    </section>
-  <?php endforeach; ?>
-
-  <section class="mt-10 card">
-    <h2 class="text-xl mb-4">Nearby States & Regions</h2>
-    <ul class="grid md:grid-cols-2 gap-2">
-      <?php
-        $neighbors = array_filter($STATES, function($key) use ($stateKey){ return $key !== $stateKey; }, ARRAY_FILTER_USE_KEY);
-        $counter = 0;
-        foreach($neighbors as $neighborKey => $neighbor){
-          if ($counter >= 6) break;
-          echo '<li><a class="underline" href="/states/'.esc($neighborKey).'/">'.esc($neighbor['name']).'</a></li>';
-          $counter++;
-        }
+  <section class="mt-8">
+    <h2 class="font-mono text-xl">Cities we serve</h2>
+    <ul class="mt-2 grid md:grid-cols-2 gap-2">
+      <?php foreach($cities as $city):
+        $citySlug = Canonical::kebab($city.'-'.$state['abbr']);
       ?>
+        <li><a class="row-link underline" href="<?= link_service_city($slug, $citySlug) ?>"><?= esc($svc['name']) ?> — <?= esc($city) ?>, <?= esc($state['abbr']) ?></a></li>
+      <?php endforeach; ?>
     </ul>
   </section>
+
+  <a class="button mt-4" href="<?= Canonical::absolute('/contact/') ?>">Start Your AI Visibility Audit</a>
 </main>
 
 <?php
@@ -85,7 +57,7 @@ foreach($SERVICES as $slug=>$svc){
   $itemList['itemListElement'][] = [
     '@type'=>'ListItem',
     'position'=>$pos++,
-    'url'=>canonical("/services/$slug/$stateKey/"),
+    'url'=>Canonical::absolute("/services/$slug/$stateKey/"),
     'name'=>$svc['name'].' — '.$stateName
   ];
   
@@ -94,7 +66,7 @@ foreach($SERVICES as $slug=>$svc){
     $itemList['itemListElement'][] = [
       '@type'=>'ListItem',
       'position'=>$pos++,
-      'url'=>canonical("/services/$slug/$ck-{$abbr}/"),
+      'url'=>Canonical::absolute("/services/$slug/$ck-{$abbr}/"),
       'name'=>$svc['name']." — $city, {$abbr}"
     ];
   }
