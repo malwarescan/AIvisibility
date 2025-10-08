@@ -7,7 +7,7 @@ if (!defined('NC_NAME')) {
     define('NC_ADDR', '1639 11th St Suite 110-A, Santa Monica, CA 90404, United States');
     define('NC_LINKEDIN', 'https://www.linkedin.com/company/neural-command/');
     define('NC_GKP', 'https://g.co/kgs/EP6p5de');
-    define('NC_BASEURL', 'https://neuralcommandllc.com');
+    define('NC_BASEURL', 'https://nrlcmd.com');
     define('NC_EMAIL', 'hirejoelm@gmail.com');
     define('NC_EMAIL_FROM', 'noreply@neuralcommandllc.com');
     define('NC_ALLOWED_HOSTS', [

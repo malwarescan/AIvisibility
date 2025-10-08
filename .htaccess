@@ -1,36 +1,28 @@
+# Enable rewriting
 RewriteEngine On
 
-# Force trailing slash for directories
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_URI} !\.
-RewriteRule ^(.+[^/])$ /$1/ [R=301,L]
+# Force primary host (uncomment if needed)
+# RewriteCond %{HTTP_HOST} !^nrlcmd\.com$ [NC]
+# RewriteRule ^(.*)$ https://nrlcmd.com/$1 [R=301,L]
 
-# Pretty routes
-RewriteRule ^sitemap\.xml$ sitemap.xml.php [L]
-RewriteRule ^agent\.json$ agent.json [L]
-RewriteRule ^meta\.json$ meta.json [L]
+# Force HTTPS
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
-# Pages
-RewriteRule ^about/?$ index.php?page=about [L,QSA]
-RewriteRule ^services/?$ index.php?page=services [L,QSA]
-RewriteRule ^services/([a-z0-9-]+)/?$ index.php?page=service&slug=$1 [L,QSA]
-RewriteRule ^services/([a-z0-9-]+)/([a-z0-9-]+)/?$ index.php?page=service-city&slug=$1&city=$2 [L,QSA]
-RewriteRule ^states/([a-z0-9-]+)/?$ index.php?page=state&state=$1 [L,QSA]
-RewriteRule ^ai-consulting/([a-z0-9-]+)/?$ index.php?page=city-service&city=$1 [L,QSA]
-RewriteRule ^resources/?$ index.php?page=resources [L,QSA]
-RewriteRule ^resources/diagnostic/?$ index.php?page=resources/diagnostic [L,QSA]
-RewriteRule ^process-audit/?$ index.php?page=process-audit [L,QSA]
-RewriteRule ^audit-results/?$ index.php?page=audit-results [L,QSA]
-RewriteRule ^contact/?$ index.php?page=contact [L,QSA]
-RewriteRule ^thanks/?$ index.php?page=thanks [L,QSA]
+# Collapse multiple slashes (except protocol)
+RewriteCond %{THE_REQUEST} \s/+([^\ ]*)
+RewriteRule .* https://%{HTTP_HOST}/%1 [R=301,L]
 
-# APIs
-RewriteRule ^api/book/?$ api/book.php [L,QSA]
-RewriteRule ^api/quote/?$ api/quote.php [L,QSA]
-RewriteRule ^api/audit/?$ api/audit.php [L,QSA]
+# Strip disallowed query params globally
+RewriteCond %{QUERY_STRING} (^|&)(utm_source|utm_medium|utm_campaign|utm_term|utm_content|ref|fbclid|gclid|msclkid|_hsmi|_hsenc)=[^&]* [NC]
+RewriteRule ^ %{REQUEST_URI}? [R=301,L]
 
-# Fallback to home
+# Normalize directory-like URLs to trailing slash (not for file-like)
+RewriteCond %{REQUEST_URI} !\.[a-zA-Z0-9]{2,5}$
+RewriteCond %{REQUEST_URI} !/$
+RewriteRule ^ %{REQUEST_URI}/ [R=301,L]
+
+# Route all to index.php (front controller)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^$ index.php?page=home [L,QSA]
-
+RewriteRule ^ index.php [L,QSA]

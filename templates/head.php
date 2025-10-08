@@ -20,7 +20,7 @@ if (!empty($breadcrumbs ?? [])) {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title><?= esc($ctx['title']) ?></title>
   <meta name="description" content="<?= esc($ctx['desc']) ?>" />
-  <link rel="canonical" href="<?= esc(canonical($_SERVER['REQUEST_URI'])) ?>" />
+<?php include __DIR__.'/../partials/head.php'; ?>
   <link rel="preload" href="/assets/css/styles.css" as="style" />
   <link rel="stylesheet" href="/assets/css/styles.css" />
   <script defer src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
