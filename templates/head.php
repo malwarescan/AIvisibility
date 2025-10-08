@@ -20,7 +20,7 @@ if (!empty($breadcrumbs ?? [])) {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title><?= esc($ctx['title']) ?></title>
   <meta name="description" content="<?= esc($ctx['desc']) ?>" />
-<?php include __DIR__.'/../partials/head.php'; ?>
+  <?php include __DIR__.'/../partials/head.php'; ?>
   <link rel="preload" href="/assets/css/styles.css" as="style" />
   <link rel="stylesheet" href="/assets/css/styles.css" />
   <script defer src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -30,34 +30,22 @@ if (!empty($breadcrumbs ?? [])) {
   <script type="application/ld+json"><?= json_encode($ld, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) ?></script>
 <?php endforeach; ?>
   <script>
-    // Mobile menu toggle
     document.addEventListener('DOMContentLoaded', function() {
-      const toggle = document.querySelector('.mobile-menu-toggle');
       const nav = document.querySelector('.header .nav');
-      
-      if (toggle && nav) {
-        toggle.addEventListener('click', function() {
-          const isOpen = nav.classList.contains('open');
-          
-          if (isOpen) {
-            nav.classList.remove('open');
-            toggle.setAttribute('aria-expanded', 'false');
-          } else {
-            nav.classList.add('open');
-            toggle.setAttribute('aria-expanded', 'true');
-          }
-        });
-        
-        // Close menu when clicking on a link
-        nav.addEventListener('click', function(e) {
-          if (e.target.tagName === 'A') {
-            nav.classList.remove('open');
-            toggle.setAttribute('aria-expanded', 'false');
-          }
-        });
-      }
+      const toggle = document.querySelector('.mobile-menu-toggle');
+      if (!nav || !toggle) return;
+      toggle.addEventListener('click', function() {
+        const open = nav.classList.contains('open');
+        nav.classList.toggle('open', !open);
+        toggle.setAttribute('aria-expanded', open ? 'false' : 'true');
+      });
+      nav.addEventListener('click', function(e) {
+        if (e.target.tagName === 'A') {
+          nav.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
     });
   </script>
 </head>
 <body>
-
