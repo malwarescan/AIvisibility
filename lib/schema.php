@@ -23,10 +23,33 @@ function schema_add_license(array $json): array {
 }
 
 /**
- * Render as JSON-LD with license augmentation when applicable
+ * Add "creator" field for CreativeWork subtypes
+ */
+function schema_add_creator(array $json): array {
+  $creativeWorkTypes = [
+    'CreativeWork','WebPage','Article','FAQPage','HowTo','SoftwareApplication',
+    'CollectionPage','AboutPage','ItemPage','Blog','BlogPosting','TechArticle'
+  ];
+  
+  $type = is_string($json['@type'] ?? null) ? $json['@type'] : null;
+  
+  if ($type && in_array($type, $creativeWorkTypes, true)) {
+    $json['creator'] = [
+      '@type' => 'Person',
+      'name'  => 'Joel David Maldonado',
+      'url'   => 'https://nrlcmd.com/#creator'
+    ];
+  }
+  
+  return $json;
+}
+
+/**
+ * Main merge + render function - applies license and creator to CreativeWork types
  */
 function render_jsonld(array $json): string {
   $json = schema_add_license($json);
+  $json = schema_add_creator($json);
   return '<script type="application/ld+json">'.json_encode($json, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE).'</script>';
 }
 

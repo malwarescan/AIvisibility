@@ -60,6 +60,7 @@
     <p><?= esc(NC_ADDR) ?></p>
   </div>
 </footer>
+<?php include __DIR__.'/../partials/person.php'; ?>
 </body>
 </html>
 
