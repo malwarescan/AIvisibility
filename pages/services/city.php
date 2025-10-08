@@ -3,6 +3,7 @@ declare(strict_types=1);
 /** Inputs: $service, $city from index.php router */
 require_once __DIR__.'/../../bootstrap/canonical.php';
 require_once __DIR__.'/../../lib/links.php';
+require_once __DIR__.'/../../lib/schema.php';
 
 $service = Canonical::kebab($service);
 $city    = Canonical::kebab($city);
@@ -81,7 +82,7 @@ $orgJson = [
   <?php include __DIR__.'/../../partials/head.php'; ?>
   <script type="application/ld+json"><?= json_encode($orgJson, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) ?></script>
   <script type="application/ld+json"><?= json_encode($serviceJson, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) ?></script>
-  <script type="application/ld+json"><?= json_encode($faqJson, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) ?></script>
+  <?= render_jsonld($faqJson) ?>
 </head>
 <body>
   <h1><?= htmlspecialchars($serviceName.' in '.$cityName, ENT_QUOTES) ?></h1>

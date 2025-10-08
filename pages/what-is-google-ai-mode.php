@@ -84,5 +84,6 @@ $faqs = [
   ['How do I know if my content is AI-friendly?', 'Use structured data, clear headings, direct answers to questions, and ensure your content is easily parseable by AI systems.'],
 ];
 
-echo '<script type="application/ld+json">'.json_encode(ld_faq($faqs), JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE).'</script>';
+require_once __DIR__.'/../lib/schema.php';
+echo render_jsonld(ld_faq($faqs));
 ?>

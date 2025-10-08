@@ -100,6 +100,9 @@ function resolve_route(string $uri): array {
         case $path === '/case-studies/healthcare-practice-ai-dominance/':
             $result['page'] = 'case-studies/healthcare-practice-ai-dominance';
             break;
+        case $path === '/legal/license/':
+            $result['include'] = __DIR__ . '/../pages/legal/license.php';
+            break;
         case $path === '/sitemap.xml':
             $result['include'] = __DIR__ . '/../public/sitemap.index.php';
             break;

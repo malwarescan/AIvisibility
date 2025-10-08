@@ -3,11 +3,17 @@ declare(strict_types=1);
 
 require __DIR__.'/config.php';
 require __DIR__.'/bootstrap/canonical.php';
+require __DIR__.'/bootstrap/config.php';
 require __DIR__.'/lib/util.php';
 require __DIR__.'/lib/seo.php';
 require __DIR__.'/lib/links.php';
 
 Canonical::ensureCanonicalRedirect();
+
+// Send license link header for HTML pages
+if (PHP_SAPI !== 'cli') {
+  header('Link: <'.app_config('license_url').'>; rel="license"', false);
+}
 
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
 $path = Canonical::normalizePath($path);
@@ -73,6 +79,9 @@ switch (true) {
     case $path === '/resources/diagnostic/':
         $setPage('resources/diagnostic');
         break;
+    case $path === '/legal/license/':
+        require __DIR__.'/pages/legal/license.php';
+        exit;
     case preg_match('#^/industries/([^/]+)/$#', $path, $m):
         $setPage('industries/'.$m[1]);
         break;

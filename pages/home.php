@@ -83,6 +83,7 @@ $breadcrumbs = [
 <?php
 // HERO SCHEMA — Comprehensive JSON-LD for homepage
 require_once __DIR__ . '/../lib/seo.php';
+require_once __DIR__ . '/../lib/schema.php';
 
 // Use pricing table for the main hero offer
 $heroServiceSlug  = 'agentic-seo';
@@ -104,7 +105,7 @@ $headline   = 'Be the Default Recommendation in ChatGPT, Google AI Overviews, Cl
 $desc       = 'Get your products, services, and brand cited by AI. We engineer your site so you are the trusted default across LLMs.';
 
 // Build individual nodes
-$webPageLD = [
+$webPageLD = schema_add_license([
   '@type'        => 'WebPage',
   '@id'          => $currentUrl.'#webpage',
   'url'          => $currentUrl,
@@ -113,7 +114,7 @@ $webPageLD = [
   'description'  => $desc,
   'inLanguage'   => 'en',
   'isPartOf'     => ['@type'=>'WebSite','@id'=>NC_BASEURL.'#website','url'=>NC_BASEURL,'name'=>NC_NAME],
-];
+]);
 
 $serviceLD = [
   '@type'        => 'Service',
@@ -132,7 +133,7 @@ $serviceLD = [
   'offers'       => $heroOffers
 ];
 
-$faqLD = build_faq_jsonld($heroFaq);
+$faqLD = schema_add_license(build_faq_jsonld($heroFaq));
 $faqLD['@id'] = $currentUrl.'#faq';
 
 $breadcrumbLD = build_breadcrumb_jsonld([
