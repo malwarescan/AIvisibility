@@ -33,10 +33,18 @@ final class Canonical {
     return self::absolute($path);
   }
   public static function guard(): void {
-    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS']!=='off') ? 'https':'http';
+    // Use X-Forwarded-Proto if behind proxy (Railway), otherwise check HTTPS
+    $forwardedProto = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '';
+    if ($forwardedProto) {
+      $scheme = $forwardedProto;
+    } else {
+      $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS']!=='off') ? 'https':'http';
+    }
+    
     $host   = $_SERVER['HTTP_HOST'] ?? 'nrlcmd.com';
     $uri    = parse_url($_SERVER['REQUEST_URI']??'/', PHP_URL_PATH) ?? '/';
     $q      = $_GET ?? [];
+    
     $target = 'https://'.$host.self::normalizePath($uri);
     $qsNorm = http_build_query(self::strip($q));
     if ($qsNorm) $target .= '?'.$qsNorm;
