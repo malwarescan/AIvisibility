@@ -4,6 +4,11 @@ require_once __DIR__.'/../lib/schema.php';
 // Non-CreativeWork schemas (render directly)
 $nonCreativeSchemas = [ ld_localbusiness(), ld_website() ];
 
+// Add service-specific schemas if present
+if (!empty($GLOBALS['serviceSchemas'])) {
+  $nonCreativeSchemas = array_merge($nonCreativeSchemas, $GLOBALS['serviceSchemas']);
+}
+
 // CreativeWork schemas (use render_jsonld for license & creator)
 $creativeSchemas = [ ld_software(), ld_agentic_dataset() ];
 
@@ -30,9 +35,6 @@ if (!empty($breadcrumbs ?? [])) {
   <?php include __DIR__.'/../partials/head.php'; ?>
   <link rel="preload" href="/assets/css/styles.css" as="style" />
   <link rel="stylesheet" href="/assets/css/styles.css" />
-  <script defer src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script defer src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script defer src="/js/react-app.js"></script>
 <?php 
 // Render non-CreativeWork schemas directly
 foreach($nonCreativeSchemas as $ld): ?>

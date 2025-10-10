@@ -27,7 +27,16 @@ final class Canonical {
   }
   public static function absolute(string $path): string {
     $host = $_SERVER['HTTP_HOST'] ?? 'nrlcmd.com';
-    return 'https://'.$host.self::normalizePath($path);
+    
+    // Use X-Forwarded-Proto if behind proxy (Railway), otherwise check HTTPS
+    $forwardedProto = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '';
+    if ($forwardedProto) {
+      $scheme = $forwardedProto;
+    } else {
+      $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS']!=='off') ? 'https':'http';
+    }
+    
+    return $scheme.'://'.$host.self::normalizePath($path);
   }
   public static function absoluteCanonical(string $path): string {
     return self::absolute($path);
@@ -45,7 +54,12 @@ final class Canonical {
     $uri    = parse_url($_SERVER['REQUEST_URI']??'/', PHP_URL_PATH) ?? '/';
     $q      = $_GET ?? [];
     
-    $target = 'https://'.$host.self::normalizePath($uri);
+    // Allow HTTP for localhost development
+    $isLocalhost = in_array($host, ['localhost', 'localhost:8080', '127.0.0.1', '[::1]'], true) 
+                   || strpos($host, 'localhost:') === 0;
+    $targetScheme = $isLocalhost ? $scheme : 'https';
+    
+    $target = $targetScheme.'://'.$host.self::normalizePath($uri);
     $qsNorm = http_build_query(self::strip($q));
     if ($qsNorm) $target .= '?'.$qsNorm;
     $current = $scheme.'://'.$host.self::withSlash($uri);

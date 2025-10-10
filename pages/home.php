@@ -4,7 +4,6 @@ $breadcrumbs = [
 ];
 ?>
 <main class="container py-8 home">
-  <div id="react-root" class="mb-8"></div>
   <div class="home__panel">
     <div class="home__badge">terminal mode</div>
     <h1 class="home__title">neuralCommand(get visible)</h1>
@@ -17,6 +16,19 @@ $breadcrumbs = [
       <a class="home__button home__button--secondary" href="/services/">View Service Manual</a>
     </div>
   </div>
+
+  <!-- Featured Article Section -->
+  <section class="home__featured-article">
+    <div class="home__featured-content">
+      <header>
+        <span class="home__label">Featured Research</span>
+        <span class="home__code">/resources/llmo-optimization</span>
+      </header>
+      <h2>LLMO: The Art and Architecture of Large Language Model Optimization</h2>
+      <p class="home__featured-desc">Three years inside the machine. A field report from the front lines of the LLM-powered internet — where search, reasoning, and visibility have merged into one evolving organism.</p>
+      <a href="/resources/llmo-optimization/" class="home__button">Read the Research</a>
+    </div>
+  </section>
 
   <section class="home__grid">
     <article class="home__card">
