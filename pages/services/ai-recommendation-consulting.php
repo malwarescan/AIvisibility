@@ -78,10 +78,7 @@ $serviceSchemas = [
 ];
 
 // Add service schemas to global array for template rendering
-if (!isset($GLOBALS['serviceSchemas'])) {
-  $GLOBALS['serviceSchemas'] = [];
-}
-$GLOBALS['serviceSchemas'] = array_merge($GLOBALS['serviceSchemas'], $serviceSchemas);
+$GLOBALS['serviceSchemas'] = $serviceSchemas;
 ?>
     {
       "@type": "WebPage",
