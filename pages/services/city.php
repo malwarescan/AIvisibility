@@ -6,6 +6,7 @@ require_once __DIR__.'/../../lib/links.php';
 require_once __DIR__.'/../../lib/schema.php';
 require_once __DIR__.'/../../lib/schema_builders.php';
 require_once __DIR__.'/../../lib/content_tokens.php';
+require_once __DIR__.'/../../inc/seo.php'; // NC: Include SEO helpers
 
 $service = Canonical::kebab($_GET['service'] ?? '');
 $city    = Canonical::kebab($_GET['city'] ?? '');
