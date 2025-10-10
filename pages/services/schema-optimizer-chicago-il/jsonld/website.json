@@ -1,0 +1,46 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://nrlcmd.com/#website",
+  "name": "Neural Command",
+  "alternateName": "Neural Command, LLC",
+  "url": "https://nrlcmd.com/",
+  "description": "The only platform that turns your website into LLM-ready training signals and agentic actions. If you have a product or service, we get it mentioned in ChatGPT and AI.",
+  "publisher": {
+    "@type": "Organization",
+    "@id": "https://nrlcmd.com/#organization",
+    "name": "Neural Command, LLC",
+    "url": "https://nrlcmd.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://nrlcmd.com/assets/images/neural-command-logo.png",
+      "width": 200,
+      "height": 60
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+1-844-568-4624",
+      "contactType": "customer service",
+      "availableLanguage": "English"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "1639 11th St Suite 110-A",
+      "addressLocality": "Santa Monica",
+      "addressRegion": "CA",
+      "postalCode": "90404",
+      "addressCountry": "US"
+    },
+    "sameAs": [
+      "https://www.linkedin.com/company/neural-command/"
+    ]
+  },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://nrlcmd.com/search?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "@id": "https://nrlcmd.com/services/schema-optimizer/chicago-il/#service",
+  "name": "Schema Optimizer & Reverse Engineer (JSON-LD) in Chicago",
+  "serviceType": "Schema Optimization",
+  "description": "Professional schema markup optimization and JSON-LD implementation services in Chicago. We reverse engineer competitor schemas and implement comprehensive structured data for better search visibility.",
+  "provider": {
+    "@type": "LocalBusiness",
+    "@id": "https://nrlcmd.com/#org",
+    "name": "Neural Command, LLC",
+    "url": "https://nrlcmd.com/",
+    "telephone": "+1-844-568-4624",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "1639 11th St Suite 110-A",
+      "addressLocality": "Santa Monica",
+      "addressRegion": "CA",
+      "postalCode": "90404",
+      "addressCountry": "US"
+    },
+    "areaServed": {
+      "@type": "City",
+      "name": "Chicago"
+    },
+    "serviceArea": {
+      "@type": "GeoCircle",
+      "geoMidpoint": {
+        "@type": "GeoCoordinates",
+        "latitude": 41.8781,
+        "longitude": -87.6298
+      },
+      "geoRadius": "50000"
+    }
+  },
+  "areaServed": {
+    "@type": "City",
+    "name": "Chicago"
+  },
+  "url": "https://nrlcmd.com/services/schema-optimizer/chicago-il/",
+  "mainEntityOfPage": "https://nrlcmd.com/services/schema-optimizer/chicago-il/",
+  "offers": {
+    "@type": "Offer",
+    "description": "Schema optimization and JSON-LD implementation",
+    "price": "Contact for pricing",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock",
+    "validFrom": "2024-01-01"
+  },
+  "potentialAction": {
+    "@type": "ContactAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://nrlcmd.com/contact/"
+    },
+    "name": "Contact Neural Command"
+  }
+}

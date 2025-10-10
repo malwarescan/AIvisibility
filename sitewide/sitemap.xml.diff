@@ -1,0 +1,26 @@
+--- a/public/sitemap.page.php
++++ b/public/sitemap.page.php
+@@ -1,5 +1,5 @@
+ <?php
+-declare(strict_types=1);
++declare(strict_types=1);
+ header('Content-Type: application/xml; charset=utf-8');
+ require_once __DIR__.'/../lib/links.php';
+ $page=max(1,(int)($_GET['page']??1));
+@@ -8,6 +8,7 @@
+ if (is_file($csv) && ($h=fopen($csv,'r'))) { $head=fgetcsv($h); while(($r=fgetcsv($h))!==false){ $rows[] = array_combine($head,$r);} fclose($h); }
+ $per=45000; $start=($page-1)*$per; $chunk=array_slice($rows,$start,$per);
+ $now=gmdate('c'); echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"; ?>
+ <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+ <?php foreach($chunk as $row):
+@@ -15,7 +16,7 @@
+   $loc=link_service_city($service,$city);
+   if (!(str_starts_with($loc,'https://') && strtolower($loc)===$loc && str_ends_with($loc,'/') && parse_url($loc, PHP_URL_QUERY)===null)) continue;
+-  $lastmod=!empty($row['lastmod'])?date('c',strtotime($row['lastmod'])):$now; ?>
++  $lastmod=!empty($row['lastmod'])?date('c',strtotime($row['lastmod'])):$now;
++  $priority = ($service === 'agentic-seo' || $service === 'chatgpt-optimization') ? '0.9' : '0.8';
++  $changefreq = ($service === 'schema-optimizer') ? 'daily' : 'weekly'; ?>
+-  <url><loc><?= htmlspecialchars($loc, ENT_XML1) ?></loc><lastmod><?= htmlspecialchars($lastmod, ENT_XML1) ?></lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
++  <url><loc><?= htmlspecialchars($loc, ENT_XML1) ?></loc><lastmod><?= htmlspecialchars($lastmod, ENT_XML1) ?></lastmod><changefreq><?= $changefreq ?></changefreq><priority><?= $priority ?></priority></url>
+ <?php endforeach; ?>
+ </urlset>

@@ -1,0 +1,21 @@
+--- a/public/robots.txt.php
++++ b/public/robots.txt.php
+@@ -1,8 +1,12 @@
+ <?php header('Content-Type: text/plain; charset=utf-8'); $host=$_SERVER['HTTP_HOST']??'nrlcmd.com';
+-echo "User-agent: *\nDisallow: /*?utm_*\nDisallow: /*?ref=*\nDisallow: /*?fbclid=*\nDisallow: /*?gclid=*\nDisallow: /*?msclkid=*\nDisallow: /*?_hsmi=*\nDisallow: /*?_hsenc=*\n\nSitemap: https://$host/sitemap.xml\n";
++echo "User-agent: *\n";
++echo "Allow: /assets/css/\n";
++echo "Allow: /assets/js/\n";
++echo "Allow: /public/\n";
++echo "Disallow: /*?utm_*\n";
++echo "Disallow: /*?ref=*\n";
++echo "Disallow: /*?fbclid=*\n";
++echo "Disallow: /*?gclid=*\n";
++echo "Disallow: /*?msclkid=*\n";
++echo "Disallow: /*?_hsmi=*\n";
++echo "Disallow: /*?_hsenc=*\n";
++echo "Disallow: /admin/\n";
++echo "Disallow: /temp/\n";
++echo "Disallow: /logs/\n";
++echo "\n";
++echo "Sitemap: https://$host/sitemap.xml\n";
