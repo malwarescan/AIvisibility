@@ -87,24 +87,24 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
 ?>
     {
       "@type": "WebPage",
-      "@id": "https://www.neuralcommandllc.com/services/agentic-seo/",
-      "url": "https://www.neuralcommandllc.com/services/agentic-seo/",
+      "@id": "https://nrlcmd.com/services/agentic-seo/",
+      "url": "https://nrlcmd.com/services/agentic-seo/",
       "name": "Agentic SEO & AI Overview Optimization | Neural Command LLC",
       "description": "Optimize for AI agent confidence and transparency. Our Agentic SEO focuses on agentic confidence scoring, retrieval transparency, and multimodal entity coherence for maximum AI Overview visibility.",
       "inLanguage": "en-US",
-      "isPartOf": {"@id": "https://www.neuralcommandllc.com/#website"},
-      "breadcrumb": {"@id": "https://www.neuralcommandllc.com/#breadcrumb"},
-      "about": {"@id": "https://www.neuralcommandllc.com/#organization"},
+      "isPartOf": {"@id": "https://nrlcmd.com/#website"},
+      "breadcrumb": {"@id": "https://nrlcmd.com/#breadcrumb"},
+      "about": {"@id": "https://nrlcmd.com/#organization"},
       "potentialAction": {
         "@type": "Action",
         "name": "Book AI Strategy Call",
-        "target": "https://www.neuralcommandllc.com/contact/"
+        "target": "https://nrlcmd.com/contact/"
       }
     },
     {
       "@type": "Service",
       "serviceType": "Agentic SEO & AI Overview Optimization",
-      "provider": {"@id": "https://www.neuralcommandllc.com/#organization"},
+      "provider": {"@id": "https://nrlcmd.com/#organization"},
       "areaServed": {
         "@type": "AdministrativeArea",
         "name": "Global"
@@ -158,16 +158,16 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
     },
     {
       "@type": "BreadcrumbList",
-      "@id": "https://www.neuralcommandllc.com/#breadcrumb",
+      "@id": "https://nrlcmd.com/#breadcrumb",
       "itemListElement": [
-        {"@type": "ListItem","position":1,"name":"Home","item":"https://www.neuralcommandllc.com/"},
-        {"@type": "ListItem","position":2,"name":"Services","item":"https://www.neuralcommandllc.com/services/"},
+        {"@type": "ListItem","position":1,"name":"Home","item":"https://nrlcmd.com/"},
+        {"@type": "ListItem","position":2,"name":"Services","item":"https://nrlcmd.com/services/"},
         {"@type": "ListItem","position":3,"name":"Agentic SEO & AI Overview Optimization"}
       ]
     },
     {
       "@type": "LocalBusiness",
-      "@id": "https://www.neuralcommandllc.com/#organization",
+      "@id": "https://nrlcmd.com/#organization",
       "name": "Neural Command LLC",
       "address": {
         "@type": "PostalAddress",
@@ -178,7 +178,7 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
         "addressCountry": "US"
       },
       "telephone": "+1-844-568-4624",
-      "url": "https://www.neuralcommandllc.com/",
+      "url": "https://nrlcmd.com/",
       "sameAs": [
         "https://www.linkedin.com/company/neural-command/",
         "https://g.co/kgs/EP6p5de"

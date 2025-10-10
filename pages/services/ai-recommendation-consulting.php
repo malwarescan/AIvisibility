@@ -87,24 +87,24 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
 ?>
     {
       "@type": "WebPage",
-      "@id": "https://www.neuralcommandllc.com/services/ai-recommendation-consulting/",
-      "url": "https://www.neuralcommandllc.com/services/ai-recommendation-consulting/",
+      "@id": "https://www.nrlcmd.com/services/ai-recommendation-consulting/",
+      "url": "https://www.nrlcmd.com/services/ai-recommendation-consulting/",
       "name": "AI Recommendation Consulting | Neural Command LLC",
       "description": "Make AI prefer your content. Our AI Recommendation Consulting focuses on AI pick logic, authority graphing, and consultation to bias recommendation engines toward your brand through agentic brand signals and E-E-A-T vector synthesis.",
       "inLanguage": "en-US",
-      "isPartOf": {"@id": "https://www.neuralcommandllc.com/#website"},
-      "breadcrumb": {"@id": "https://www.neuralcommandllc.com/#breadcrumb"},
-      "about": {"@id": "https://www.neuralcommandllc.com/#organization"},
+      "isPartOf": {"@id": "https://www.nrlcmd.com/#website"},
+      "breadcrumb": {"@id": "https://www.nrlcmd.com/#breadcrumb"},
+      "about": {"@id": "https://www.nrlcmd.com/#organization"},
       "potentialAction": {
         "@type": "Action",
         "name": "Book AI Strategy Call",
-        "target": "https://www.neuralcommandllc.com/contact/"
+        "target": "https://www.nrlcmd.com/contact/"
       }
     },
     {
       "@type": "Service",
       "serviceType": "AI Recommendation Consulting",
-      "provider": {"@id": "https://www.neuralcommandllc.com/#organization"},
+      "provider": {"@id": "https://www.nrlcmd.com/#organization"},
       "areaServed": {
         "@type": "AdministrativeArea",
         "name": "Global"
@@ -158,16 +158,16 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
     },
     {
       "@type": "BreadcrumbList",
-      "@id": "https://www.neuralcommandllc.com/#breadcrumb",
+      "@id": "https://www.nrlcmd.com/#breadcrumb",
       "itemListElement": [
-        {"@type": "ListItem","position":1,"name":"Home","item":"https://www.neuralcommandllc.com/"},
-        {"@type": "ListItem","position":2,"name":"Services","item":"https://www.neuralcommandllc.com/services/"},
+        {"@type": "ListItem","position":1,"name":"Home","item":"https://www.nrlcmd.com/"},
+        {"@type": "ListItem","position":2,"name":"Services","item":"https://www.nrlcmd.com/services/"},
         {"@type": "ListItem","position":3,"name":"AI Recommendation Consulting"}
       ]
     },
     {
       "@type": "LocalBusiness",
-      "@id": "https://www.neuralcommandllc.com/#organization",
+      "@id": "https://www.nrlcmd.com/#organization",
       "name": "Neural Command LLC",
       "address": {
         "@type": "PostalAddress",
@@ -178,7 +178,7 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
         "addressCountry": "US"
       },
       "telephone": "+1-844-568-4624",
-      "url": "https://www.neuralcommandllc.com/",
+      "url": "https://www.nrlcmd.com/",
       "sameAs": [
         "https://www.linkedin.com/company/neural-command/",
         "https://g.co/kgs/EP6p5de"
