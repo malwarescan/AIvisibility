@@ -10,7 +10,12 @@ final class Canonical {
     $s = preg_replace('/-+/','-',$s);
     return strtolower($s ?? '');
   }
-  public static function withSlash(string $p): string { return self::isFileLike($p) ? $p : rtrim($p,'/').'/'; }
+  public static function withSlash(string $p): string { 
+    // Only add trailing slash for root path
+    if ($p === '/') return '/';
+    // Remove trailing slash for all other paths
+    return rtrim($p, '/');
+  }
   public static function normalizePath(string $p): string {
     $p = preg_replace('#/+#','/',$p);
     $parts = array_filter(explode('/',$p), fn($x)=>$x!=='');
@@ -62,7 +67,7 @@ final class Canonical {
     $target = $targetScheme.'://'.$host.self::normalizePath($uri);
     $qsNorm = http_build_query(self::strip($q));
     if ($qsNorm) $target .= '?'.$qsNorm;
-    $current = $scheme.'://'.$host.self::withSlash($uri);
+    $current = $scheme.'://'.$host.$uri;
     $qsNow   = $_SERVER['QUERY_STRING']??'';
     if ($qsNow) $current .= '?'.$qsNow;
     if ($target !== $current) { header('Location: '.$target, true, 301); exit; }

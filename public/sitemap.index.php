@@ -12,24 +12,24 @@ $urls = [];
 // Core pages
 $corePages = [
   '/', 
-  '/about/', 
-  '/services/', 
-  '/contact/',
-  '/resources/',
-  '/resources/diagnostic/',
-  '/resources/programmatic-seo-matrix-method/',
-  '/resources/llmo-optimization/',
-  '/quote-thanks/',
-  '/thanks/',
-  '/what-is-google-ai-mode/',
-  '/how-to-get-featured-in-ai-overviews/',
-  '/why-is-my-site-not-showing-in-ai-answers/',
-  '/who-controls-which-sites-ai-picks/',
-  '/ai-seo-vs-traditional-seo/',
-  '/industries/saas/',
-  '/industries/healthcare/',
-  '/case-studies/crm-ai-visibility/',
-  '/case-studies/healthcare-practice-ai-dominance/',
+  '/about', 
+  '/services', 
+  '/contact',
+  '/resources',
+  '/resources/diagnostic',
+  '/resources/programmatic-seo-matrix-method',
+  '/resources/llmo-optimization',
+  '/quote-thanks',
+  '/thanks',
+  '/what-is-google-ai-mode',
+  '/how-to-get-featured-in-ai-overviews',
+  '/why-is-my-site-not-showing-in-ai-answers',
+  '/who-controls-which-sites-ai-picks',
+  '/ai-seo-vs-traditional-seo',
+  '/industries/saas',
+  '/industries/healthcare',
+  '/case-studies/crm-ai-visibility',
+  '/case-studies/healthcare-practice-ai-dominance',
 ];
 
 foreach ($corePages as $u) {
@@ -38,16 +38,16 @@ foreach ($corePages as $u) {
 
 // Add all services
 foreach (array_keys($SERVICES) as $s) {
-  $urls[] = ['loc' => Canonical::absolute('/services/'.$s.'/'), 'priority' => '0.8'];
+  $urls[] = ['loc' => Canonical::absolute('/services/'.$s), 'priority' => '0.8'];
 }
 
 // Add all states
 foreach (array_keys($STATES) as $sk) {
-  $urls[] = ['loc' => Canonical::absolute('/states/'.$sk.'/'), 'priority' => '0.7'];
+  $urls[] = ['loc' => Canonical::absolute('/states/'.$sk), 'priority' => '0.7'];
   
   // Add service×state combinations
   foreach (array_keys($SERVICES) as $s) {
-    $urls[] = ['loc' => Canonical::absolute('/services/'.$s.'/'.$sk.'/'), 'priority' => '0.8'];
+    $urls[] = ['loc' => Canonical::absolute('/services/'.$s.'/'.$sk), 'priority' => '0.8'];
   }
   
   // Add service×city combinations for each state
@@ -55,7 +55,7 @@ foreach (array_keys($STATES) as $sk) {
     $ck = strtolower(str_replace(' ', '-', $city));
     $abbr = $STATES[$sk]['abbr'];
     foreach (array_keys($SERVICES) as $s) {
-      $urls[] = ['loc' => Canonical::absolute('/services/'.$s.'/'.$ck.'-'.$abbr.'/'), 'priority' => '0.8'];
+      $urls[] = ['loc' => Canonical::absolute('/services/'.$s.'/'.$ck.'-'.$abbr), 'priority' => '0.8'];
     }
   }
 }
