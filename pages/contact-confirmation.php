@@ -15,28 +15,28 @@ $ctx = [
 $successData = $_SESSION['contact_success'] ?? null;
 ?>
 
-<main class="container mx-auto px-4 py-10">
-  <div class="max-w-2xl mx-auto text-center">
-    <div class="mb-8">
-      <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<main class="container py-8">
+  <div class="contact-confirmation">
+    <div class="confirmation-header">
+      <div class="success-icon">
+        <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
         </svg>
       </div>
-      <h1 class="text-3xl font-bold mb-4">Thanks for Reaching Out!</h1>
-      <p class="text-lg text-gray-600 mb-6">
+      <h1>Thanks for Reaching Out!</h1>
+      <p class="lead">
         We received your message and will respond within 24 hours. Keep an eye on your inbox for next steps from the Neural Command team.
       </p>
 
-      <div class="mb-6 p-3 bg-green-50 border border-green-200 rounded-lg">
-        <p class="text-green-800 text-sm">Thanks! Our team has your request and will follow up shortly.</p>
+      <div class="success-message">
+        <p>Thanks! Our team has your request and will follow up shortly.</p>
       </div>
     </div>
 
     <?php if ($successData): ?>
-    <div class="bg-gray-50 p-6 rounded-lg mb-8 text-left">
-      <h2 class="text-lg font-semibold mb-4">Message Summary</h2>
-      <div class="space-y-2 text-sm">
+    <div class="message-summary">
+      <h2>Message Summary</h2>
+      <div class="summary-details">
         <p><strong>Name:</strong> <?= esc($successData['name']) ?></p>
         <p><strong>Email:</strong> <?= esc($successData['email']) ?></p>
         <?php if (!empty($successData['notes'])): ?>
@@ -47,27 +47,27 @@ $successData = $_SESSION['contact_success'] ?? null;
     </div>
     <?php endif; ?>
 
-    <div class="space-y-6">
-      <h2 class="text-xl font-semibold">Meanwhile, you can…</h2>
-      <ul class="text-left space-y-3 text-gray-600">
-        <li class="flex items-start gap-3">
-          <span class="text-blue-500 font-semibold">1</span>
-          <span>Review our <a class="underline" href="/services/">AI SEO services</a>.</span>
+    <div class="next-steps">
+      <h2>Meanwhile, you can…</h2>
+      <ul class="steps-list">
+        <li>
+          <span class="step-number">1</span>
+          <span>Review our <a href="/services/">AI SEO services</a>.</span>
         </li>
-        <li class="flex items-start gap-3">
-          <span class="text-blue-500 font-semibold">2</span>
-          <span>Run another <a class="underline" href="/resources/diagnostic/">AI visibility diagnostic</a>.</span>
+        <li>
+          <span class="step-number">2</span>
+          <span>Run another <a href="/resources/diagnostic/">AI visibility diagnostic</a>.</span>
         </li>
-        <li class="flex items-start gap-3">
-          <span class="text-blue-500 font-semibold">3</span>
-          <span>Read our latest <a class="underline" href="/resources/">resources & case studies</a>.</span>
+        <li>
+          <span class="step-number">3</span>
+          <span>Read our latest <a href="/resources/">resources & case studies</a>.</span>
         </li>
       </ul>
     </div>
 
-    <div class="mt-10 flex flex-col sm:flex-row gap-5 justify-center">
-      <a href="/services/" class="button secondary button--static">Explore Services</a>
-      <a href="/contact/" class="button secondary button--static">Send Another Message</a>
+    <div class="confirmation-actions">
+      <a href="/services/" class="button button--secondary">Explore Services</a>
+      <a href="/contact/" class="button button--secondary">Send Another Message</a>
     </div>
   </div>
 </main>
