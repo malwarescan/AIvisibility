@@ -1,21 +1,18 @@
 <?php
 // /resources/programmatic-seo-matrix-method/index.php
 
-// --- Page meta ---
-$title       = "Programmatic SEO Matrix Method | Neural Command";
-$description = "A Google-style technical guide by Joel @ NRL CMD. Learn how the Programmatic SEO Matrix Method generates deterministic, large-scale, AI-ready web content with schema, canonical integrity, and agentic actions.";
-$canonical   = "https://nrlcmd.com/resources/programmatic-seo-matrix-method/";
-
-// Optional: if your header supports Open Graph / Twitter via $og array
-$og = [
-  "title" => $title,
-  "description" => $description,
-  "url" => $canonical,
-  "image" => "https://nrlcmd.com/og/programmatic-seo-matrix-method.png",
-  "type" => "article"
+// Set page context for template system
+$ctx = [
+  'title' => 'Programmatic SEO Matrix Method | Neural Command',
+  'desc'  => 'A Google-style technical guide by Joel @ NRL CMD. Learn how the Programmatic SEO Matrix Method generates deterministic, large-scale, AI-ready web content with schema, canonical integrity, and agentic actions.',
 ];
 
-include $_SERVER['DOCUMENT_ROOT'] . '/partials/header.php';
+// Set breadcrumbs
+$breadcrumbs = [
+  ['label' => 'Home', 'url' => 'https://nrlcmd.com/'],
+  ['label' => 'Resources', 'url' => 'https://nrlcmd.com/resources/'],
+  ['label' => 'Programmatic SEO Matrix Method'],
+];
 
 // Build JSON-LD (Article + HowTo). If your header template supports an $extra_head variable,
 // you can move this into <head>. Otherwise, in-body is acceptable.
@@ -48,26 +45,37 @@ $articleJsonLd = [
     ["@type"=>"HowToStep","name"=>"Validate and deploy","text"=>"Run Rich Results and indexing tests before release."]
   ]
 ];
+
+// Include the site template system
+include __DIR__ . '/../../templates/head.php';
+include __DIR__ . '/../../templates/header.php';
+
+// Output breadcrumbs
+if (!empty($breadcrumbs)) {
+  ob_start();
+  include __DIR__ . '/../../templates/breadcrumbs.php';
+  echo ob_get_clean();
+}
 ?>
+
 <script type="application/ld+json"><?php echo json_encode($articleJsonLd, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE); ?></script>
 
 <style>
-  /* Lightweight doc styles; tweak to match your design system */
-  .doc-wrap { max-width: 960px; margin: 0 auto; padding: 24px; line-height: 1.7; }
-  .doc-wrap h1 { font-size: 2rem; margin: 0 0 12px; }
-  .doc-wrap h2 { font-size: 1.5rem; margin-top: 28px; }
-  .doc-wrap h3 { font-size: 1.2rem; margin-top: 22px; }
-  .lead { color:#222; font-size:1.1rem; }
-  .note { background:#f6f8fa; border:1px solid #e5e7eb; padding:12px 14px; border-radius:8px; }
-  pre, code { background:#0a0a0a; color:#e5e5e5; padding:0.15rem 0.35rem; border-radius:6px; }
-  pre { padding:12px; overflow:auto; }
-  table { width:100%; border-collapse: collapse; margin: 12px 0; }
-  th, td { border:1px solid #e5e7eb; padding:8px 10px; text-align:left; }
-  ul { margin-left: 1.2rem; }
-  .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background:#eef2ff; padding:2px 6px; border-radius:6px; border:1px solid #c7d2fe; }
+  /* Documentation page styles */
+  .doc-page { max-width: 960px; margin: 0 auto; padding: 24px; line-height: 1.7; }
+  .doc-page h1 { font-size: 2rem; margin: 0 0 12px; }
+  .doc-page h2 { font-size: 1.5rem; margin-top: 28px; }
+  .doc-page h3 { font-size: 1.2rem; margin-top: 22px; }
+  .doc-page .lead { color:#222; font-size:1.1rem; }
+  .doc-page .note { background:#f6f8fa; border:1px solid #e5e7eb; padding:12px 14px; border-radius:8px; }
+  .doc-page pre, .doc-page code { background:#0a0a0a; color:#e5e5e5; padding:0.15rem 0.35rem; border-radius:6px; }
+  .doc-page pre { padding:12px; overflow:auto; }
+  .doc-page table { width:100%; border-collapse: collapse; margin: 12px 0; }
+  .doc-page th, .doc-page td { border:1px solid #e5e7eb; padding:8px 10px; text-align:left; }
+  .doc-page ul { margin-left: 1.2rem; }
 </style>
 
-<main class="doc-wrap" id="content">
+<main class="doc-page" id="content">
   <h1>Programmatic SEO Matrix Method</h1>
   <p class="lead"><em>by Joel @ NRL CMD</em></p>
 
@@ -202,4 +210,6 @@ Neural Command aligns structured data so agents interpret your brand contextuall
   </div>
 </main>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/partials/footer.php'; ?>
+<?php 
+include __DIR__ . '/../../templates/footer.php'; 
+?>
