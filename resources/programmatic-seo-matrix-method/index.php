@@ -1,11 +1,22 @@
 <?php
 // /resources/programmatic-seo-matrix-method/index.php
 
+// Include required files
+require_once __DIR__ . '/../../config.php';
+require_once __DIR__ . '/../../bootstrap/canonical.php';
+require_once __DIR__ . '/../../bootstrap/config.php';
+require_once __DIR__ . '/../../lib/util.php';
+require_once __DIR__ . '/../../lib/seo.php';
+require_once __DIR__ . '/../../lib/links.php';
+
 // Set page context for template system
 $ctx = [
   'title' => 'Programmatic SEO Matrix Method | Neural Command',
   'desc'  => 'A Google-style technical guide by Joel @ NRL CMD. Learn how the Programmatic SEO Matrix Method generates deterministic, large-scale, AI-ready web content with schema, canonical integrity, and agentic actions.',
 ];
+
+// Set canonical URL
+$canonical = 'https://nrlcmd.com/resources/programmatic-seo-matrix-method/';
 
 // Set breadcrumbs
 $breadcrumbs = [
@@ -37,7 +48,7 @@ $articleJsonLd = [
   "mainEntityOfPage" => $canonical,
   "datePublished" => "2025-10-10",
   "dateModified"  => "2025-10-10",
-  "description"   => $description,
+  "description"   => $ctx['desc'],
   "step" => [
     ["@type"=>"HowToStep","name"=>"Define matrix dimensions","text"=>"Establish service, location, and token data sources."],
     ["@type"=>"HowToStep","name"=>"Seed deterministic content","text"=>"Use CRC32 or similar to generate reproducible content seeds."],
