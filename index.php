@@ -103,10 +103,16 @@ switch (true) {
         $setPage('thanks');
         break;
     case $path === '/resources/':
+    case $path === '/resources':
         $setPage('resources');
         break;
     case $path === '/resources/diagnostic/':
+    case $path === '/resources/diagnostic':
         $setPage('resources/diagnostic');
+        break;
+    case $path === '/resources/llmo-optimization/':
+    case $path === '/resources/llmo-optimization':
+        $setPage('resources/llmo-optimization');
         break;
     case $path === '/resources/programmatic-seo-matrix-method/':
         require __DIR__.'/resources/programmatic-seo-matrix-method/index.php';
@@ -163,7 +169,7 @@ if (strpos($page, '/') !== false) {
         $pageFile = __DIR__.'/pages/'.$pagePath.'.php';
     }
 } else {
-    $valid = ['home','about','services','service','service-city','service-state','state','city-service','process-audit','audit-results','contact','contact-confirmation','thanks','quote-thanks','services/service-hub','services/index','services/state-hub','services/city','process-contact','ai-consulting/index'];
+    $valid = ['home','about','services','service','service-city','service-state','state','city-service','process-audit','audit-results','contact','contact-confirmation','thanks','quote-thanks','services/service-hub','services/index','services/state-hub','services/city','process-contact','ai-consulting/index','resources','resources/diagnostic','resources/llmo-optimization'];
     if (!in_array($page,$valid)) $page='home';
     $pageFile = __DIR__.'/pages/'.$page.'.php';
 }

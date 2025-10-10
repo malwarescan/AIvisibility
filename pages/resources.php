@@ -1,6 +1,9 @@
 <?php
+declare(strict_types=1);
+require_once __DIR__.'/../../bootstrap/canonical.php';
+
 $breadcrumbs = [
-  ['label' => 'Home', 'url' => canonical('/')],
+  ['label' => 'Home', 'url' => Canonical::absolute('/')],
   ['label' => 'Resources'],
 ];
 ?>
