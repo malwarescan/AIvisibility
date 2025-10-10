@@ -11,9 +11,10 @@ $breadcrumbs = [
 ];
 
 // Set page context for the main template
+// NC: Lift CTR without layout changes
 $ctx = [
-  'title' => 'Generative Engine Optimization (GEO) | Neural Command LLC',
-  'desc' => 'Train the engines that train the world. GEO replaces keyword SEO by teaching LLMs your entity context using structured data, canonical entity graphs, and recursive crawl signals.'
+  'title' => 'Generative Engine Optimization (GEO) — Train LLMs About Your Brand | Neural Command',
+  'desc' => 'GEO that LLMs can parse and trust. We implement entity-centric content modeling, JSON-LD propagation networks, and AI Overview readiness scoring for measurable AI visibility.'
 ];
 
 // Service-specific JSON-LD schemas

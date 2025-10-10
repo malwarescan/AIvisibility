@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__.'/../lib/schema.php';
+require_once __DIR__.'/../inc/seo.php'; // NC: Include SEO helpers
 
 // Non-CreativeWork schemas (render directly)
 $nonCreativeSchemas = [ ld_localbusiness(), ld_website() ];

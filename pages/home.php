@@ -2,6 +2,12 @@
 $breadcrumbs = [
   ['label' => 'Home'],
 ];
+
+// NC: Homepage meta for CTR lift on branded + AI intents
+$ctx = [
+  'title' => 'Neural Command — Agentic SEO, GEO & AI Overview Optimization',
+  'desc' => 'Agentic SEO for 2025+: schema-first strategy to win Google AI Overviews, ChatGPT, Claude, and Perplexity. Crawl clarity, JSON-LD, and programmatic city coverage.'
+];
 ?>
 <main class="container py-8 home">
   <div class="home__panel">

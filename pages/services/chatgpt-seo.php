@@ -10,10 +10,10 @@ $breadcrumbs = [
   ['label' => 'ChatGPT SEO Services']
 ];
 
-// Set page context for the main template
+// NC: Lift CTR without layout changes
 $ctx = [
-  'title' => 'ChatGPT SEO Services | Neural Command LLC',
-  'desc' => 'Optimize for ChatGPT citations and recommendations. We specialize in prompt citation pathways, model retrieval memory, and semantic embedding triggers that drive AI visibility.'
+  'title' => 'ChatGPT SEO Services — Structure Your Site for LLM Discovery | Neural Command',
+  'desc' => 'ChatGPT SEO that LLMs can parse and trust. We implement semantic embedding triggers, entity recognition optimization, and citation pathway enhancement for measurable AI visibility.'
 ];
 
 // Service-specific JSON-LD schemas

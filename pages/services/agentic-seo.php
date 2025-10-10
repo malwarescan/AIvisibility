@@ -10,10 +10,10 @@ $breadcrumbs = [
   ['label' => 'Agentic SEO & AI Overview Optimization']
 ];
 
-// Set page context for the main template
+// NC: Lift CTR without layout changes
 $ctx = [
-  'title' => 'Agentic SEO & AI Overview Optimization | Neural Command LLC',
-  'desc' => 'Optimize for AI agent confidence and transparency. Our Agentic SEO focuses on agentic confidence scoring, retrieval transparency, and multimodal entity coherence for maximum AI Overview visibility.'
+  'title' => 'Agentic SEO — Optimize for Google AI Overviews & LLM Discovery | Neural Command',
+  'desc' => 'Agentic SEO that LLMs can parse and trust. We implement Service + FAQ + LocalBusiness schema, crawl clarity, and programmatic coverage for measurable AI visibility.'
 ];
 
 // Service-specific JSON-LD schemas
@@ -82,8 +82,70 @@ $serviceSchemas = [
   ]
 ];
 
-// Add service schemas to global array for template rendering
-$GLOBALS['serviceSchemas'] = $serviceSchemas;
+// NC: Unified JSON-LD (Service + FAQPage + LocalBusiness)
+$currentUrl = nc_abs($_SERVER['REQUEST_URI'] ?? '/');
+$serviceName = 'Agentic SEO & AI Overview Optimization';
+
+$unifiedSchema = [
+  '@context' => 'https://schema.org',
+  '@type' => ['Service','FAQPage'],
+  'name' => $serviceName,
+  'alternateName' => ['Generative Engine Optimization','Agentic SEO','AI Overview Optimization','AI Search Optimization'],
+  'serviceType' => $serviceName,
+  'url' => $currentUrl,
+  'description' => 'Schema-first implementation for AI discoverability across Google AI Overviews, ChatGPT, Claude, and Perplexity.',
+  'provider' => [
+    '@type' => 'Organization',
+    'name' => 'Neural Command, LLC',
+    'url' => nc_base_url(),
+    'telephone' => '+1-844-568-4624',
+    'address' => [
+      '@type' => 'PostalAddress',
+      'streetAddress' => '1639 11th St Suite 110-A',
+      'addressLocality' => 'Santa Monica',
+      'addressRegion' => 'CA',
+      'postalCode' => '90404',
+      'addressCountry' => 'US'
+    ],
+    'sameAs' => [
+      'https://www.linkedin.com/company/neural-command',
+      'https://g.co/kgs/EP6p5de'
+    ]
+  ],
+  'areaServed' => [ ['@type'=>'Country','name'=>'United States'] ],
+  'offers' => [
+    '@type' => 'Offer',
+    'priceCurrency' => 'USD',
+    'price' => 'Custom',
+    'availability' => 'https://schema.org/InStock',
+    'url' => $currentUrl
+  ],
+  'potentialAction' => [
+    '@type' => 'ContactAction',
+    'target' => nc_abs('/contact/'),
+    'name' => 'Request Consultation'
+  ],
+  'mainEntity' => [
+    [
+      '@type'=>'Question',
+      'name'=>"Why is my page 'URL is not on Google'?",
+      'acceptedAnswer'=>['@type'=>'Answer','text'=>'It usually means Google found the URL but has not indexed it yet due to thin/duplicate content, weak internal links, crawl budget limits, canonical issues, or soft 404s.']
+    ],
+    [
+      '@type'=>'Question',
+      'name'=>'How do I fix "Crawled — currently not indexed"?',
+      'acceptedAnswer'=>['@type'=>'Answer','text'=>'Strengthen internal links from authoritative pages, add unique entity-rich content and FAQs, confirm 200 OK, add canonical, submit an updated sitemap, then request indexing once.']
+    ],
+    [
+      '@type'=>'Question',
+      'name'=>'What schema improves AI visibility?',
+      'acceptedAnswer'=>['@type'=>'Answer','text'=>'Service + FAQPage + LocalBusiness with potentialAction. Ensure accurate serviceType, areaServed, provider identity, and consistent canonicals.']
+    ]
+  ]
+];
+
+// Add unified schema to global array for template rendering
+$GLOBALS['serviceSchemas'] = [$unifiedSchema];
 ?>
 <main class="container py-8">
   <h1>Agentic SEO & AI Overview Optimization</h1>

@@ -25,8 +25,9 @@ if (preg_match('/^(.+)-([a-z]{2})$/', $city, $matches)) {
   $stateAbbr = strtoupper($matches[2]);
 }
 
+// NC: City page meta for local SEO
 $pageTitle = "$serviceName in $cityName | Neural Command";
-$pageDesc = "Professional $serviceName services in $cityName. Expert agentic SEO, AI visibility optimization, and schema implementation.";
+$pageDesc = "$serviceName in $cityName: schema-first implementation, crawl clarity, and internal link architecture to enter and stay in Google's index and AI Overviews.";
 
 // Set breadcrumbs for the main template
 $breadcrumbs = [
@@ -41,6 +42,73 @@ $ctx = [
   'title' => $pageTitle,
   'desc' => $pageDesc
 ];
+
+// NC: Unified JSON-LD for city service pages
+$currentUrl = nc_abs($_SERVER['REQUEST_URI'] ?? '/');
+
+$unifiedSchema = [
+  '@context' => 'https://schema.org',
+  '@type' => ['Service','FAQPage'],
+  'name' => $serviceName,
+  'alternateName' => ['Generative Engine Optimization','Agentic SEO','AI Overview Optimization','AI Search Optimization'],
+  'serviceType' => $serviceName,
+  'url' => $currentUrl,
+  'description' => 'Schema-first implementation for AI discoverability across Google AI Overviews, ChatGPT, Claude, and Perplexity.',
+  'provider' => [
+    '@type' => 'Organization',
+    'name' => 'Neural Command, LLC',
+    'url' => nc_base_url(),
+    'telephone' => '+1-844-568-4624',
+    'address' => [
+      '@type' => 'PostalAddress',
+      'streetAddress' => '1639 11th St Suite 110-A',
+      'addressLocality' => 'Santa Monica',
+      'addressRegion' => 'CA',
+      'postalCode' => '90404',
+      'addressCountry' => 'US'
+    ],
+    'sameAs' => [
+      'https://www.linkedin.com/company/neural-command',
+      'https://g.co/kgs/EP6p5de'
+    ]
+  ],
+  'areaServed' => [ 
+    ['@type'=>'City','name'=>$cityName],
+    ['@type'=>'Country','name'=>'United States'] 
+  ],
+  'offers' => [
+    '@type' => 'Offer',
+    'priceCurrency' => 'USD',
+    'price' => 'Custom',
+    'availability' => 'https://schema.org/InStock',
+    'url' => $currentUrl
+  ],
+  'potentialAction' => [
+    '@type' => 'ContactAction',
+    'target' => nc_abs('/contact/'),
+    'name' => 'Request Consultation'
+  ],
+  'mainEntity' => [
+    [
+      '@type'=>'Question',
+      'name'=>"Why is my page 'URL is not on Google'?",
+      'acceptedAnswer'=>['@type'=>'Answer','text'=>'It usually means Google found the URL but has not indexed it yet due to thin/duplicate content, weak internal links, crawl budget limits, canonical issues, or soft 404s.']
+    ],
+    [
+      '@type'=>'Question',
+      'name'=>'How do I fix "Crawled — currently not indexed"?',
+      'acceptedAnswer'=>['@type'=>'Answer','text'=>'Strengthen internal links from authoritative pages, add unique entity-rich content and FAQs, confirm 200 OK, add canonical, submit an updated sitemap, then request indexing once.']
+    ],
+    [
+      '@type'=>'Question',
+      'name'=>'What schema improves AI visibility?',
+      'acceptedAnswer'=>['@type'=>'Answer','text'=>'Service + FAQPage + LocalBusiness with potentialAction. Ensure accurate serviceType, areaServed, provider identity, and consistent canonicals.']
+    ]
+  ]
+];
+
+// Add unified schema to global array for template rendering
+$GLOBALS['serviceSchemas'] = [$unifiedSchema];
 
 // Build comprehensive JSON-LD schemas
 $organizationJson = build_organization_schema();
@@ -89,6 +157,12 @@ $faqJson = [
 ?>
 <main class="container py-8">
   <h1><?= htmlspecialchars("$serviceName in $cityName", ENT_QUOTES) ?></h1>
+  <?php
+  // NC: Micro-intro with local entity. Do not wrap in new containers.
+  if (!empty($cityName) && !empty($serviceName)) {
+    echo '<p>We implement ' . htmlspecialchars($serviceName, ENT_QUOTES) . ' for organizations in ' . htmlspecialchars($cityName, ENT_QUOTES) . ', focusing on crawl clarity, JSON-LD coverage, and AI Overview eligibility.</p>';
+  }
+  ?>
   
   <!-- Intro Section: Deterministic, unique per URL -->
   <section class="intro">
@@ -173,5 +247,18 @@ $faqJson = [
       <a href="<?= htmlspecialchars(Canonical::absolute('/services/'), ENT_QUOTES) ?>">View All Services</a> |
       <a href="<?= htmlspecialchars(link_service_hub($service), ENT_QUOTES) ?>">More <?= htmlspecialchars($serviceName, ENT_QUOTES) ?> Cities</a>
     </p>
+    <?php
+    // NC: Two nearby city links for crawl clustering, plain inline text.
+    $nearby = $nearby ?? []; // e.g., ['orlando-fl','tampa-fl']
+    if (!empty($nearby) && !empty($service)) {
+      $links = [];
+      foreach ($nearby as $slug) {
+        $links[] = '<a href="' . nc_abs('/services/' . $service . '/' . $slug . '/') . '">' . ucwords(str_replace('-', ' ', $slug)) . '</a>';
+      }
+      if ($links) {
+        echo '<p>Also see: ' . implode(' and ', $links) . '.</p>';
+      }
+    }
+    ?>
     </section>
 </main>
