@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /agent.json
+Allow: /.well-known/agent.json
+Allow: /assets/css/
+Allow: /assets/js/
+Allow: /public/
+Disallow: /*?utm_*
+Disallow: /*?ref=*
+Disallow: /*?fbclid=*
+Disallow: /*?gclid=*
+Disallow: /*?msclkid=*
+Disallow: /*?_hsmi=*
+Disallow: /*?_hsenc=*
+Disallow: /admin/
+Disallow: /temp/
+Disallow: /logs/
+
+Sitemap: https://nrlcmd.com/sitemap.xml
+Sitemap: https://nrlcmd.com/sitemap-city.xml.php
