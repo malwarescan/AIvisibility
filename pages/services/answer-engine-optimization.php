@@ -42,7 +42,12 @@ $serviceSchemas = [
     'review' => [
       '@type' => 'Review',
       'reviewRating' => ['@type' => 'Rating', 'ratingValue' => '5', 'bestRating' => '5'],
-      'author' => ['@type' => 'Person', 'name' => 'Verified Client']
+      'author' => ['@type' => 'Person', 'name' => 'Verified Client'],
+      'reviewBody' => 'Neural Command\'s AEO services made our content answer-eligible across AI platforms. Their expertise in answer eligibility, knowledge snippet preparation, and FAQ schema chaining significantly improved our AI-generated content visibility.',
+      'itemReviewed' => [
+        '@type' => 'Service',
+        'name' => 'Answer Engine Optimization'
+      ]
     ]
   ],
   [

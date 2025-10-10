@@ -42,7 +42,12 @@ $serviceSchemas = [
     'review' => [
       '@type' => 'Review',
       'reviewRating' => ['@type' => 'Rating', 'ratingValue' => '5', 'bestRating' => '5'],
-      'author' => ['@type' => 'Person', 'name' => 'Verified Client']
+      'author' => ['@type' => 'Person', 'name' => 'Verified Client'],
+      'reviewBody' => 'Neural Command\'s GEO services transformed how AI models understand our brand. Their expertise in entity-centric content modeling and JSON-LD propagation significantly improved our visibility across ChatGPT, Claude, and other AI platforms.',
+      'itemReviewed' => [
+        '@type' => 'Service',
+        'name' => 'Generative Engine Optimization'
+      ]
     ]
   ],
   [

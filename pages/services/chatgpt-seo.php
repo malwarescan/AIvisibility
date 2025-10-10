@@ -42,7 +42,12 @@ $serviceSchemas = [
     'review' => [
       '@type' => 'Review',
       'reviewRating' => ['@type' => 'Rating', 'ratingValue' => '5', 'bestRating' => '5'],
-      'author' => ['@type' => 'Person', 'name' => 'Verified Client']
+      'author' => ['@type' => 'Person', 'name' => 'Verified Client'],
+      'reviewBody' => 'Neural Command\'s ChatGPT SEO services delivered outstanding results for our brand visibility. Their expertise in prompt citation pathways and model retrieval memory significantly improved our ChatGPT citations and recommendations.',
+      'itemReviewed' => [
+        '@type' => 'Service',
+        'name' => 'ChatGPT SEO Services'
+      ]
     ]
   ],
   [

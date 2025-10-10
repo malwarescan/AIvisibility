@@ -42,7 +42,12 @@ $serviceSchemas = [
     'review' => [
       '@type' => 'Review',
       'reviewRating' => ['@type' => 'Rating', 'ratingValue' => '5', 'bestRating' => '5'],
-      'author' => ['@type' => 'Person', 'name' => 'Verified Client']
+      'author' => ['@type' => 'Person', 'name' => 'Verified Client'],
+      'reviewBody' => 'Neural Command\'s AI Consulting services delivered exceptional results for our AI integration goals. Their expertise in LLM workflow implementation and autonomous agent integration significantly improved our AI-driven operations.',
+      'itemReviewed' => [
+        '@type' => 'Service',
+        'name' => 'AI Consulting & Integration'
+      ]
     ]
   ],
   [

@@ -42,7 +42,12 @@ $serviceSchemas = [
     'review' => [
       '@type' => 'Review',
       'reviewRating' => ['@type' => 'Rating', 'ratingValue' => '5', 'bestRating' => '5'],
-      'author' => ['@type' => 'Person', 'name' => 'Verified Client']
+      'author' => ['@type' => 'Person', 'name' => 'Verified Client'],
+      'reviewBody' => 'Neural Command\'s Schema Optimizer services delivered exceptional results for our structured data implementation. Their expertise in schema coverage audits and reverse-engineering competitors significantly improved our AI visibility.',
+      'itemReviewed' => [
+        '@type' => 'Service',
+        'name' => 'Schema Optimizer & Reverse Engineer'
+      ]
     ]
   ],
   [

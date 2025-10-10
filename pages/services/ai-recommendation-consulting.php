@@ -42,7 +42,12 @@ $serviceSchemas = [
     'review' => [
       '@type' => 'Review',
       'reviewRating' => ['@type' => 'Rating', 'ratingValue' => '5', 'bestRating' => '5'],
-      'author' => ['@type' => 'Person', 'name' => 'Verified Client']
+      'author' => ['@type' => 'Person', 'name' => 'Verified Client'],
+      'reviewBody' => 'Neural Command\'s AI Recommendation Consulting services transformed our brand\'s AI visibility. Their expertise in AI pick logic, authority graphing, and agentic brand signals significantly improved our recommendation engine inclusion.',
+      'itemReviewed' => [
+        '@type' => 'Service',
+        'name' => 'AI Recommendation Consulting'
+      ]
     ]
   ],
   [

@@ -42,7 +42,12 @@ $serviceSchemas = [
     'review' => [
       '@type' => 'Review',
       'reviewRating' => ['@type' => 'Rating', 'ratingValue' => '5', 'bestRating' => '5'],
-      'author' => ['@type' => 'Person', 'name' => 'Verified Client']
+      'author' => ['@type' => 'Person', 'name' => 'Verified Client'],
+      'reviewBody' => 'Neural Command\'s AI Search Optimization services delivered exceptional results across Google AI Mode, Bing Copilot, and Perplexity. Their expertise in deterministic content token systems and crawl-clarity ranking significantly improved our AI search visibility.',
+      'itemReviewed' => [
+        '@type' => 'Service',
+        'name' => 'AI Search Optimization'
+      ]
     ]
   ],
   [

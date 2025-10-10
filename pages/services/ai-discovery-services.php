@@ -42,7 +42,12 @@ $serviceSchemas = [
     'review' => [
       '@type' => 'Review',
       'reviewRating' => ['@type' => 'Rating', 'ratingValue' => '5', 'bestRating' => '5'],
-      'author' => ['@type' => 'Person', 'name' => 'Verified Client']
+      'author' => ['@type' => 'Person', 'name' => 'Verified Client'],
+      'reviewBody' => 'Neural Command\'s AI Discovery Services made our brand the default recommendation across AI platforms. Their expertise in entity registration and AI knowledge graph integration significantly improved our visibility in AI-generated content.',
+      'itemReviewed' => [
+        '@type' => 'Service',
+        'name' => 'AI Discovery Services'
+      ]
     ]
   ],
   [

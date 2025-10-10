@@ -42,7 +42,12 @@ $serviceSchemas = [
     'review' => [
       '@type' => 'Review',
       'reviewRating' => ['@type' => 'Rating', 'ratingValue' => '5', 'bestRating' => '5'],
-      'author' => ['@type' => 'Person', 'name' => 'Verified Client']
+      'author' => ['@type' => 'Person', 'name' => 'Verified Client'],
+      'reviewBody' => 'Neural Command\'s Agentic SEO services delivered exceptional results for our AI visibility goals. Their expertise in optimizing for AI agents and AI Overviews significantly improved our brand\'s presence in AI-generated content.',
+      'itemReviewed' => [
+        '@type' => 'Service',
+        'name' => 'Agentic SEO & AI Overview Optimization'
+      ]
     ]
   ],
   [
