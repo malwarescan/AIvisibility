@@ -81,9 +81,9 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 $now = gmdate('Y-m-d');
 foreach ($chunk as $item):
   $loc = $item['loc'];
-  // Sanity check: must be https, lowercase, ends with slash (or file-like), no params
+  // Sanity check: must be https (or http for localhost), lowercase, ends with slash (or file-like), no params
   $isValid = (
-    str_starts_with($loc, 'https://') &&
+    (str_starts_with($loc, 'https://') || str_starts_with($loc, 'http://')) &&
     strtolower($loc) === $loc &&
     (str_ends_with($loc, '/') || Canonical::isFileLike($loc)) &&
     parse_url($loc, PHP_URL_QUERY) === null
