@@ -5,16 +5,20 @@ require_once __DIR__.'/../../config.php';
 
 $canonical = Canonical::absolute('/services/');
 $services = array_keys($SERVICES);
-?><!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Services | Neural Command</title>
-  <meta name="description" content="Browse all AI visibility and agentic SEO services from Neural Command. Available across major US cities.">
-  <link rel="canonical" href="<?= htmlspecialchars($canonical, ENT_QUOTES) ?>">
-  <meta name="robots" content="index,follow">
-</head>
-<body>
+
+// Set breadcrumbs for the main template
+$breadcrumbs = [
+  ['label' => 'Home', 'url' => Canonical::absolute('/')],
+  ['label' => 'Services']
+];
+
+// Set page context for the main template
+$ctx = [
+  'title' => 'Services | Neural Command',
+  'desc' => 'Browse all AI visibility and agentic SEO services from Neural Command. Available across major US cities.'
+];
+?>
+<main class="container py-8">
   <h1>Neural Command Services</h1>
   <p>Explore our complete suite of AI visibility, agentic SEO, and schema optimization services. Available in cities nationwide.</p>
   
@@ -34,6 +38,5 @@ $services = array_keys($SERVICES);
   </ul>
   
   <p><a href="<?= Canonical::absolute('/') ?>">← Back to Home</a></p>
-</body>
-</html>
+</main>
 

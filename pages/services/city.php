@@ -7,8 +7,8 @@ require_once __DIR__.'/../../lib/schema.php';
 require_once __DIR__.'/../../lib/schema_builders.php';
 require_once __DIR__.'/../../lib/content_tokens.php';
 
-$service = Canonical::kebab($service);
-$city    = Canonical::kebab($city);
+$service = Canonical::kebab($_GET['service'] ?? '');
+$city    = Canonical::kebab($_GET['city'] ?? '');
 $path    = "/services/$service/$city/";
 $canonical = Canonical::absoluteCanonical($path);
 
@@ -27,6 +27,20 @@ if (preg_match('/^(.+)-([a-z]{2})$/', $city, $matches)) {
 
 $pageTitle = "$serviceName in $cityName | Neural Command";
 $pageDesc = "Professional $serviceName services in $cityName. Expert agentic SEO, AI visibility optimization, and schema implementation.";
+
+// Set breadcrumbs for the main template
+$breadcrumbs = [
+  ['label' => 'Home', 'url' => Canonical::absolute('/')],
+  ['label' => 'Services', 'url' => Canonical::absolute('/services/')],
+  ['label' => $serviceName, 'url' => Canonical::absolute('/services/'.$service.'/')],
+  ['label' => $cityName]
+];
+
+// Set page context for the main template
+$ctx = [
+  'title' => $pageTitle,
+  'desc' => $pageDesc
+];
 
 // Build comprehensive JSON-LD schemas
 $organizationJson = build_organization_schema();
@@ -72,33 +86,8 @@ $faqJson = [
     ]
   ]
 ];
-?><!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title><?= htmlspecialchars($pageTitle, ENT_QUOTES) ?></title>
-  <meta name="description" content="<?= htmlspecialchars($pageDesc, ENT_QUOTES) ?>">
-  <?php include __DIR__.'/../../partials/head.php'; ?>
-  
-  <!-- Organization (Neural Command, LLC) -->
-  <script type="application/ld+json"><?= json_encode($organizationJson, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) ?></script>
-  
-  <!-- LocalBusiness (for this location) -->
-  <script type="application/ld+json"><?= json_encode($localBusinessJson, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) ?></script>
-  
-  <!-- Service offering -->
-  <script type="application/ld+json"><?= json_encode($serviceJson, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) ?></script>
-  
-  <!-- BreadcrumbList -->
-  <script type="application/ld+json"><?= json_encode($breadcrumbJson, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) ?></script>
-  
-  <!-- WebPage (with license & creator via render_jsonld) -->
-  <?= render_jsonld($webPageJson) ?>
-  
-  <!-- FAQPage (with license & creator via render_jsonld) -->
-  <?= render_jsonld($faqJson) ?>
-</head>
-<body>
+?>
+<main class="container py-8">
   <h1><?= htmlspecialchars("$serviceName in $cityName", ENT_QUOTES) ?></h1>
   
   <!-- Intro Section: Deterministic, unique per URL -->
@@ -184,6 +173,5 @@ $faqJson = [
       <a href="<?= htmlspecialchars(Canonical::absolute('/services/'), ENT_QUOTES) ?>">View All Services</a> |
       <a href="<?= htmlspecialchars(link_service_hub($service), ENT_QUOTES) ?>">More <?= htmlspecialchars($serviceName, ENT_QUOTES) ?> Cities</a>
     </p>
-  </section>
-</body>
-</html>
+    </section>
+</main>
