@@ -13,6 +13,22 @@ if ($requestUri === '/health.php' || strpos($requestUri, '/health.php') === 0) {
     exit;
 }
 
+// Handle static files (CSS, JS, images, etc.)
+$path = parse_url($requestUri, PHP_URL_PATH) ?? '/';
+if ($path !== '/' && file_exists(__DIR__ . $path) && !is_dir(__DIR__ . $path)) {
+    // For production servers (Apache/Nginx), serve the file directly
+    if (PHP_SAPI !== 'cli-server') {
+        $filePath = __DIR__ . $path;
+        $mimeType = mime_content_type($filePath);
+        header('Content-Type: ' . $mimeType);
+        header('Content-Length: ' . filesize($filePath));
+        readfile($filePath);
+        exit;
+    }
+    // For PHP's built-in server, let it handle the static file
+    return false;
+}
+
 require __DIR__.'/config.php';
 require __DIR__.'/bootstrap/canonical.php';
 require __DIR__.'/bootstrap/config.php';
@@ -47,21 +63,21 @@ switch (true) {
         $setPage('about');
         break;
     case $path === '/services/':
-        require __DIR__.'/pages/services/index.php';
-        exit;
-    case preg_match('#^/services/([^/]+)/([^/]+)/$#', $path, $m):
-        $service = $m[1];
-        $city = $m[2];
-        require __DIR__.'/pages/services/city.php';
-        exit;
-    case preg_match('#^/services/([^/]+)/$#', $path, $m):
-        $_GET['service'] = $m[1];
-        require __DIR__.'/pages/services/service-hub.php';
-        exit;
+        $setPage('services/index');
+        break;
     case preg_match('#^/services/state/([a-z]{2})/$#', $path, $m):
         $_GET['state'] = $m[1];
-        require __DIR__.'/pages/services/state-hub.php';
-        exit;
+        $setPage('services/state-hub');
+        break;
+    case preg_match('#^/services/([^/]+)/([^/]+)/$#', $path, $m):
+        $_GET['service'] = $m[1];
+        $_GET['city'] = $m[2];
+        $setPage('services/city');
+        break;
+    case preg_match('#^/services/([^/]+)/$#', $path, $m):
+        $_GET['service'] = $m[1];
+        $setPage('services/service-hub');
+        break;
     case preg_match('#^/city-service/([^/]+)/$#', $path, $m):
         $setPage('city-service', ['city' => $m[1]]);
         break;
@@ -72,8 +88,8 @@ switch (true) {
         $setPage('contact-confirmation');
         break;
     case $path === '/process-contact/':
-        require __DIR__.'/pages/process-contact.php';
-        exit;
+        $setPage('process-contact');
+        break;
     case $path === '/process-audit/':
         $setPage('process-audit');
         break;
@@ -95,6 +111,12 @@ switch (true) {
     case $path === '/resources/programmatic-seo-matrix-method/':
         require __DIR__.'/resources/programmatic-seo-matrix-method/index.php';
         exit;
+    case $path === '/ai-consulting/':
+        $setPage('ai-consulting/index');
+        break;
+    case preg_match('#^/ai-consulting/([^/]+)/$#', $path, $m):
+        $setPage('ai-consulting/index');
+        break;
     case $path === '/legal/license/':
         require __DIR__.'/pages/legal/license.php';
         exit;
@@ -134,9 +156,14 @@ $ctx = [
 
 if (strpos($page, '/') !== false) {
     $pagePath = $page;
-    $pageFile = __DIR__.'/pages/'.$pagePath.'.php';
+    // Handle ai-consulting pages outside pages directory
+    if (strpos($pagePath, 'ai-consulting/') === 0) {
+        $pageFile = __DIR__.'/'.$pagePath.'.php';
+    } else {
+        $pageFile = __DIR__.'/pages/'.$pagePath.'.php';
+    }
 } else {
-    $valid = ['home','about','services','service','service-city','service-state','state','city-service','process-audit','audit-results','contact','contact-confirmation','thanks','quote-thanks'];
+    $valid = ['home','about','services','service','service-city','service-state','state','city-service','process-audit','audit-results','contact','contact-confirmation','thanks','quote-thanks','services/service-hub','services/index','services/state-hub','services/city','process-contact','ai-consulting/index'];
     if (!in_array($page,$valid)) $page='home';
     $pageFile = __DIR__.'/pages/'.$page.'.php';
 }
