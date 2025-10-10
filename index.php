@@ -111,6 +111,9 @@ switch (true) {
     case $path === '/robots.txt':
         require __DIR__.'/public/robots.txt.php';
         exit;
+    case $path === '/sitemap-city.xml.php':
+        require __DIR__.'/sitemap-city.xml.php';
+        exit;
     default:
         $trimmed = trim($path, '/');
         $setPage($trimmed !== '' ? $trimmed : 'home');
