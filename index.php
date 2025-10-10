@@ -92,6 +92,9 @@ switch (true) {
     case $path === '/resources/diagnostic/':
         $setPage('resources/diagnostic');
         break;
+    case $path === '/resources/programmatic-seo-matrix-method/':
+        require __DIR__.'/resources/programmatic-seo-matrix-method/index.php';
+        exit;
     case $path === '/legal/license/':
         require __DIR__.'/pages/legal/license.php';
         exit;
