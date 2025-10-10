@@ -19,6 +19,7 @@ $corePages = [
   '/resources/',
   '/resources/diagnostic/',
   '/resources/programmatic-seo-matrix-method/',
+  '/resources/llmo-optimization/',
   '/quote-thanks/',
   '/thanks/',
   '/what-is-google-ai-mode/',
