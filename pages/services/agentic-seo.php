@@ -84,7 +84,7 @@ $serviceSchemas = [
 
 // Add service schemas to global array for template rendering
 $GLOBALS['serviceSchemas'] = $serviceSchemas;
-
+?>
 <main class="container py-8">
   <h1>Agentic SEO & AI Overview Optimization</h1>
   <p class="lead">Optimize for AI agent confidence and transparency.</p>
