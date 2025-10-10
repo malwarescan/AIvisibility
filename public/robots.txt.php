@@ -22,3 +22,4 @@ echo "Disallow: /temp/\n";
 echo "Disallow: /logs/\n";
 echo "\n";
 echo "Sitemap: https://$host/sitemap.xml\n";
+echo "Sitemap: https://$host/sitemap-city.xml.php\n";
