@@ -20,63 +20,117 @@ $ctx = [
 $serviceSchemas = [
   [
     '@context' => 'https://schema.org',
-    '@type' => 'Service',
-    'serviceType' => 'AI Consulting & Integration',
-    'provider' => ['@id' => 'https://nrlcmd.com/#organization'],
-    'areaServed' => [
-      '@type' => 'AdministrativeArea',
-      'name' => 'Global'
-    ],
-    'hasOfferCatalog' => [
-      '@type' => 'OfferCatalog',
-      'name' => 'AI Integration Packages',
-      'itemListElement' => [
-        [
-          '@type' => 'Offer',
-          'name' => 'LLM Workflow Implementation',
-          'priceCurrency' => 'USD',
-          'availability' => 'https://schema.org/InStock'
+    '@graph' => [
+      [
+        '@type' => 'WebPage',
+        '@id' => 'https://nrlcmd.com/services/ai-consulting/#webpage',
+        'url' => 'https://nrlcmd.com/services/ai-consulting/',
+        'name' => 'AI Consulting & Integration | Neural Command LLC',
+        'description' => 'Implement AI workflows and autonomous agents. Our AI Consulting focuses on LLM workflow implementation, API affordances, and autonomous agent integration for intelligent onboarding, agentic customer service, and AI-driven site optimization.',
+        'inLanguage' => 'en-US',
+        'isPartOf' => ['@id' => 'https://nrlcmd.com/#website'],
+        'breadcrumb' => ['@id' => 'https://nrlcmd.com/services/ai-consulting/#breadcrumb'],
+        'about' => ['@id' => 'https://nrlcmd.com/#organization'],
+        'potentialAction' => [
+          '@type' => 'Action',
+          'name' => 'Book AI Strategy Call',
+          'target' => 'https://nrlcmd.com/contact/'
         ]
-      ]
-    ],
-    'review' => [
-      '@type' => 'Review',
-      'reviewRating' => ['@type' => 'Rating', 'ratingValue' => '5', 'bestRating' => '5'],
-      'author' => ['@type' => 'Person', 'name' => 'Verified Client'],
-      'reviewBody' => 'Neural Command\'s AI Consulting services delivered exceptional results for our AI integration goals. Their expertise in LLM workflow implementation and autonomous agent integration significantly improved our AI-driven operations.',
-      'itemReviewed' => [
+      ],
+      [
         '@type' => 'Service',
-        'name' => 'AI Consulting & Integration'
-      ]
-    ]
-  ],
-  [
-    '@context' => 'https://schema.org',
-    '@type' => 'FAQPage',
-    'mainEntity' => [
-      [
-        '@type' => 'Question',
-        'name' => 'What does AI integration involve?',
-        'acceptedAnswer' => [
-          '@type' => 'Answer',
-          'text' => 'AI integration involves implementing LLM workflows, API affordances, and autonomous agent systems into your existing infrastructure. This includes intelligent onboarding systems, agentic customer service, and AI-driven site optimization to enhance user experience and operational efficiency.'
+        'serviceType' => 'AI Consulting & Integration',
+        'provider' => ['@id' => 'https://nrlcmd.com/#organization'],
+        'areaServed' => [
+          '@type' => 'AdministrativeArea',
+          'name' => 'Global'
+        ],
+        'hasOfferCatalog' => [
+          '@type' => 'OfferCatalog',
+          'name' => 'AI Consulting Packages',
+          'itemListElement' => [
+            [
+              '@type' => 'Offer',
+              'name' => 'AI Workflow Implementation',
+              'priceCurrency' => 'USD',
+              'availability' => 'https://schema.org/InStock'
+            ]
+          ]
+        ],
+        'review' => [
+          '@type' => 'Review',
+          'reviewRating' => ['@type' => 'Rating', 'ratingValue' => '5', 'bestRating' => '5'],
+          'author' => ['@type' => 'Person', 'name' => 'Verified Client'],
+          'reviewBody' => 'Neural Command\'s AI Consulting services delivered exceptional results for our AI integration goals. Their expertise in LLM workflow implementation and autonomous agent integration significantly improved our AI-driven operations.',
+          'itemReviewed' => [
+            '@type' => 'Service',
+            'name' => 'AI Consulting & Integration'
+          ]
         ]
       ],
       [
-        '@type' => 'Question',
-        'name' => 'Can you build AI workflows into existing systems?',
-        'acceptedAnswer' => [
-          '@type' => 'Answer',
-          'text' => 'Yes, we specialize in integrating AI workflows into existing systems without disrupting current operations. Our approach focuses on API affordances and seamless integration that enhances rather than replaces your current infrastructure and processes.'
+        '@type' => 'FAQPage',
+        'mainEntity' => [
+          [
+            '@type' => 'Question',
+            'name' => 'What does AI integration involve?',
+            'acceptedAnswer' => [
+              '@type' => 'Answer',
+              'text' => 'AI integration involves implementing AI workflows, API affordances, and autonomous agents into your existing systems. This includes LLM workflow implementation, intelligent onboarding systems, agentic customer service, and AI-driven site optimization that enhances user experience and operational efficiency.'
+            ]
+          ],
+          [
+            '@type' => 'Question',
+            'name' => 'Can you build AI workflows into existing systems?',
+            'acceptedAnswer' => [
+              '@type' => 'Answer',
+              'text' => 'Yes, we specialize in integrating AI workflows into existing systems without disrupting current operations. Our AI Consulting services include API affordances, workflow implementation, and seamless integration that enhances your current processes with AI capabilities.'
+            ]
+          ],
+          [
+            '@type' => 'Question',
+            'name' => 'How do agentic actions enhance SEO?',
+            'acceptedAnswer' => [
+              '@type' => 'Answer',
+              'text' => 'Agentic actions enhance SEO by creating autonomous systems that continuously optimize content, monitor AI visibility, and implement improvements. These AI-driven processes provide ongoing optimization that traditional SEO methods cannot achieve, ensuring consistent performance improvements.'
+            ]
+          ]
         ]
       ],
       [
-        '@type' => 'Question',
-        'name' => 'How do agentic actions enhance SEO?',
-        'acceptedAnswer' => [
-          '@type' => 'Answer',
-          'text' => 'Agentic actions enhance SEO by providing AI systems with actionable capabilities and structured data about your services. This includes booking systems, quote requests, and consultation scheduling that AI agents can reference and recommend, improving your visibility in AI-powered search and recommendations.'
+        '@type' => 'BreadcrumbList',
+        '@id' => 'https://nrlcmd.com/services/ai-consulting/#breadcrumb',
+        'itemListElement' => [
+          ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => 'https://nrlcmd.com/'],
+          ['@type' => 'ListItem', 'position' => 2, 'name' => 'Services', 'item' => 'https://nrlcmd.com/services/'],
+          ['@type' => 'ListItem', 'position' => 3, 'name' => 'AI Consulting & Integration']
         ]
+      ],
+      [
+        '@type' => 'LocalBusiness',
+        '@id' => 'https://nrlcmd.com/#organization',
+        'name' => 'Neural Command LLC',
+        'address' => [
+          '@type' => 'PostalAddress',
+          'streetAddress' => '1639 11th St Suite 110-A',
+          'addressLocality' => 'Santa Monica',
+          'addressRegion' => 'CA',
+          'postalCode' => '90404',
+          'addressCountry' => 'US'
+        ],
+        'telephone' => '+1-844-568-4624',
+        'url' => 'https://nrlcmd.com/',
+        'sameAs' => [
+          'https://www.linkedin.com/company/neural-command/',
+          'https://g.co/kgs/EP6p5de'
+        ]
+      ],
+      [
+        '@type' => 'SoftwareApplication',
+        'name' => 'Neural Command Platform',
+        'applicationCategory' => 'SEO and AI Search Optimization',
+        'operatingSystem' => 'Web',
+        'offers' => ['@type' => 'Offer', 'priceCurrency' => 'USD', 'availability' => 'https://schema.org/InStock']
       ]
     ]
   ]
@@ -85,115 +139,6 @@ $serviceSchemas = [
 // Add service schemas to global array for template rendering
 $GLOBALS['serviceSchemas'] = $serviceSchemas;
 ?>
-    {
-      "@type": "WebPage",
-      "@id": "https://www.nrlcmd.com/services/ai-consulting/",
-      "url": "https://www.nrlcmd.com/services/ai-consulting/",
-      "name": "AI Consulting & Integration | Neural Command LLC",
-      "description": "Implement AI workflows and autonomous agents. Our AI Consulting focuses on LLM workflow implementation, API affordances, and autonomous agent integration for intelligent onboarding, agentic customer service, and AI-driven site optimization.",
-      "inLanguage": "en-US",
-      "isPartOf": {"@id": "https://www.nrlcmd.com/#website"},
-      "breadcrumb": {"@id": "https://www.nrlcmd.com/#breadcrumb"},
-      "about": {"@id": "https://www.nrlcmd.com/#organization"},
-      "potentialAction": {
-        "@type": "Action",
-        "name": "Book AI Strategy Call",
-        "target": "https://www.nrlcmd.com/contact/"
-      }
-    },
-    {
-      "@type": "Service",
-      "serviceType": "AI Consulting & Integration",
-      "provider": {"@id": "https://www.nrlcmd.com/#organization"},
-      "areaServed": {
-        "@type": "AdministrativeArea",
-        "name": "Global"
-      },
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "AI Consulting Packages",
-        "itemListElement": [
-          {
-            "@type": "Offer",
-            "name": "AI Workflow Implementation",
-            "priceCurrency": "USD",
-            "availability": "https://schema.org/InStock"
-          }
-        ]
-      },
-      "review": {
-        "@type": "Review",
-        "reviewRating": {"@type": "Rating","ratingValue": "5","bestRating": "5"},
-        "author": {"@type": "Person","name": "Verified Client"}
-      }
-    },
-    {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What does AI integration involve?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "AI integration involves implementing AI workflows, API affordances, and autonomous agents into your existing systems. This includes LLM workflow implementation, intelligent onboarding systems, agentic customer service, and AI-driven site optimization that enhances user experience and operational efficiency."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can you build AI workflows into existing systems?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, we specialize in integrating AI workflows into existing systems without disrupting current operations. Our AI Consulting services include API affordances, workflow implementation, and seamless integration that enhances your current processes with AI capabilities."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How do agentic actions enhance SEO?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Agentic actions enhance SEO by creating autonomous systems that continuously optimize content, monitor AI visibility, and implement improvements. These AI-driven processes provide ongoing optimization that traditional SEO methods cannot achieve, ensuring consistent performance improvements."
-          }
-        }
-      ]
-    },
-    {
-      "@type": "BreadcrumbList",
-      "@id": "https://www.nrlcmd.com/#breadcrumb",
-      "itemListElement": [
-        {"@type": "ListItem","position":1,"name":"Home","item":"https://www.nrlcmd.com/"},
-        {"@type": "ListItem","position":2,"name":"Services","item":"https://www.nrlcmd.com/services/"},
-        {"@type": "ListItem","position":3,"name":"AI Consulting & Integration"}
-      ]
-    },
-    {
-      "@type": "LocalBusiness",
-      "@id": "https://www.nrlcmd.com/#organization",
-      "name": "Neural Command LLC",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "1639 11th St Suite 110-A",
-        "addressLocality": "Santa Monica",
-        "addressRegion": "CA",
-        "postalCode": "90404",
-        "addressCountry": "US"
-      },
-      "telephone": "+1-844-568-4624",
-      "url": "https://www.nrlcmd.com/",
-      "sameAs": [
-        "https://www.linkedin.com/company/neural-command/",
-        "https://g.co/kgs/EP6p5de"
-      ]
-    },
-    {
-      "@type": "SoftwareApplication",
-      "name": "Neural Command Platform",
-      "applicationCategory": "SEO and AI Search Optimization",
-      "operatingSystem": "Web",
-      "offers": {"@type": "Offer","priceCurrency": "USD","availability": "https://schema.org/InStock"}
-    }
-  ]
-}
-</script>
 
 <main class="container py-8">
   <h1>AI Consulting & Integration</h1>
