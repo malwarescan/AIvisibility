@@ -7,7 +7,6 @@
       <a href="/about/"><?= I18n::t('nav.about') ?></a>
       <a href="/contact/"><?= I18n::t('nav.contact') ?></a>
     </nav>
-    <?php include __DIR__.'/language-switcher.php'; ?>
   </div>
 </header>
 
