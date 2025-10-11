@@ -102,8 +102,8 @@ $cover_img = '/assets/geo16-cover.webp';
 
     <!-- Article Content -->
     <article class="prose prose-lg max-w-none">
-      <div class="bg-gray-50 border border-gray-200 p-6 rounded-lg mb-8">
-        <p class="text-lg font-medium mb-0">
+      <div class="bg-gray-50 border border-gray-200 p-8 rounded-lg mb-8">
+        <p class="text-lg font-medium mb-0 leading-relaxed">
           <strong>TL;DR.</strong> AI answer engines cite pages they can parse, trust, and verify. Meet GEO-16 thresholds (G≥0.70, ≥12 pillar hits), validate JSON-LD, enforce semantic HTML, expose recency with real dates, and maintain provenance. Pair on-page excellence with earned media.
         </p>
       </div>
