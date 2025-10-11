@@ -247,11 +247,12 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
 .mermaid .node:hover {
   filter: brightness(1.1);
 }
-/* Responsive sizing */
+/* Responsive sizing for human legibility */
 @media (max-width: 1024px) {
   .mermaid svg {
     width: 100% !important;
     max-width: 100% !important;
+    font-size: 16px !important;
   }
 }
 @media (max-width: 768px) {
@@ -282,12 +283,13 @@ document.addEventListener('DOMContentLoaded', function() {
       useMaxWidth: true,
       htmlLabels: true,
       curve: 'basis',
-      nodeSpacing: 60,
-      rankSpacing: 80
+      nodeSpacing: 80,
+      rankSpacing: 100
     },
     securityLevel: 'loose',
-    maxTextSize: 20000,
-    maxEdges: 1000
+    maxTextSize: 30000,
+    maxEdges: 1000,
+    fontSize: 16
   });
   
   // Render the diagram and then add interactivity
