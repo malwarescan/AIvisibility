@@ -33,7 +33,12 @@ if (!empty($breadcrumbs ?? [])) {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title><?= esc($ctx['title']) ?></title>
   <meta name="description" content="<?= esc($ctx['desc']) ?>" />
-  <?php if (!empty($ctx['hreflang'])): ?>
+  <?php 
+  // Auto-generate hreflang if not provided
+  if (empty($ctx['hreflang'])) {
+    $ctx['hreflang'] = I18n::getHreflangData($_SERVER['REQUEST_URI']);
+  }
+  if (!empty($ctx['hreflang'])): ?>
     <?php foreach ($ctx['hreflang'] as $hreflang): ?>
       <link rel="alternate" hreflang="<?= esc($hreflang['hreflang']) ?>" href="<?= esc($hreflang['href']) ?>" />
     <?php endforeach; ?>

@@ -6,6 +6,10 @@ error_reporting(E_ALL);
 ini_set('display_errors', '1');
 ini_set('log_errors', '1');
 
+// Initialize i18n system
+require_once __DIR__.'/lib/i18n.php';
+I18n::init();
+
 // Skip all logic for healthcheck endpoint (Railway internal check)
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
 if ($requestUri === '/health.php' || strpos($requestUri, '/health.php') === 0) {
@@ -45,6 +49,14 @@ if (PHP_SAPI !== 'cli') {
 
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
 $path = Canonical::normalizePath($path);
+
+// Handle language-specific routing
+$currentLang = I18n::getCurrentLanguage();
+if ($currentLang !== I18n::getSupportedLanguages()[0]) { // Not default language
+    // Remove language prefix from path for internal routing
+    $path = preg_replace('/^\/' . preg_quote($currentLang, '/') . '(\/|$)/', '/', $path);
+    if ($path === '') $path = '/';
+}
 
 $_GET = [];
 

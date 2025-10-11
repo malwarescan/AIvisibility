@@ -224,12 +224,16 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
   width: 100%;
   height: auto;
   overflow: visible;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .mermaid svg {
-  width: 100% !important;
+  width: 80% !important;
+  max-width: 800px !important;
   height: auto !important;
-  max-width: 100% !important;
   overflow: visible !important;
+  margin: 0 auto;
 }
 .mermaid .node.highlighted {
   filter: brightness(1.3) drop-shadow(0 0 8px #00ff00);
@@ -243,14 +247,24 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
 .mermaid .node:hover {
   filter: brightness(1.1);
 }
-/* Responsive text sizing */
+/* Responsive sizing */
+@media (max-width: 1024px) {
+  .mermaid svg {
+    width: 90% !important;
+    max-width: 700px !important;
+  }
+}
 @media (max-width: 768px) {
   .mermaid svg {
+    width: 95% !important;
+    max-width: 600px !important;
     font-size: 12px !important;
   }
 }
 @media (max-width: 480px) {
   .mermaid svg {
+    width: 100% !important;
+    max-width: 400px !important;
     font-size: 10px !important;
   }
 }
@@ -264,12 +278,14 @@ document.addEventListener('DOMContentLoaded', function() {
     startOnLoad: true,
     theme: 'dark',
     flowchart: {
-      useMaxWidth: true,
+      useMaxWidth: false,
       htmlLabels: true,
-      curve: 'basis'
+      curve: 'basis',
+      nodeSpacing: 50,
+      rankSpacing: 50
     },
     securityLevel: 'loose',
-    maxTextSize: 50000,
+    maxTextSize: 20000,
     maxEdges: 1000
   });
   
