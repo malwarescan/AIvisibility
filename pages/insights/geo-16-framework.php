@@ -229,10 +229,9 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
   align-items: center;
 }
 .mermaid svg {
-  width: 80% !important;
-  max-width: 800px !important;
+  width: 100% !important;
+  max-width: 1000px !important;
   height: auto !important;
-  min-height: 600px !important;
   overflow: visible !important;
   margin: 0 auto;
 }
@@ -251,22 +250,22 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
 /* Responsive sizing */
 @media (max-width: 1024px) {
   .mermaid svg {
-    width: 90% !important;
-    max-width: 700px !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
 }
 @media (max-width: 768px) {
   .mermaid svg {
-    width: 95% !important;
-    max-width: 600px !important;
-    font-size: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    font-size: 14px !important;
   }
 }
 @media (max-width: 480px) {
   .mermaid svg {
     width: 100% !important;
-    max-width: 400px !important;
-    font-size: 10px !important;
+    max-width: 100% !important;
+    font-size: 12px !important;
   }
 }
 </style>
@@ -280,11 +279,11 @@ document.addEventListener('DOMContentLoaded', function() {
     startOnLoad: false, // We'll render manually
     theme: 'dark',
     flowchart: {
-      useMaxWidth: false,
+      useMaxWidth: true,
       htmlLabels: true,
       curve: 'basis',
-      nodeSpacing: 80,
-      rankSpacing: 100
+      nodeSpacing: 60,
+      rankSpacing: 80
     },
     securityLevel: 'loose',
     maxTextSize: 20000,
