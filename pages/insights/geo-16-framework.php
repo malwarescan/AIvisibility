@@ -42,21 +42,21 @@ $cover_img = '/assets/geo16-cover.webp';
         <h3 class="text-xl font-semibold text-white mb-4">Interactive GEO-16 Framework Algorithm</h3>
         <div class="mermaid">
 flowchart TD
-    A["START<br/>Page Input"] --> B["METADATA_CHECK<br/>• datePublished<br/>• dateModified<br/>• ETag<br/>• sitemap_lastmod"]
-    A --> C["SEMANTIC_HTML_CHECK<br/>• single_h1<br/>• logical_h2_h3<br/>• descriptive_anchors<br/>• accessible_lists"]
-    A --> D["STRUCTURED_DATA_CHECK<br/>• valid_jsonld<br/>• matches_content<br/>• has_breadcrumbs<br/>• canonical_present"]
+    A["START"] --> B["Metadata Check"]
+    A --> C["HTML Structure"]
+    A --> D["Structured Data"]
     
-    B --> E["PROVENANCE_CHECK<br/>• authoritative_refs<br/>• link_validation<br/>• trust_indicators"]
-    C --> F["RISK_MANAGEMENT_CHECK<br/>• content_quality<br/>• spam_signals<br/>• user_experience"]
-    D --> G["RAG_FIT_CHECK<br/>• machine_readable<br/>• parsing_optimized<br/>• ai_friendly"]
+    B --> E["Provenance"]
+    C --> F["Risk Management"]
+    D --> G["RAG Optimization"]
     
-    E --> H["CALCULATE_GEO_SCORE<br/>score = active_pillars / 16 * 100<br/>IF score >= 70 AND active_pillars >= 12"]
+    E --> H["Calculate GEO Score"]
     F --> H
     G --> H
     
-    H --> I["Brave Summary<br/>78% Citation Rate<br/>GEO: 0.727"]
-    H --> J["Google AI Overviews<br/>72% Citation Rate<br/>GEO: 0.687"]
-    H --> K["Perplexity<br/>45% Citation Rate<br/>GEO: 0.300"]
+    H --> I["Brave: 78% Citations"]
+    H --> J["Google: 72% Citations"]
+    H --> K["Perplexity: 45% Citations"]
     
     classDef startNode fill:#00ff00,stroke:#333,stroke-width:2px,color:#000
     classDef checkNode fill:#0066cc,stroke:#333,stroke-width:2px,color:#fff
@@ -252,21 +252,21 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
   .mermaid svg {
     width: 100% !important;
     max-width: 100% !important;
-    font-size: 16px !important;
+    font-size: 18px !important;
   }
 }
 @media (max-width: 768px) {
   .mermaid svg {
     width: 100% !important;
     max-width: 100% !important;
-    font-size: 14px !important;
+    font-size: 16px !important;
   }
 }
 @media (max-width: 480px) {
   .mermaid svg {
     width: 100% !important;
     max-width: 100% !important;
-    font-size: 12px !important;
+    font-size: 14px !important;
   }
 }
 </style>
@@ -283,13 +283,13 @@ document.addEventListener('DOMContentLoaded', function() {
       useMaxWidth: true,
       htmlLabels: true,
       curve: 'basis',
-      nodeSpacing: 80,
-      rankSpacing: 100
+      nodeSpacing: 120,
+      rankSpacing: 150
     },
     securityLevel: 'loose',
     maxTextSize: 30000,
     maxEdges: 1000,
-    fontSize: 16
+    fontSize: 18
   });
   
   // Render the diagram and then add interactivity
