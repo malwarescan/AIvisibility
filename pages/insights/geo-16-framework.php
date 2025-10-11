@@ -222,10 +222,10 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
 }
 .mermaid .node {
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 .mermaid .node:hover {
   filter: brightness(1.1);
-  cursor: pointer;
 }
 </style>
 
@@ -245,33 +245,76 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Add interactivity after Mermaid renders
   setTimeout(function() {
-    const nodes = document.querySelectorAll('.mermaid .node');
+    console.log('Adding interactivity to Mermaid flowchart...');
+    
+    // Try multiple selectors to find nodes
+    const selectors = [
+      '.mermaid .node',
+      '.mermaid .nodeLabel',
+      '.mermaid g.node',
+      '.mermaid rect',
+      '.mermaid .flowchart-label'
+    ];
+    
+    let nodes = [];
+    for (let selector of selectors) {
+      nodes = document.querySelectorAll(selector);
+      if (nodes.length > 0) {
+        console.log(`Found ${nodes.length} nodes with selector: ${selector}`);
+        break;
+      }
+    }
+    
     const detailsDiv = document.getElementById('node-details');
     
-    nodes.forEach(node => {
-      node.style.cursor = 'pointer';
-      node.addEventListener('click', function() {
-        const nodeId = this.id;
-        const nodeText = this.querySelector('text')?.textContent || '';
+    if (nodes.length === 0) {
+      console.log('No nodes found, trying alternative approach...');
+      // Try to find any clickable elements in the mermaid diagram
+      const mermaidDiv = document.querySelector('.mermaid');
+      if (mermaidDiv) {
+        const allElements = mermaidDiv.querySelectorAll('*');
+        console.log(`Found ${allElements.length} elements in mermaid diagram`);
         
-        // Remove previous highlights
-        nodes.forEach(n => n.classList.remove('highlighted'));
-        
-        // Highlight clicked node
-        this.classList.add('highlighted');
-        
-        // Show details
-        if (detailsDiv) {
-          detailsDiv.innerHTML = `
-            <div class="bg-gray-800 p-4 rounded border border-gray-600">
-              <h4 class="text-white font-semibold mb-2">${nodeText.split('<br/>')[0]}</h4>
-              <p class="text-gray-300 text-sm">${getNodeDescription(nodeId)}</p>
-            </div>
-          `;
-        }
+        // Add click handler to the entire mermaid div
+        mermaidDiv.addEventListener('click', function(e) {
+          console.log('Mermaid diagram clicked');
+          if (detailsDiv) {
+            detailsDiv.innerHTML = `
+              <div class="bg-gray-800 p-4 rounded border border-gray-600">
+                <h4 class="text-white font-semibold mb-2">GEO-16 Framework</h4>
+                <p class="text-gray-300 text-sm">Interactive flowchart showing the 16-pillar GEO framework for AI citation optimization. Click anywhere on the diagram to explore.</p>
+              </div>
+            `;
+          }
+        });
+      }
+    } else {
+      nodes.forEach((node, index) => {
+        node.style.cursor = 'pointer';
+        node.addEventListener('click', function() {
+          console.log(`Node ${index} clicked`);
+          const nodeId = this.id || `node-${index}`;
+          const nodeText = this.textContent || this.querySelector('text')?.textContent || `Node ${index}`;
+          
+          // Remove previous highlights
+          nodes.forEach(n => n.classList.remove('highlighted'));
+          
+          // Highlight clicked node
+          this.classList.add('highlighted');
+          
+          // Show details
+          if (detailsDiv) {
+            detailsDiv.innerHTML = `
+              <div class="bg-gray-800 p-4 rounded border border-gray-600">
+                <h4 class="text-white font-semibold mb-2">${nodeText.split('<br/>')[0]}</h4>
+                <p class="text-gray-300 text-sm">${getNodeDescription(nodeId)}</p>
+              </div>
+            `;
+          }
+        });
       });
-    });
-  }, 1000);
+    }
+  }, 2000);
 });
 
 function getNodeDescription(nodeId) {
@@ -288,7 +331,7 @@ function getNodeDescription(nodeId) {
     'J': 'Google AI Overviews output showing 72% citation rate with GEO score of 0.687.',
     'K': 'Perplexity engine output showing 45% citation rate with GEO score of 0.300.'
   };
-  return descriptions[nodeId] || 'Click on any node to see detailed information about this step in the GEO-16 framework.';
+  return descriptions[nodeId] || 'Interactive node in the GEO-16 framework algorithm. This step is part of the 16-pillar system for AI citation optimization.';
 }
 </script>
 
