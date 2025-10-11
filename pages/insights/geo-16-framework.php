@@ -232,6 +232,7 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
   width: 80% !important;
   max-width: 800px !important;
   height: auto !important;
+  min-height: 600px !important;
   overflow: visible !important;
   margin: 0 auto;
 }
@@ -282,8 +283,8 @@ document.addEventListener('DOMContentLoaded', function() {
       useMaxWidth: false,
       htmlLabels: true,
       curve: 'basis',
-      nodeSpacing: 50,
-      rankSpacing: 50
+      nodeSpacing: 80,
+      rankSpacing: 100
     },
     securityLevel: 'loose',
     maxTextSize: 20000,
