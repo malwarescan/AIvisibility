@@ -28,11 +28,11 @@ $ctx = [
     <div class="home__featured-content">
       <header>
         <span class="home__label">Featured Research</span>
-        <span class="home__code">/resources/llmo-optimization</span>
+        <span class="home__code">/insights/geo-16-framework</span>
       </header>
-      <h2>LLMO: The Art and Architecture of Large Language Model Optimization</h2>
-      <p class="home__featured-desc">Three years inside the machine. A field report from the front lines of the LLM-powered internet — where search, reasoning, and visibility have merged into one evolving organism.</p>
-      <a href="/resources/llmo-optimization/" class="home__button">Read the Research</a>
+      <h2>AI Answer Engine Citation Behavior: The GEO-16 Framework Explained</h2>
+      <p class="home__featured-desc">How to reach GEO ≥ 0.70 and earn cross-engine citations using structured data, semantic HTML, and freshness signals. A 16-pillar model that improves AI citation likelihood.</p>
+      <a href="/insights/geo-16-framework/" class="home__button">Read the Research</a>
     </div>
   </section>
 
