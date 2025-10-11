@@ -63,6 +63,15 @@ flowchart TD
     class H calcNode
     class I,J,K outputNode
         </div>
+        
+        <!-- Node Details Panel -->
+        <div id="node-details" class="mt-4">
+          <div class="bg-gray-800 p-4 rounded border border-gray-600">
+            <h4 class="text-white font-semibold mb-2">Click on any node above</h4>
+            <p class="text-gray-300 text-sm">Select a node in the flowchart to see detailed information about that step in the GEO-16 framework algorithm.</p>
+          </div>
+        </div>
+        
         <p class="text-gray-400 text-sm mt-2">Click on nodes to explore the algorithm flow. Each node represents a check in the GEO-16 framework.</p>
       </div>
     </header>
@@ -204,6 +213,22 @@ $serviceSchemas = [
 $GLOBALS['serviceSchemas'] = $serviceSchemas;
 ?>
 
+<!-- CSS for interactive highlighting -->
+<style>
+.mermaid .node.highlighted {
+  filter: brightness(1.3) drop-shadow(0 0 8px #00ff00);
+  stroke-width: 4px !important;
+  stroke: #00ff00 !important;
+}
+.mermaid .node {
+  transition: all 0.3s ease;
+}
+.mermaid .node:hover {
+  filter: brightness(1.1);
+  cursor: pointer;
+}
+</style>
+
 <!-- Mermaid.js for interactive flowchart -->
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
 <script>
@@ -214,8 +239,56 @@ document.addEventListener('DOMContentLoaded', function() {
     flowchart: {
       useMaxWidth: true,
       htmlLabels: true
-    }
+    },
+    securityLevel: 'loose'
   });
+  
+  // Add interactivity after Mermaid renders
+  setTimeout(function() {
+    const nodes = document.querySelectorAll('.mermaid .node');
+    const detailsDiv = document.getElementById('node-details');
+    
+    nodes.forEach(node => {
+      node.style.cursor = 'pointer';
+      node.addEventListener('click', function() {
+        const nodeId = this.id;
+        const nodeText = this.querySelector('text')?.textContent || '';
+        
+        // Remove previous highlights
+        nodes.forEach(n => n.classList.remove('highlighted'));
+        
+        // Highlight clicked node
+        this.classList.add('highlighted');
+        
+        // Show details
+        if (detailsDiv) {
+          detailsDiv.innerHTML = `
+            <div class="bg-gray-800 p-4 rounded border border-gray-600">
+              <h4 class="text-white font-semibold mb-2">${nodeText.split('<br/>')[0]}</h4>
+              <p class="text-gray-300 text-sm">${getNodeDescription(nodeId)}</p>
+            </div>
+          `;
+        }
+      });
+    });
+  }, 1000);
 });
+
+function getNodeDescription(nodeId) {
+  const descriptions = {
+    'A': 'Starting point for the GEO-16 algorithm. Input page data for analysis.',
+    'B': 'Checks for metadata freshness signals including publication dates, modification timestamps, ETag headers, and sitemap lastmod values.',
+    'C': 'Validates semantic HTML structure including single H1, logical heading hierarchy, descriptive anchor text, and accessible list structures.',
+    'D': 'Verifies structured data implementation including valid JSON-LD, content matching, breadcrumb presence, and canonical tags.',
+    'E': 'Assesses content provenance including authoritative references, link validation, and trust indicators.',
+    'F': 'Evaluates risk management factors including content quality, spam signals, and user experience metrics.',
+    'G': 'Checks RAG (Retrieval-Augmented Generation) fit including machine readability, parsing optimization, and AI-friendly formatting.',
+    'H': 'Calculates final GEO score based on active pillars. Threshold: score ≥ 0.70 and ≥ 12 pillar hits for high citation likelihood.',
+    'I': 'Brave Summary engine output showing 78% citation rate with GEO score of 0.727.',
+    'J': 'Google AI Overviews output showing 72% citation rate with GEO score of 0.687.',
+    'K': 'Perplexity engine output showing 45% citation rate with GEO score of 0.300.'
+  };
+  return descriptions[nodeId] || 'Click on any node to see detailed information about this step in the GEO-16 framework.';
+}
 </script>
 
