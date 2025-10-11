@@ -62,28 +62,5 @@ $posts = [
 </main>
 
 <?php
-// Service-specific JSON-LD schemas
-$serviceSchemas = [
-  [
-    '@context' => 'https://schema.org',
-    '@type' => 'CollectionPage',
-    'name' => 'Insights',
-    'url' => Canonical::absolute('/insights/'),
-    'description' => 'Research and implementation guides on Agentic SEO, GEO-16, AI Overviews, and schema engineering.',
-    'mainEntity' => [
-      '@type' => 'ItemList',
-      'itemListElement' => array_map(function($i, $p) {
-        return [
-          '@type' => 'ListItem',
-          'position' => $i + 1,
-          'url' => Canonical::absolute($p['url']),
-          'name' => $p['title']
-        ];
-      }, array_keys($posts), $posts)
-    ]
-  ]
-];
-
-// Add service schemas to global array for template rendering
-$GLOBALS['serviceSchemas'] = $serviceSchemas;
+// Schemas now handled by unified @graph system in templates/head.php
 ?>

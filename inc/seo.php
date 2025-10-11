@@ -28,9 +28,4 @@ if (!function_exists('nc_meta')) {
   }
 }
 
-if (!function_exists('nc_jsonld')) {
-  function nc_jsonld(array $obj): void {
-    // Single JSON-LD block per page
-    echo "<script type=\"application/ld+json\">" . json_encode($obj, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) . "</script>\n";
-  }
-}
+// nc_jsonld function now defined in lib/schema_utils.php with proper @graph wrapper

@@ -73,21 +73,6 @@ if($svc && $state){
   </section>
 </main>
 
-<?php
-require_once __DIR__.'/../lib/seo.php';
-
-// Use the comprehensive schema function
-$schema = build_page_schema_jsonld('service-state', [
-  'title' => $svc['name'] . ' in ' . $stateName . ' | Neural Command',
-  'headline' => $svc['name'] . ' in ' . $stateName,
-  'description' => 'Become the default recommendation across ChatGPT, Google AI Overviews, Claude, and Perplexity in ' . $stateName . '.',
-  'serviceSlug' => $slug,
-  'stateKey' => $stateKey,
-  'faqs' => $svc['faqs'] ?? []
-]);
-
-// Override areaServed to be State instead of City
-$schema['@graph'][1]['areaServed'] = ['@type'=>'State','name'=>$stateName,'addressRegion'=>$abbr];
-
-echo '<script type="application/ld+json">'.json_encode($schema, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE).'</script>';
+<?php 
+// Schemas now handled by unified @graph system in templates/head.php
 ?>

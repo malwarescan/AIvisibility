@@ -104,15 +104,7 @@ $canonical = Canonical::absolute("/services/$slug/");
   <?php endif; ?>
   <?php endif; ?>
 </main>
-<?php if($svc){
-  $schema = build_page_schema_jsonld('service', [
-    'title' => $svc['name'] . ' | Neural Command',
-    'headline' => $svc['name'],
-    'description' => $svc['short'],
-    'serviceSlug' => $slug,
-    'faqs' => $svc['faqs'] ?? []
-  ]);
-  echo '<script type="application/ld+json">'.json_encode($schema, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE).'</script>';
-}
+<?php 
+// Schemas now handled by unified @graph system in templates/head.php
 ?>
 

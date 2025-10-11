@@ -166,18 +166,6 @@ $speakableLD = [
   'cssSelector' => ['h1', 'section p']
 ];
 
-// Emit a single @graph
-$graph = [
-  '@context' => 'https://schema.org',
-  '@graph'   => [
-    $webPageLD,
-    $serviceLD,
-    $faqLD,
-    array_merge($breadcrumbLD, ['@id'=>$currentUrl.'#breadcrumb']),
-    $speakableLD
-  ]
-];
-
-echo '<script type="application/ld+json">'.json_encode($graph, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE).'</script>';
+// Schemas now handled by unified @graph system in templates/head.php
 ?>
 

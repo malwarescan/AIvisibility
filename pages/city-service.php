@@ -81,20 +81,7 @@
   <?php } ?>
   <?php endif; ?>
 </main>
-<?php if($cityData){ 
-  // Use the new comprehensive schema function
-  $schema = build_page_schema_jsonld('city-service', [
-    'title' => 'AI Consulting in ' . $cityName . ' | Neural Command',
-    'headline' => 'AI Consulting in ' . $cityName,
-    'description' => 'Implementation of agent‑ready websites and schema systems for startups and enterprises in ' . $cityName . '.',
-    'serviceSlug' => 'ai-consulting',
-    'cityKey' => $key,
-    'faqs' => [
-      ['What do you implement?','Agentic endpoints (/agent.json, /meta.json), Q&A content, schema, and visibility monitoring.'],
-      ['Do you support my industry?','Yes — we tailor prompts, citations, and examples to your niche in '.$cityName.'.']
-    ]
-  ]);
-  
-  echo '<script type="application/ld+json">'.json_encode($schema, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE).'</script>';
-} ?>
+<?php 
+// Schemas now handled by unified @graph system in templates/head.php
+?>
 

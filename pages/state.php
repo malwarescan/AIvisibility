@@ -49,28 +49,5 @@ $cities = $state['cities'];
 </main>
 
 <?php
-// ItemList schema for crawl clarity
-$itemList = ['@context'=>'https://schema.org','@type'=>'ItemList','itemListElement'=>[]];
-$pos = 1;
-
-foreach($SERVICES as $slug=>$svc){
-  $itemList['itemListElement'][] = [
-    '@type'=>'ListItem',
-    'position'=>$pos++,
-    'url'=>Canonical::absolute("/services/$slug/$stateKey/"),
-    'name'=>$svc['name'].' — '.$stateName
-  ];
-  
-  foreach($state['cities'] as $city){
-    $ck = strtolower(str_replace(' ','-',$city));
-    $itemList['itemListElement'][] = [
-      '@type'=>'ListItem',
-      'position'=>$pos++,
-      'url'=>Canonical::absolute("/services/$slug/$ck-{$abbr}/"),
-      'name'=>$svc['name']." — $city, {$abbr}"
-    ];
-  }
-}
-
-echo '<script type="application/ld+json">'.json_encode($itemList, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE).'</script>';
+// Schemas now handled by unified @graph system in templates/head.php
 ?>

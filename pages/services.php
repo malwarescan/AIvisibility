@@ -84,25 +84,6 @@ $breadcrumbs = [
   </div>
 </main>
 <?php 
-$itemList = [
-  '@context'=>'https://schema.org',
-  '@type'=>'ItemList',
-  'itemListElement'=>[]
-];
-$pos=1;
-foreach ($SERVICES as $slug=>$svc) {
-  $itemList['itemListElement'][] = [
-    '@type'=>'ListItem',
-    'position'=>$pos++,
-    'url'=>canonical('/services/'.$slug.'/'),
-    'name'=>$svc['name']
-  ];
-}
-echo '<script type="application/ld+json">'.json_encode($itemList, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE).'</script>';
-
-echo '<script type="application/ld+json">'.json_encode(ld_faq([
-  ['How do services get mentioned in ChatGPT?', 'By giving LLMs structured facts, trusted references, and explicit actions that agents can use confidently.'],
-  ['Do you support regional SEO?', 'Yes — we deploy /ai-consulting/{city}/ pages with localized schema and CTAs.'],
-]), JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE).'</script>';
+// Schemas now handled by unified @graph system in templates/head.php
 ?>
 
