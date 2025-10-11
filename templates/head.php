@@ -1,29 +1,99 @@
 <?php
-require_once __DIR__.'/../lib/schema.php';
-require_once __DIR__.'/../inc/seo.php'; // NC: Include SEO helpers
+require_once __DIR__.'/../lib/schema_utils.php';
 
-// Non-CreativeWork schemas (render directly)
-$nonCreativeSchemas = [ ld_localbusiness(), ld_website() ];
+// --- Core IDs/URLs
+$BASE = nc_base_url();
+$PAGE = nc_page_url();
+$LANG = nc_lang_for_url($PAGE);
 
-// Add service-specific schemas if present
-if (!empty($GLOBALS['serviceSchemas'])) {
-  $nonCreativeSchemas = array_merge($nonCreativeSchemas, $GLOBALS['serviceSchemas']);
+$orgId      = nc_org_id();
+$siteId     = nc_site_id();
+$webpageId  = nc_id('#webpage');
+$crumbId    = nc_id('#breadcrumb');
+
+// --- Organization & Website
+$graph = [
+  [
+    "@type" => "Organization",
+    "@id"   => $orgId,
+    "name"  => "Neural Command, LLC",
+    "url"   => $BASE."/",
+    "logo"  => [
+      "@type" => "ImageObject",
+      "@id"   => $orgId."#logo",
+      "url"   => nc_logo_url()
+    ],
+    "telephone" => "+1-844-568-4624",
+    "address" => [
+      "@type" => "PostalAddress",
+      "streetAddress"   => "1639 11th St Suite 110-A",
+      "addressLocality" => "Santa Monica",
+      "addressRegion"   => "CA",
+      "postalCode"      => "90404",
+      "addressCountry"  => "US"
+    ],
+    "sameAs" => [
+      "https://www.linkedin.com/company/neural-command/",
+      "https://g.co/kgs/EP6p5de"
+    ]
+  ],
+  [
+    "@type" => "WebSite",
+    "@id"   => $siteId,
+    "url"   => $BASE."/",
+    "name"  => "Neural Command",
+    "publisher" => [ "@id" => $orgId ]
+    // Note: Sitelinks Search box no longer renders; ok to omit SearchAction.
+  ],
+  [
+    "@type" => "WebPage",
+    "@id"   => $webpageId,
+    "url"   => $PAGE,
+    "inLanguage" => $LANG,
+    "isPartOf"   => [ "@id" => $siteId ],
+    "about"      => [ "@id" => $orgId ],
+    "breadcrumb" => [ "@id" => $crumbId ]
+  ]
+];
+
+// --- BreadcrumbList: build from existing PHP breadcrumb array if available
+// Expect $BREADCRUMBS like: [ ['name'=>'Home','url'=>'/'], ... ]
+if (!isset($BREADCRUMBS) || !is_array($BREADCRUMBS) || empty($BREADCRUMBS)) {
+  // Fallback: infer basic crumbs from URL
+  $path = trim(parse_url($PAGE, PHP_URL_PATH), '/');
+  $parts = $path === '' ? [] : explode('/', $path);
+  $accum = '';
+  $BREADCRUMBS = [['name' => 'Home', 'url' => $BASE.'/']];
+  foreach ($parts as $p) {
+    $accum .= '/'.$p;
+    $BREADCRUMBS[] = ['name' => ucwords(str_replace('-', ' ', $p)), 'url' => $BASE.$accum.'/'];
+  }
 }
+$itemListElement = [];
+$pos = 1;
+foreach ($BREADCRUMBS as $c) {
+  $itemListElement[] = [
+    "@type" => "ListItem",
+    "position" => $pos++,
+    "name" => $c['name'],
+    "item" => $c['url']
+  ];
+}
+$graph[] = [
+  "@type" => "BreadcrumbList",
+  "@id"   => $crumbId,
+  "itemListElement" => $itemListElement
+];
 
-// CreativeWork schemas (use render_jsonld for license & creator)
-$creativeSchemas = [ ld_software(), ld_agentic_dataset() ];
-
-// Breadcrumbs (non-CreativeWork)
-if (!empty($breadcrumbs ?? [])) {
-  $breadcrumbItems = [];
-  foreach ($breadcrumbs as $crumb) {
-    if (!empty($crumb['label']) && !empty($crumb['url'])) {
-      $breadcrumbItems[] = ['name' => $crumb['label'], 'item' => $crumb['url']];
-    }
-  }
-  if ($breadcrumbItems) {
-    $nonCreativeSchemas[] = build_breadcrumb_jsonld($breadcrumbItems);
-  }
+// --- Page-specific schemas appended by pages/* via $GLOBALS['serviceSchemas'] etc.
+if (!empty($GLOBALS['serviceSchemas']) && is_array($GLOBALS['serviceSchemas'])) {
+  $graph = array_merge($graph, $GLOBALS['serviceSchemas']);
+}
+if (!empty($GLOBALS['articleSchema']) && is_array($GLOBALS['articleSchema'])) {
+  $graph[] = $GLOBALS['articleSchema'];
+}
+if (!empty($GLOBALS['videoSchema']) && is_array($GLOBALS['videoSchema'])) {
+  $graph[] = $GLOBALS['videoSchema'];
 }
 ?>
 <!doctype html>
@@ -33,29 +103,22 @@ if (!empty($breadcrumbs ?? [])) {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title><?= esc($ctx['title']) ?></title>
   <meta name="description" content="<?= esc($ctx['desc']) ?>" />
-  <?php 
-  // Auto-generate hreflang if not provided
-  if (empty($ctx['hreflang'])) {
-    $ctx['hreflang'] = I18n::getHreflangData($_SERVER['REQUEST_URI']);
-  }
-  if (!empty($ctx['hreflang'])): ?>
-    <?php foreach ($ctx['hreflang'] as $hreflang): ?>
-      <link rel="alternate" hreflang="<?= esc($hreflang['hreflang']) ?>" href="<?= esc($hreflang['href']) ?>" />
-    <?php endforeach; ?>
-  <?php endif; ?>
+<?php 
+// Canonical + hreflang cluster
+$canonical = $PAGE;
+$alt_en = str_replace('/ko/', '/', $PAGE);
+$alt_ko = str_contains($PAGE, '/ko/') ? $PAGE : rtrim($BASE.'/ko'.parse_url($PAGE, PHP_URL_PATH), '/').'/';
+?>
+<link rel="canonical" href="<?= htmlspecialchars($canonical, ENT_QUOTES) ?>">
+<link rel="alternate" hreflang="en" href="<?= htmlspecialchars($alt_en, ENT_QUOTES) ?>">
+<link rel="alternate" hreflang="ko" href="<?= htmlspecialchars($alt_ko, ENT_QUOTES) ?>">
+<link rel="alternate" hreflang="x-default" href="<?= htmlspecialchars($canonical, ENT_QUOTES) ?>">
   <?php include __DIR__.'/../partials/head.php'; ?>
          <link rel="preload" href="/assets/css/styles.css?v=<?= time() ?>" as="style" />
          <link rel="stylesheet" href="/assets/css/styles.css?v=<?= time() ?>" />
 <?php 
-// Render non-CreativeWork schemas directly
-foreach($nonCreativeSchemas as $ld): ?>
-  <script type="application/ld+json"><?= json_encode($ld, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) ?></script>
-<?php endforeach; ?>
-<?php 
-// Render CreativeWork schemas with license & creator
-foreach($creativeSchemas as $schema): 
-  echo render_jsonld($schema);
-endforeach; 
+// Emit one unified @graph
+echo nc_jsonld($graph);
 ?>
   <script>
     document.addEventListener('DOMContentLoaded', function() {

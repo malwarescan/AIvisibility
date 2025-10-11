@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__, 2).'/bootstrap/canonical.php';
-require_once dirname(__DIR__, 2).'/lib/schema_utils.php';
 
 // Set breadcrumbs for the main template
 $breadcrumbs = [
@@ -25,43 +24,6 @@ $published = '2025-10-11';
 $modified = '2025-10-11';
 $author_name = 'Neural Command, LLC';
 $cover_img = '/assets/geo16-cover.webp';
-
-// Insights articles: Article (+ optional VideoObject)
-$PAGE = nc_page_url();
-$orgId = nc_org_id();
-$webpageId = nc_id('#webpage');
-
-$headline = $ctx['title'] ?? 'AI Answer Engine Citation Behavior: The GEO-16 Framework Explained';
-$imgUrl   = $cover_img ? nc_base_url().$cover_img : null;
-$pubIso   = isset($published) ? date(DATE_W3C, strtotime($published)) : null;
-$modIso   = isset($modified)   ? date(DATE_W3C, strtotime($modified))   : $pubIso;
-
-$GLOBALS['articleSchema'] = [
-  "@type" => "Article",
-  "@id"   => nc_id('#article'),
-  "headline" => $headline,
-  "mainEntityOfPage" => [ "@id" => $webpageId ],
-  "author"    => [ "@id" => $orgId ],
-  "publisher" => [ "@id" => $orgId ],
-  "datePublished" => $pubIso,
-  "dateModified"  => $modIso,
-  "image"         => $imgUrl ? [ $imgUrl ] : null
-];
-
-// If the article embeds a video, expose VideoObject
-if (!empty($VIDEO)) {
-  $GLOBALS['videoSchema'] = [
-    "@type" => "VideoObject",
-    "@id"   => nc_id('#video'),
-    "name"  => $VIDEO['name'] ?? $headline,
-    "description" => $VIDEO['description'] ?? $headline,
-    "thumbnailUrl" => $VIDEO['thumbnailUrl'] ?? [],
-    "uploadDate"   => $VIDEO['uploadDate'] ?? $pubIso,
-    "duration"     => $VIDEO['duration'] ?? null,
-    "contentUrl"   => $VIDEO['contentUrl'] ?? null,
-    "embedUrl"     => $VIDEO['embedUrl'] ?? null
-  ];
-}
 ?>
 
 <main class="container mx-auto px-4 py-10">

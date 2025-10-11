@@ -93,5 +93,59 @@ $ctx = [
 </main>
 
 <?php
-// Schemas now handled by unified @graph system in templates/head.php
+// Service-specific JSON-LD schemas
+$serviceSchemas = [
+  [
+    '@context' => 'https://schema.org',
+    '@type' => 'WebPage',
+    '@id' => Canonical::absolute('/'),
+    'url' => Canonical::absolute('/'),
+    'name' => I18n::t('meta.home.title'),
+    'description' => I18n::t('meta.home.desc'),
+    'inLanguage' => I18n::getCurrentLanguage(),
+    'isPartOf' => ['@id' => Canonical::absolute('/#website')],
+    'about' => ['@id' => Canonical::absolute('/#organization')],
+    'potentialAction' => [
+      '@type' => 'Action',
+      'name' => I18n::t('common.book_consultation'),
+      'target' => Canonical::absolute('/contact/')
+    ]
+  ],
+  [
+    '@context' => 'https://schema.org',
+    '@type' => 'WebSite',
+    '@id' => Canonical::absolute('/#website'),
+    'url' => Canonical::absolute('/'),
+    'name' => 'Neural Command, LLC',
+    'publisher' => ['@id' => Canonical::absolute('/#organization')],
+    'potentialAction' => [
+      '@type' => 'SearchAction',
+      'target' => Canonical::absolute('/search?q={search_term_string}'),
+      'query-input' => 'required name=search_term_string'
+    ]
+  ],
+  [
+    '@context' => 'https://schema.org',
+    '@type' => 'LocalBusiness',
+    '@id' => Canonical::absolute('/#organization'),
+    'name' => 'Neural Command, LLC',
+    'address' => [
+      '@type' => 'PostalAddress',
+      'streetAddress' => '1639 11th St Suite 110-A',
+      'addressLocality' => 'Santa Monica',
+      'addressRegion' => 'CA',
+      'postalCode' => '90404',
+      'addressCountry' => 'US'
+    ],
+    'telephone' => '+1-844-568-4624',
+    'url' => Canonical::absolute('/'),
+    'sameAs' => [
+      'https://www.linkedin.com/company/neural-command/',
+      'https://g.co/kgs/EP6p5de'
+    ]
+  ]
+];
+
+// Add service schemas to global array for template rendering
+$GLOBALS['serviceSchemas'] = $serviceSchemas;
 ?>

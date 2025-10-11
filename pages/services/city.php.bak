@@ -7,7 +7,6 @@ require_once __DIR__.'/../../lib/schema.php';
 require_once __DIR__.'/../../lib/schema_builders.php';
 require_once __DIR__.'/../../lib/content_tokens.php';
 require_once __DIR__.'/../../inc/seo.php'; // NC: Include SEO helpers
-require_once __DIR__.'/../../lib/schema_utils.php';
 
 $service = Canonical::kebab($_GET['service'] ?? '');
 $city    = Canonical::kebab($_GET['city'] ?? '');
@@ -45,98 +44,117 @@ $ctx = [
   'desc' => $pageDesc
 ];
 
-// NC: City service pages: LocalBusiness + Service coupling
-$BASE = nc_base_url();
-$PAGE = nc_page_url();
-$orgId = nc_org_id();
+// NC: Unified JSON-LD for city service pages
+$currentUrl = nc_abs($_SERVER['REQUEST_URI'] ?? '/');
 
-$cityName  = $cityName ?? null;     // e.g., "Austin"
-$region    = $stateAbbr ?? null;    // e.g., "TX"
-$country   = 'US';
-$svcName   = $serviceName ?? 'Agentic SEO';
-$svcSlug   = $service ?? 'agentic-seo';
-
-if ($cityName && $region) {
-  $svcId = nc_id('#service');
-  $lbId  = nc_id('#local');
-
-  $offers = [];
-  if (!empty($PRICING[$svcSlug])) {
-    foreach ($PRICING[$svcSlug] as $p) {
-      $offers[] = [
-        "@type" => "Offer",
-        "priceSpecification" => [
-          "@type" => "UnitPriceSpecification",
-          "priceCurrency" => $p['currency'] ?? "USD",
-          "price" => (float)($p['price'] ?? 0)
-        ],
-        "itemOffered" => [ "@type" => "Service", "name" => $p['name'] ?? $svcName ]
-      ];
-    }
-  }
-
-  $GLOBALS['serviceSchemas'] = array_merge($GLOBALS['serviceSchemas'] ?? [], [
+$unifiedSchema = [
+  '@context' => 'https://schema.org',
+  '@type' => ['Service','FAQPage'],
+  'name' => $serviceName,
+  'alternateName' => ['Generative Engine Optimization','Agentic SEO','AI Overview Optimization','AI Search Optimization'],
+  'serviceType' => $serviceName,
+  'url' => $currentUrl,
+  'description' => 'Schema-first implementation for AI discoverability across Google AI Overviews, ChatGPT, Claude, and Perplexity.',
+  'provider' => [
+    '@type' => 'Organization',
+    'name' => 'Neural Command, LLC',
+    'url' => nc_base_url(),
+    'telephone' => '+1-844-568-4624',
+    'address' => [
+      '@type' => 'PostalAddress',
+      'streetAddress' => '1639 11th St Suite 110-A',
+      'addressLocality' => 'Santa Monica',
+      'addressRegion' => 'CA',
+      'postalCode' => '90404',
+      'addressCountry' => 'US'
+    ],
+    'sameAs' => [
+      'https://www.linkedin.com/company/neural-command',
+      'https://g.co/kgs/EP6p5de'
+    ]
+  ],
+  'areaServed' => [ 
+    ['@type'=>'City','name'=>$cityName],
+    ['@type'=>'Country','name'=>'United States'] 
+  ],
+  'offers' => [
+    '@type' => 'Offer',
+    'priceCurrency' => 'USD',
+    'price' => 'Custom',
+    'availability' => 'https://schema.org/InStock',
+    'url' => $currentUrl
+  ],
+  'potentialAction' => [
+    '@type' => 'ContactAction',
+    'target' => nc_abs('/contact/'),
+    'name' => 'Request Consultation'
+  ],
+  'mainEntity' => [
     [
-      "@type" => "LocalBusiness",
-      "@id"   => $lbId,
-      "name"  => "Neural Command — ".$cityName,
-      "url"   => $PAGE,
-      "image" => $BASE."/assets/og/neural-command.jpg",
-      "telephone" => "+1-844-568-4624",
-      "parentOrganization" => [ "@id" => $orgId ],
-      "address" => [
-        "@type" => "PostalAddress",
-        // Use HQ address for NAP consistency; scope service via areaServed
-        "streetAddress"   => "1639 11th St Suite 110-A",
-        "addressLocality" => "Santa Monica",
-        "addressRegion"   => "CA",
-        "postalCode"      => "90404",
-        "addressCountry"  => "US"
-      ],
-      "areaServed" => [
-        "@type" => "City",
-        "name"  => $cityName,
-        "address" => [ "@type"=>"PostalAddress","addressRegion"=>$region,"addressCountry"=>$country ]
-      ],
-      "makesOffer" => array_map(function($o){ return ["@type"=>"Offer","itemOffered"=>$o['itemOffered']]; }, $offers ?: [["itemOffered"=>["@type"=>"Service","name"=>$svcName]]])
+      '@type'=>'Question',
+      'name'=>"Why is my page 'URL is not on Google'?",
+      'acceptedAnswer'=>['@type'=>'Answer','text'=>'It usually means Google found the URL but has not indexed it yet due to thin/duplicate content, weak internal links, crawl budget limits, canonical issues, or soft 404s.']
     ],
     [
-      "@type" => "Service",
-      "@id"   => $svcId,
-      "name"  => $svcName." (".$cityName.")",
-      "serviceType" => $svcName,
-      "provider" => [ "@id" => $lbId ],
-      "areaServed" => [ [ "@type"=>"City", "name"=>$cityName ] ],
-      "hasOfferCatalog" => !empty($offers) ? [
-        "@type" => "OfferCatalog",
-        "name"  => $svcName." Packages",
-        "itemListElement" => $offers
-      ] : null
+      '@type'=>'Question',
+      'name'=>'How do I fix "Crawled — currently not indexed"?',
+      'acceptedAnswer'=>['@type'=>'Answer','text'=>'Strengthen internal links from authoritative pages, add unique entity-rich content and FAQs, confirm 200 OK, add canonical, submit an updated sitemap, then request indexing once.']
+    ],
+    [
+      '@type'=>'Question',
+      'name'=>'What schema improves AI visibility?',
+      'acceptedAnswer'=>['@type'=>'Answer','text'=>'Service + FAQPage + LocalBusiness with potentialAction. Ensure accurate serviceType, areaServed, provider identity, and consistent canonicals.']
     ]
-  ]);
+  ]
+];
 
-  // Optional page-scoped FAQ (kept for AEO/LLM; SERP rich result restricted)
-  if (!empty($SERVICE_FAQS[$svcSlug])) {
-    $faqId = nc_id('#faq');
-    $GLOBALS['serviceSchemas'][] = [
-      "@type" => "FAQPage",
-      "@id"   => $faqId,
-      "mainEntity" => array_map(function($qa){
-        $qid = nc_id('#q-'.preg_replace('/[^a-z0-9]+/','-', strtolower(substr($qa['q'],0,80))));
-        return [
-          "@type" => "Question",
-          "@id"   => $qid,
-          "name"  => $qa['q'],
-          "acceptedAnswer" => [ "@type" => "Answer", "text" => $qa['a'] ]
-        ];
-      }, $SERVICE_FAQS[$svcSlug])
-    ];
-  }
-}
+// Add unified schema to global array for template rendering
+$GLOBALS['serviceSchemas'] = [$unifiedSchema];
 
-// Schema now handled by unified @graph system above
+// Build comprehensive JSON-LD schemas
+$organizationJson = build_organization_schema();
+$localBusinessJson = build_local_business_schema($cityName, $stateAbbr, $canonical);
+$serviceJson = build_service_schema($serviceName, $service, $cityName, $canonical);
 
-// All schemas now handled by unified @graph system above
+// Breadcrumbs
+$breadcrumbJson = build_breadcrumb_schema([
+  ['name' => 'Home', 'url' => 'https://nrlcmd.com/'],
+  ['name' => 'Services', 'url' => 'https://nrlcmd.com/services/'],
+  ['name' => $serviceName, 'url' => 'https://nrlcmd.com/services/'.$service.'/'],
+  ['name' => $cityName, 'url' => $canonical]
+]);
+
+// WebPage
+$webPageJson = build_webpage_schema($canonical, $pageTitle, $pageDesc);
+
+// FAQPage (enriched with token content)
+$faqJson = [
+  '@context'=>'https://schema.org',
+  '@type'=>'FAQPage',
+  '@id'=> $canonical.'#faq',
+  'mainEntity'=> [
+    [
+      '@type'=>'Question',
+      'name'=>"What does $serviceName include?",
+      'acceptedAnswer'=>['@type'=>'Answer','text'=>"We deliver $serviceName tailored to $cityName with full schema coverage, crawl clarity, and agentic SEO."]
+    ],
+    [
+      '@type'=>'Question',
+      'name'=>"How is $serviceName adapted for $cityName?",
+      'acceptedAnswer'=>['@type'=>'Answer','text'=>$sections['faq_local']]
+    ],
+    [
+      '@type'=>'Question',
+      'name'=>"Do you serve $cityName and nearby areas?",
+      'acceptedAnswer'=>['@type'=>'Answer','text'=>"Yes. We serve $cityName and surrounding regions with rapid deployment and ongoing optimization."]
+    ],
+    [
+      '@type'=>'Question',
+      'name'=>"How quickly can we see results?",
+      'acceptedAnswer'=>['@type'=>'Answer','text'=>"Technical improvements are immediate. AI visibility typically improves within 2-4 weeks as search engines re-crawl and incorporate changes."]
+    ]
+  ]
+];
 ?>
 <main class="container py-8">
   <h1><?= htmlspecialchars("$serviceName in $cityName", ENT_QUOTES) ?></h1>

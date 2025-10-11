@@ -10,7 +10,7 @@ $userParams = array_diff_key($_GET, array_flip($internalParams));
 $hasParams = !empty($userParams);
 $robotsContent = $hasParams ? 'noindex,follow' : 'index,follow,max-image-preview:large';
 ?>
-<!-- Canonical tag now handled by unified @graph system in templates/head.php -->
+<link rel="canonical" href="<?= htmlspecialchars($canonicalHref, ENT_QUOTES) ?>">
 <meta name="robots" content="<?= $robotsContent ?>">
 
 <!-- Agent discovery -->
