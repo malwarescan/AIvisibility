@@ -53,6 +53,13 @@ $cover_img = '/assets/geo16-cover.webp';
       <h2 id="geo16" class="text-2xl font-semibold mt-8 mb-4">GEO-16, Explained</h2>
       <p class="mb-6">GEO-16 is a sixteen-pillar scoring model linking on-page quality to citation behavior. It operationalizes six principles: People-First Answers, Structured Data, Provenance, Freshness, Risk Management, and RAG Fit.</p>
 
+      <!-- Interactive Algorithm Visualization -->
+      <div class="bg-gray-900 p-6 rounded-lg mb-8">
+        <h3 class="text-xl font-semibold text-white mb-4">Interactive GEO-16 Algorithm</h3>
+        <div id="geo16-algorithm" class="w-full h-96 border border-gray-600 rounded"></div>
+        <p class="text-gray-400 text-sm mt-2">Click and drag to explore the algorithm flow. Each node represents a check in the GEO-16 framework.</p>
+      </div>
+
       <h3 id="pillars" class="text-xl font-semibold mt-6 mb-4">Top-Impact Pillars</h3>
       <ul class="list-disc pl-6 mb-6">
         <li class="mb-2"><strong>Metadata & Freshness:</strong> Visible timestamps and machine-readable dates (datePublished, dateModified, ETag, sitemaps).</li>
@@ -175,3 +182,7 @@ $serviceSchemas = [
 // Add service schemas to global array for template rendering
 $GLOBALS['serviceSchemas'] = $serviceSchemas;
 ?>
+
+<!-- Ripple.js for algorithm visualization -->
+<script src="https://unpkg.com/ripple.js@latest/dist/ripple.min.js"></script>
+<script src="/assets/js/geo16-algorithm.js"></script>
