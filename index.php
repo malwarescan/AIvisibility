@@ -52,6 +52,7 @@ $path = Canonical::normalizePath($path);
 
 // Handle language-specific routing
 $currentLang = I18n::getCurrentLanguage();
+$originalPath = $path; // Store original path for debugging
 if ($currentLang !== I18n::getSupportedLanguages()[0]) { // Not default language
     // Remove language prefix from path for internal routing
     $path = preg_replace('/^\/' . preg_quote($currentLang, '/') . '(\/|$)/', '/', $path);
@@ -66,6 +67,14 @@ $setPage = function (string $page, array $extra = []): void {
         $_GET[$k] = $v;
     }
 };
+
+// Debug output for routing
+if (isset($_GET['debug'])) {
+    echo "Original Path: $originalPath\n";
+    echo "Current Language: $currentLang\n";
+    echo "Processed Path: $path\n";
+    echo "Request URI: " . ($_SERVER['REQUEST_URI'] ?? 'N/A') . "\n";
+}
 
 switch (true) {
     case $path === '/':

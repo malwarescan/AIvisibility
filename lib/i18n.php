@@ -91,7 +91,7 @@ class I18n {
     /**
      * Get language-specific URL
      */
-    public static function getUrl(string $path, string $lang = null): string {
+    public static function getUrl(string $path, ?string $lang = null): string {
         $lang = $lang ?? self::$currentLanguage;
         
         if ($lang === self::$defaultLanguage) {

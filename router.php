@@ -1,31 +1,21 @@
 <?php
-require __DIR__ . '/lib/router_map.php';
+// Router for PHP built-in server
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-$uri = $_SERVER['REQUEST_URI'] ?? '/';
-
-$path = parse_url($uri, PHP_URL_PATH) ?? '/';
-
-if ($path !== '/' && file_exists(__DIR__ . $path) && !is_dir(__DIR__ . $path)) {
-    return false;
+// Handle static files
+if ($uri !== '/' && file_exists(__DIR__ . $uri) && !is_dir(__DIR__ . $uri)) {
+    return false; // Let PHP server handle it
 }
 
-$resolution = resolve_route($uri);
-
-if (!empty($resolution['include'])) {
-    include $resolution['include'];
-    exit;
+// Handle directories
+if ($uri !== '/' && is_dir(__DIR__ . $uri)) {
+    $indexFile = __DIR__ . $uri . '/index.php';
+    if (file_exists($indexFile)) {
+        require $indexFile;
+        return true;
+    }
 }
 
-$_GET['page'] = $resolution['page'];
-if (!empty($resolution['slug'])) {
-    $_GET['slug'] = $resolution['slug'];
-}
-if (!empty($resolution['city'])) {
-    $_GET['city'] = $resolution['city'];
-}
-if (!empty($resolution['state'])) {
-    $_GET['state'] = $resolution['state'];
-}
-
-include __DIR__ . '/index.php';
-
+// All other requests go to main index.php
+require __DIR__ . '/index.php';
+return true;
