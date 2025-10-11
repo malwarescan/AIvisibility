@@ -69,11 +69,11 @@ flowchart TD
     class I,J,K outputNode
         </div>
         
-        <!-- Node Details Panel -->
-        <div id="node-details" class="mt-4">
-          <div class="bg-gray-800 p-4 rounded border border-gray-600">
-            <h4 class="text-white font-semibold mb-2">Click on any node above</h4>
-            <p class="text-gray-300 text-sm">Select a node in the flowchart to see detailed information about that step in the GEO-16 framework algorithm.</p>
+        <!-- Tooltip for node details -->
+        <div id="node-tooltip" class="fixed bg-gray-800 p-3 rounded-lg border border-gray-600 shadow-lg text-white text-sm z-50 pointer-events-none opacity-0 transition-opacity duration-200">
+          <div id="tooltip-content">
+            <h4 class="font-semibold mb-1">Hover over nodes</h4>
+            <p class="text-gray-300">Move your mouse over any node to see details</p>
           </div>
         </div>
         
@@ -311,11 +311,12 @@ document.addEventListener('DOMContentLoaded', function() {
   function addInteractivity() {
     console.log('Adding interactivity to Mermaid flowchart...');
     
-    const detailsDiv = document.getElementById('node-details');
+    const tooltip = document.getElementById('node-tooltip');
+    const tooltipContent = document.getElementById('tooltip-content');
     const mermaidDiv = document.querySelector('.mermaid');
     
-    if (!mermaidDiv) {
-      console.log('Mermaid div not found');
+    if (!mermaidDiv || !tooltip) {
+      console.log('Mermaid div or tooltip not found');
       return;
     }
     
@@ -323,28 +324,61 @@ document.addEventListener('DOMContentLoaded', function() {
     const clickableElements = mermaidDiv.querySelectorAll('g.node, rect, text, .node');
     console.log(`Found ${clickableElements.length} clickable elements`);
     
+    // Tooltip positioning function
+    function positionTooltip(e) {
+      const tooltipRect = tooltip.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      
+      let left = e.clientX + 10;
+      let top = e.clientY - tooltipRect.height - 10;
+      
+      // Adjust if tooltip would go off screen
+      if (left + tooltipRect.width > viewportWidth) {
+        left = e.clientX - tooltipRect.width - 10;
+      }
+      if (top < 0) {
+        top = e.clientY + 10;
+      }
+      
+      tooltip.style.left = left + 'px';
+      tooltip.style.top = top + 'px';
+    }
+    
+    // Show tooltip function
+    function showTooltip(nodeText, nodeId, e) {
+      const description = getNodeDescription(nodeId);
+      tooltipContent.innerHTML = `
+        <h4 class="font-semibold mb-1">${nodeText}</h4>
+        <p class="text-gray-300">${description}</p>
+      `;
+      
+      positionTooltip(e);
+      tooltip.style.opacity = '1';
+    }
+    
+    // Hide tooltip function
+    function hideTooltip() {
+      tooltip.style.opacity = '0';
+    }
+    
     if (clickableElements.length === 0) {
-      console.log('No clickable elements found, adding click handler to entire diagram');
-      mermaidDiv.addEventListener('click', function(e) {
-        console.log('Mermaid diagram clicked');
-        if (detailsDiv) {
-          detailsDiv.innerHTML = `
-            <div class="bg-gray-800 p-4 rounded border border-gray-600">
-              <h4 class="text-white font-semibold mb-2">GEO-16 Framework</h4>
-              <p class="text-gray-300 text-sm">Interactive flowchart showing the 16-pillar GEO framework for AI citation optimization. Click anywhere on the diagram to explore.</p>
-            </div>
-          `;
-        }
+      console.log('No clickable elements found, adding hover handler to entire diagram');
+      mermaidDiv.addEventListener('mouseenter', function(e) {
+        showTooltip('GEO-16 Framework', 'framework', e);
       });
+      mermaidDiv.addEventListener('mouseleave', hideTooltip);
+      mermaidDiv.addEventListener('mousemove', positionTooltip);
       return;
     }
     
-    // Add click handlers to individual elements
+    // Add hover handlers to individual elements
     clickableElements.forEach((element, index) => {
       element.style.cursor = 'pointer';
-      element.addEventListener('click', function(e) {
-        e.stopPropagation();
-        console.log(`Element ${index} clicked`);
+      
+      element.addEventListener('mouseenter', function(e) {
+        const nodeText = this.textContent || this.querySelector('text')?.textContent || `Node ${index}`;
+        const nodeId = this.id || `node-${index}`;
         
         // Remove previous highlights
         clickableElements.forEach(el => {
@@ -353,22 +387,38 @@ document.addEventListener('DOMContentLoaded', function() {
           el.style.stroke = '';
         });
         
-        // Highlight clicked element
+        // Highlight hovered element
         this.style.filter = 'brightness(1.3) drop-shadow(0 0 8px #00ff00)';
         this.style.strokeWidth = '4px';
         this.style.stroke = '#00ff00';
         
-        // Show details
-        if (detailsDiv) {
-          const nodeText = this.textContent || this.querySelector('text')?.textContent || `Node ${index}`;
-          const nodeId = this.id || `node-${index}`;
-          
-          detailsDiv.innerHTML = `
-            <div class="bg-gray-800 p-4 rounded border border-gray-600">
-              <h4 class="text-white font-semibold mb-2">${nodeText.split('<br/>')[0]}</h4>
-              <p class="text-gray-300 text-sm">${getNodeDescription(nodeId)}</p>
-            </div>
-          `;
+        showTooltip(nodeText, nodeId, e);
+      });
+      
+      element.addEventListener('mouseleave', function() {
+        // Remove highlight
+        this.style.filter = '';
+        this.style.strokeWidth = '';
+        this.style.stroke = '';
+        
+        hideTooltip();
+      });
+      
+      element.addEventListener('mousemove', function(e) {
+        positionTooltip(e);
+      });
+      
+      // Click handler for mobile/touch devices
+      element.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const nodeText = this.textContent || this.querySelector('text')?.textContent || `Node ${index}`;
+        const nodeId = this.id || `node-${index}`;
+        
+        // Toggle tooltip on click for mobile
+        if (tooltip.style.opacity === '1') {
+          hideTooltip();
+        } else {
+          showTooltip(nodeText, nodeId, e);
         }
       });
     });
