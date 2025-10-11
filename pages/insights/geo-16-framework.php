@@ -32,11 +32,71 @@ $cover_img = '/assets/geo16-cover.webp';
         Updated <time datetime="<?= $modified ?>"><?= date('F j, Y', strtotime($modified)) ?></time>
       </p>
       
-      <!-- Interactive GEO-16 Algorithm Visualization -->
+      <!-- GEO-16 Algorithm Visualization -->
       <div class="bg-gray-900 p-6 rounded-lg mb-8">
-        <h3 class="text-xl font-semibold text-white mb-4">Interactive GEO-16 Algorithm</h3>
-        <div id="geo16-algorithm" class="w-full h-96 border border-gray-600 rounded"></div>
-        <p class="text-gray-400 text-sm mt-2">Click and drag to explore the algorithm flow. Each node represents a check in the GEO-16 framework.</p>
+        <h3 class="text-xl font-semibold text-white mb-4">GEO-16 Framework Algorithm</h3>
+        <div class="bg-black p-4 rounded border border-gray-600 font-mono text-sm text-green-400">
+          <div class="text-center mb-4">
+            <div class="inline-block bg-green-600 text-white px-3 py-1 rounded text-xs">START</div>
+            <div class="text-xs mt-1">Page Input</div>
+          </div>
+          
+          <div class="flex justify-between items-center mb-4">
+            <div class="text-center">
+              <div class="bg-blue-600 text-white px-2 py-1 rounded text-xs mb-1">METADATA_CHECK()</div>
+              <div class="text-xs">• datePublished<br>• dateModified<br>• ETag<br>• sitemap_lastmod</div>
+            </div>
+            <div class="text-center">
+              <div class="bg-green-600 text-white px-2 py-1 rounded text-xs mb-1">SEMANTIC_HTML_CHECK()</div>
+              <div class="text-xs">• single_h1<br>• logical_h2_h3<br>• descriptive_anchors<br>• accessible_lists</div>
+            </div>
+            <div class="text-center">
+              <div class="bg-purple-600 text-white px-2 py-1 rounded text-xs mb-1">STRUCTURED_DATA_CHECK()</div>
+              <div class="text-xs">• valid_jsonld<br>• matches_content<br>• has_breadcrumbs<br>• canonical_present</div>
+            </div>
+          </div>
+          
+          <div class="flex justify-between items-center mb-4">
+            <div class="text-center">
+              <div class="bg-orange-600 text-white px-2 py-1 rounded text-xs mb-1">PROVENANCE_CHECK()</div>
+              <div class="text-xs">• authoritative_refs<br>• link_validation<br>• trust_indicators</div>
+            </div>
+            <div class="text-center">
+              <div class="bg-red-600 text-white px-2 py-1 rounded text-xs mb-1">RISK_MANAGEMENT_CHECK()</div>
+              <div class="text-xs">• content_quality<br>• spam_signals<br>• user_experience</div>
+            </div>
+            <div class="text-center">
+              <div class="bg-teal-600 text-white px-2 py-1 rounded text-xs mb-1">RAG_FIT_CHECK()</div>
+              <div class="text-xs">• machine_readable<br>• parsing_optimized<br>• ai_friendly</div>
+            </div>
+          </div>
+          
+          <div class="text-center mb-4">
+            <div class="bg-yellow-600 text-black px-4 py-2 rounded text-sm font-bold">CALCULATE_GEO_SCORE()</div>
+            <div class="text-xs mt-1">score = (active_pillars / 16) * 100</div>
+            <div class="text-xs">IF score >= 70 AND active_pillars >= 12: RETURN "HIGH_CITATION_LIKELIHOOD"</div>
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <div class="text-center">
+              <div class="bg-green-600 text-white px-2 py-1 rounded text-xs mb-1">Brave Summary</div>
+              <div class="text-xs">78% Citation Rate<br>GEO: 0.727</div>
+            </div>
+            <div class="text-center">
+              <div class="bg-yellow-600 text-black px-2 py-1 rounded text-xs mb-1">Google AI Overviews</div>
+              <div class="text-xs">72% Citation Rate<br>GEO: 0.687</div>
+            </div>
+            <div class="text-center">
+              <div class="bg-orange-600 text-white px-2 py-1 rounded text-xs mb-1">Perplexity</div>
+              <div class="text-xs">45% Citation Rate<br>GEO: 0.300</div>
+            </div>
+          </div>
+          
+          <div class="text-center mt-4 pt-2 border-t border-gray-600">
+            <div class="text-red-400 text-xs">GEO ≥ 0.70 Threshold Line</div>
+          </div>
+        </div>
+        <p class="text-gray-400 text-sm mt-2">Algorithm flow showing the 16-pillar GEO framework for AI citation optimization.</p>
       </div>
     </header>
 
@@ -177,6 +237,3 @@ $serviceSchemas = [
 $GLOBALS['serviceSchemas'] = $serviceSchemas;
 ?>
 
-<!-- Ripple.js for algorithm visualization -->
-<script src="https://unpkg.com/ripple.js@latest/dist/ripple.min.js"></script>
-<script src="/assets/js/geo16-algorithm.js"></script>
