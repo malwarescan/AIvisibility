@@ -12,7 +12,12 @@ $breadcrumbs = [
 // Set page context for the main template
 $ctx = [
   'title' => 'AI Answer Engine Citation Behavior: The GEO-16 Framework Explained | Neural Command',
-  'desc' => 'Neural Command, LLC explains GEO-16 — a 16-pillar model that improves AI citation likelihood via structured data, semantic HTML, and metadata freshness.'
+  'desc' => 'Neural Command, LLC explains GEO-16 — a 16-pillar model that improves AI citation likelihood via structured data, semantic HTML, and metadata freshness.',
+  'hreflang' => [
+    ['hreflang' => 'en', 'href' => Canonical::absolute('/insights/geo-16-framework/')],
+    ['hreflang' => 'ko', 'href' => Canonical::absolute('/insights/geo-16-framework/ko/')],
+    ['hreflang' => 'x-default', 'href' => Canonical::absolute('/insights/geo-16-framework/')]
+  ]
 ];
 
 $published = '2025-10-11';

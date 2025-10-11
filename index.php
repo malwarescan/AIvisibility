@@ -122,6 +122,10 @@ switch (true) {
     case $path === '/insights/geo-16-framework':
         $setPage('insights/geo-16-framework');
         break;
+    case $path === '/insights/geo-16-framework/ko/':
+    case $path === '/insights/geo-16-framework/ko':
+        $setPage('insights/geo-16-framework/ko');
+        break;
     case $path === '/resources/programmatic-seo-matrix-method/':
         require __DIR__.'/resources/programmatic-seo-matrix-method/index.php';
         exit;
@@ -177,7 +181,7 @@ if (strpos($page, '/') !== false) {
         $pageFile = __DIR__.'/pages/'.$pagePath.'.php';
     }
 } else {
-    $valid = ['home','about','services','service','service-city','service-state','state','city-service','process-audit','audit-results','contact','contact-confirmation','thanks','quote-thanks','services/service-hub','services/index','services/state-hub','services/city','process-contact','ai-consulting/index','resources','resources/diagnostic','resources/llmo-optimization','insights/index','insights/geo-16-framework'];
+    $valid = ['home','about','services','service','service-city','service-state','state','city-service','process-audit','audit-results','contact','contact-confirmation','thanks','quote-thanks','services/service-hub','services/index','services/state-hub','services/city','process-contact','ai-consulting/index','resources','resources/diagnostic','resources/llmo-optimization','insights/index','insights/geo-16-framework','insights/geo-16-framework/ko'];
     if (!in_array($page,$valid)) $page='home';
     $pageFile = __DIR__.'/pages/'.$page.'.php';
 }

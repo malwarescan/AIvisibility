@@ -27,12 +27,17 @@ if (!empty($breadcrumbs ?? [])) {
 }
 ?>
 <!doctype html>
-<html lang="en">
+<html lang="<?= !empty($ctx['lang']) ? esc($ctx['lang']) : 'en' ?>">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title><?= esc($ctx['title']) ?></title>
   <meta name="description" content="<?= esc($ctx['desc']) ?>" />
+  <?php if (!empty($ctx['hreflang'])): ?>
+    <?php foreach ($ctx['hreflang'] as $hreflang): ?>
+      <link rel="alternate" hreflang="<?= esc($hreflang['hreflang']) ?>" href="<?= esc($hreflang['href']) ?>" />
+    <?php endforeach; ?>
+  <?php endif; ?>
   <?php include __DIR__.'/../partials/head.php'; ?>
   <link rel="preload" href="/assets/css/styles.css" as="style" />
   <link rel="stylesheet" href="/assets/css/styles.css" />
