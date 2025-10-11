@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__).'/bootstrap/canonical.php';
+require_once dirname(__DIR__, 2).'/bootstrap/canonical.php';
 
 // Set breadcrumbs for the main template
 $breadcrumbs = [
