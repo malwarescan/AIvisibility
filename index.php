@@ -114,6 +114,14 @@ switch (true) {
     case $path === '/resources/llmo-optimization':
         $setPage('resources/llmo-optimization');
         break;
+    case $path === '/insights/':
+    case $path === '/insights':
+        require __DIR__.'/insights/index.php';
+        exit;
+    case $path === '/insights/geo-16-framework/':
+    case $path === '/insights/geo-16-framework':
+        require __DIR__.'/insights/geo-16-framework/index.php';
+        exit;
     case $path === '/resources/programmatic-seo-matrix-method/':
         require __DIR__.'/resources/programmatic-seo-matrix-method/index.php';
         exit;

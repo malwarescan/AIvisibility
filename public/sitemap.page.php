@@ -20,6 +20,8 @@ $corePages = [
   '/resources/diagnostic',
   '/resources/programmatic-seo-matrix-method',
   '/resources/llmo-optimization',
+  '/insights',
+  '/insights/geo-16-framework',
   '/quote-thanks',
   '/thanks',
   '/what-is-google-ai-mode',

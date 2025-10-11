@@ -1,208 +1,73 @@
 {
-  "name": "NRL CMD Agentic Actions",
-  "version": "1.2",
-  "etag": "W/\"agent-1.2-2025-10-10\"",
-  "lastModified": "2025-10-10T00:00:00Z",
-  "baseUrl": "https://nrlcmd.com",
-  "wellKnown": "/.well-known/agent.json",
+  "name": "Neural Command, LLC",
+  "url": "https://www.nrlcmd.com/",
+  "about": "Agentic SEO and AI visibility engineering. We optimize structured data, crawl clarity, and GEO-16 pillar compliance for AI Overviews and answer engines.",
   "contact": {
-    "email": "ops@nrlcmd.com",
-    "policy": "https://nrlcmd.com/privacy",
-    "security": "security@nrlcmd.com"
+    "telephone": "+1 844-568-4624",
+    "sameAs": [
+      "https://www.linkedin.com/company/neural-command/",
+      "https://g.co/kgs/EP6p5de"
+    ],
+    "address": {
+      "streetAddress": "1639 11th St Suite 110-A",
+      "addressLocality": "Santa Monica",
+      "addressRegion": "CA",
+      "postalCode": "90404",
+      "addressCountry": "US"
+    }
   },
-  "discovery": {
-    "sitemap": "https://nrlcmd.com/sitemap.xml",
-    "robots": "https://nrlcmd.com/robots.txt",
-    "openapi": "https://nrlcmd.com/openapi.json",
-    "jsonldGraph": "https://nrlcmd.com/#structured-data"
-  },
-  "languages": ["en-US","en-GB"],
-  "regions": ["US","GB"],
-  "serviceArea": ["global"],
-  "alternateNames": [
-    "Agentic SEO",
-    "ChatGPT Optimization",
-    "LLM Visibility",
-    "Generative Engine Optimization"
-  ],
   "capabilities": [
+    "schema-optimization",
+    "agentic-seo",
+    "generative-engine-optimization",
+    "ai-citation-strategy"
+  ],
+  "actions": [
     {
-      "id": "action:book_consult",
-      "action": "book_consult",
-      "schemaActionType": "https://schema.org/ReserveAction",
+      "name": "Request Consultation",
       "method": "POST",
-      "endpoint": "/api/book",
-      "contentType": "application/json",
-      "headers": ["Content-Type","Authorization?"],
-      "params": ["name","email","preferred_time?"],
-      "inputSchema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "type": "object",
-        "required": ["name","email"],
-        "properties": {
-          "name": {"type":"string","minLength":1},
-          "email": {"type":"string","format":"email"},
-          "preferred_time": {"type":"string","format":"date-time"},
-          "notes": {"type":"string","maxLength":500}
-        },
-        "additionalProperties": false
-      },
-      "responses": {
-        "200": {
-          "description": "Booked",
-          "schema": {
-            "type":"object",
-            "properties": {
-              "status": {"const":"confirmed"},
-              "bookingId": {"type":"string"},
-              "ical": {"type":"string","format":"uri"}
-            },
-            "required": ["status","bookingId"]
-          }
-        },
-        "400": {"description":"Bad request"},
-        "429": {"description":"Rate limit"},
-        "5xx": {"description":"Server error"}
-      },
-      "examples": [
-        {
-          "curl": "curl -X POST https://nrlcmd.com/api/book -H 'Content-Type: application/json' -d '{\"name\":\"Alex\",\"email\":\"alex@example.com\",\"preferred_time\":\"2025-10-12T16:00:00Z\"}'"
-        }
+      "endpoint": "https://www.nrlcmd.com/api/book",
+      "description": "Book a 15-minute consult about GEO-16 and AI citation readiness.",
+      "fields": [
+        {"name":"name","required":true},
+        {"name":"email","required":true},
+        {"name":"company","required":false},
+        {"name":"topic","required":false}
       ],
-      "description": "Book a consultation"
+      "potentialAction": "https://schema.org/ScheduleAction"
     },
     {
-      "id": "action:request_quote",
-      "action": "request_quote",
-      "schemaActionType": "https://schema.org/QuoteAction",
+      "name": "Get Schema Audit",
       "method": "POST",
-      "endpoint": "/api/quote",
-      "contentType": "application/json",
-      "params": ["name","email","service","notes?"],
-      "inputSchema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "type":"object",
-        "required":["name","email","service"],
-        "properties": {
-          "name":{"type":"string"},
-          "email":{"type":"string","format":"email"},
-          "service":{"type":"string","enum":["Agentic SEO","Schema Optimization","AI Visibility Audit","GEO"]},
-          "notes":{"type":"string","maxLength":1000},
-          "budgetRange":{"type":"string","enum":["<5k","5k-20k","20k-50k",">50k"]}
-        },
-        "additionalProperties": false
-      },
-      "responses": {
-        "200": {
-          "description":"Quote request accepted",
-          "schema": {
-            "type":"object",
-            "properties": {
-              "status":{"const":"received"},
-              "ticketId":{"type":"string"},
-              "slaHours":{"type":"integer"}
-            },
-            "required":["status","ticketId"]
-          }
-        }
-      },
-      "description": "Request a project quote"
-    },
-    {
-      "id": "action:visibility_audit",
-      "action": "visibility_audit",
-      "schemaActionType": "https://schema.org/AssessAction",
-      "method": "POST",
-      "endpoint": "/api/audit",
-      "contentType": "application/json",
-      "params": ["domain","industry","region?"],
-      "inputSchema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "type":"object",
-        "required":["domain","industry"],
-        "properties": {
-          "domain":{"type":"string","format":"hostname"},
-          "industry":{"type":"string"},
-          "region":{"type":"string"},
-          "depth":{"type":"integer","minimum":1,"maximum":3,"default":1}
-        },
-        "additionalProperties": false
-      },
-      "responses": {
-        "200": {
-          "description": "Audit summary",
-          "schema": {
-            "type":"object",
-            "properties": {
-              "status":{"const":"ok"},
-              "score":{"type":"number","minimum":0,"maximum":100},
-              "issues":{
-                "type":"array",
-                "items":{
-                  "type":"object",
-                  "properties":{
-                    "id":{"type":"string"},
-                    "severity":{"type":"string","enum":["low","medium","high"]},
-                    "message":{"type":"string"},
-                    "fix":{"type":"string"}
-                  },
-                  "required":["id","severity","message"]
-                }
-              }
-            },
-            "required":["status","score"]
-          }
-        }
-      },
-      "webhook": {
-        "callback": "https://nrlcmd.com/api/hooks/audit-result",
-        "expects": {
-          "type":"object",
-          "properties": {
-            "ticketId":{"type":"string"},
-            "resultUrl":{"type":"string","format":"uri"}
-          },
-          "required":["ticketId","resultUrl"]
-        }
-      },
-      "description": "Test AI visibility for a domain"
+      "endpoint": "https://www.nrlcmd.com/api/quote",
+      "description": "Submit a URL to receive a structured data and GEO-16 pillar audit.",
+      "fields": [
+        {"name":"url","required":true},
+        {"name":"email","required":true}
+      ],
+      "potentialAction": "https://schema.org/ReviewAction"
     }
   ],
-  "schemas": [
-    { "pattern": "/services/", "type": "https://schema.org/Service" },
-    { "pattern": "/ai-consulting/{city}/", "type": "https://schema.org/LocalBusiness" },
-    { "pattern": "/resources/diagnostic/", "type": "https://schema.org/TechArticle" },
-    { "url": "/sitemap.xml", "type": "sitemap" }
-  ],
-  "auth": {
-    "supported": ["none","bearer","hmac-sha256"],
-    "bearer": { "header": "Authorization", "format": "Bearer <token>" },
-    "hmac": { "header": "X-Signature", "algorithm": "HMAC-SHA256", "keyIdHeader": "X-Key-Id" }
-  },
-  "rateLimits": {
-    "anonymous": { "window": "1m", "limit": 60 },
-    "authenticated": { "window": "1m", "limit": 300 }
-  },
-  "errorModel": {
-    "type":"object",
-    "properties":{
-      "error":{"type":"string"},
-      "code":{"type":"string"},
-      "details":{"type":"object"}
-    },
-    "required":["error","code"]
-  },
-  "llmGuidance": {
-    "piiPolicy": "Minimize PII; only send required params.",
-    "retryPolicy": "Exponential backoff starting at 1s, max 3 retries.",
-    "timeoutMs": 15000
-  },
-  "linkage": {
-    "jsonld": [
-      { "actionId": "action:book_consult", "target": "https://nrlcmd.com/#bookConsultAction" },
-      { "actionId": "action:request_quote", "target": "https://nrlcmd.com/#requestQuoteAction" },
-      { "actionId": "action:visibility_audit", "target": "https://nrlcmd.com/#visibilityAuditAction" }
+  "content": {
+    "collections": [
+      {
+        "name": "Insights",
+        "url": "https://www.nrlcmd.com/insights/",
+        "itemType": "Article",
+        "items": [
+          {
+            "title": "AI Answer Engine Citation Behavior: The GEO-16 Framework Explained",
+            "url": "https://www.nrlcmd.com/insights/geo-16-framework/",
+            "datePublished": "2025-10-11",
+            "keywords": ["GEO-16","AI Overviews","Agentic SEO","Structured Data"]
+          }
+        ]
+      }
     ]
+  },
+  "meta": {
+    "version": "1.0",
+    "lastUpdated": "2025-10-11",
+    "license": "CC-BY-4.0"
   }
 }
-
