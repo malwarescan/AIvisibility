@@ -44,8 +44,8 @@ if (!empty($breadcrumbs ?? [])) {
     <?php endforeach; ?>
   <?php endif; ?>
   <?php include __DIR__.'/../partials/head.php'; ?>
-  <link rel="preload" href="/assets/css/styles.css" as="style" />
-  <link rel="stylesheet" href="/assets/css/styles.css" />
+         <link rel="preload" href="/assets/css/styles.css?v=<?= time() ?>" as="style" />
+         <link rel="stylesheet" href="/assets/css/styles.css?v=<?= time() ?>" />
 <?php 
 // Render non-CreativeWork schemas directly
 foreach($nonCreativeSchemas as $ld): ?>
