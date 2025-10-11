@@ -274,8 +274,9 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  // Initialize Mermaid with callback to ensure it's fully loaded
   mermaid.initialize({ 
-    startOnLoad: true,
+    startOnLoad: false, // We'll render manually
     theme: 'dark',
     flowchart: {
       useMaxWidth: false,
@@ -289,78 +290,87 @@ document.addEventListener('DOMContentLoaded', function() {
     maxEdges: 1000
   });
   
-  // Add interactivity after Mermaid renders
-  setTimeout(function() {
+  // Render the diagram and then add interactivity
+  const mermaidDiv = document.querySelector('.mermaid');
+  if (mermaidDiv) {
+    mermaid.render('geo16-diagram', mermaidDiv.textContent).then(function(result) {
+      mermaidDiv.innerHTML = result.svg;
+      console.log('Mermaid diagram rendered successfully');
+      
+      // Add interactivity after rendering
+      addInteractivity();
+    }).catch(function(error) {
+      console.error('Mermaid rendering error:', error);
+      // Fallback: try to add interactivity anyway
+      addInteractivity();
+    });
+  }
+  
+  function addInteractivity() {
     console.log('Adding interactivity to Mermaid flowchart...');
     
-    // Try multiple selectors to find nodes
-    const selectors = [
-      '.mermaid .node',
-      '.mermaid .nodeLabel',
-      '.mermaid g.node',
-      '.mermaid rect',
-      '.mermaid .flowchart-label'
-    ];
-    
-    let nodes = [];
-    for (let selector of selectors) {
-      nodes = document.querySelectorAll(selector);
-      if (nodes.length > 0) {
-        console.log(`Found ${nodes.length} nodes with selector: ${selector}`);
-        break;
-      }
-    }
-    
     const detailsDiv = document.getElementById('node-details');
+    const mermaidDiv = document.querySelector('.mermaid');
     
-    if (nodes.length === 0) {
-      console.log('No nodes found, trying alternative approach...');
-      // Try to find any clickable elements in the mermaid diagram
-      const mermaidDiv = document.querySelector('.mermaid');
-      if (mermaidDiv) {
-        const allElements = mermaidDiv.querySelectorAll('*');
-        console.log(`Found ${allElements.length} elements in mermaid diagram`);
-        
-        // Add click handler to the entire mermaid div
-        mermaidDiv.addEventListener('click', function(e) {
-          console.log('Mermaid diagram clicked');
-          if (detailsDiv) {
-            detailsDiv.innerHTML = `
-              <div class="bg-gray-800 p-4 rounded border border-gray-600">
-                <h4 class="text-white font-semibold mb-2">GEO-16 Framework</h4>
-                <p class="text-gray-300 text-sm">Interactive flowchart showing the 16-pillar GEO framework for AI citation optimization. Click anywhere on the diagram to explore.</p>
-              </div>
-            `;
-          }
-        });
-      }
-    } else {
-      nodes.forEach((node, index) => {
-        node.style.cursor = 'pointer';
-        node.addEventListener('click', function() {
-          console.log(`Node ${index} clicked`);
-          const nodeId = this.id || `node-${index}`;
-          const nodeText = this.textContent || this.querySelector('text')?.textContent || `Node ${index}`;
-          
-          // Remove previous highlights
-          nodes.forEach(n => n.classList.remove('highlighted'));
-          
-          // Highlight clicked node
-          this.classList.add('highlighted');
-          
-          // Show details
-          if (detailsDiv) {
-            detailsDiv.innerHTML = `
-              <div class="bg-gray-800 p-4 rounded border border-gray-600">
-                <h4 class="text-white font-semibold mb-2">${nodeText.split('<br/>')[0]}</h4>
-                <p class="text-gray-300 text-sm">${getNodeDescription(nodeId)}</p>
-              </div>
-            `;
-          }
-        });
-      });
+    if (!mermaidDiv) {
+      console.log('Mermaid div not found');
+      return;
     }
-  }, 2000);
+    
+    // Find all clickable elements in the SVG
+    const clickableElements = mermaidDiv.querySelectorAll('g.node, rect, text, .node');
+    console.log(`Found ${clickableElements.length} clickable elements`);
+    
+    if (clickableElements.length === 0) {
+      console.log('No clickable elements found, adding click handler to entire diagram');
+      mermaidDiv.addEventListener('click', function(e) {
+        console.log('Mermaid diagram clicked');
+        if (detailsDiv) {
+          detailsDiv.innerHTML = `
+            <div class="bg-gray-800 p-4 rounded border border-gray-600">
+              <h4 class="text-white font-semibold mb-2">GEO-16 Framework</h4>
+              <p class="text-gray-300 text-sm">Interactive flowchart showing the 16-pillar GEO framework for AI citation optimization. Click anywhere on the diagram to explore.</p>
+            </div>
+          `;
+        }
+      });
+      return;
+    }
+    
+    // Add click handlers to individual elements
+    clickableElements.forEach((element, index) => {
+      element.style.cursor = 'pointer';
+      element.addEventListener('click', function(e) {
+        e.stopPropagation();
+        console.log(`Element ${index} clicked`);
+        
+        // Remove previous highlights
+        clickableElements.forEach(el => {
+          el.style.filter = '';
+          el.style.strokeWidth = '';
+          el.style.stroke = '';
+        });
+        
+        // Highlight clicked element
+        this.style.filter = 'brightness(1.3) drop-shadow(0 0 8px #00ff00)';
+        this.style.strokeWidth = '4px';
+        this.style.stroke = '#00ff00';
+        
+        // Show details
+        if (detailsDiv) {
+          const nodeText = this.textContent || this.querySelector('text')?.textContent || `Node ${index}`;
+          const nodeId = this.id || `node-${index}`;
+          
+          detailsDiv.innerHTML = `
+            <div class="bg-gray-800 p-4 rounded border border-gray-600">
+              <h4 class="text-white font-semibold mb-2">${nodeText.split('<br/>')[0]}</h4>
+              <p class="text-gray-300 text-sm">${getNodeDescription(nodeId)}</p>
+            </div>
+          `;
+        }
+      });
+    });
+  }
 });
 
 function getNodeDescription(nodeId) {
