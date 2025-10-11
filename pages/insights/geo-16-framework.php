@@ -37,21 +37,21 @@ $cover_img = '/assets/geo16-cover.webp';
         <h3 class="text-xl font-semibold text-white mb-4">Interactive GEO-16 Framework Algorithm</h3>
         <div class="mermaid">
 flowchart TD
-    A[START<br/>Page Input] --> B[METADATA_CHECK<br/>• datePublished<br/>• dateModified<br/>• ETag<br/>• sitemap_lastmod]
-    A --> C[SEMANTIC_HTML_CHECK<br/>• single_h1<br/>• logical_h2_h3<br/>• descriptive_anchors<br/>• accessible_lists]
-    A --> D[STRUCTURED_DATA_CHECK<br/>• valid_jsonld<br/>• matches_content<br/>• has_breadcrumbs<br/>• canonical_present]
+    A["START<br/>Page Input"] --> B["METADATA_CHECK<br/>• datePublished<br/>• dateModified<br/>• ETag<br/>• sitemap_lastmod"]
+    A --> C["SEMANTIC_HTML_CHECK<br/>• single_h1<br/>• logical_h2_h3<br/>• descriptive_anchors<br/>• accessible_lists"]
+    A --> D["STRUCTURED_DATA_CHECK<br/>• valid_jsonld<br/>• matches_content<br/>• has_breadcrumbs<br/>• canonical_present"]
     
-    B --> E[PROVENANCE_CHECK<br/>• authoritative_refs<br/>• link_validation<br/>• trust_indicators]
-    C --> F[RISK_MANAGEMENT_CHECK<br/>• content_quality<br/>• spam_signals<br/>• user_experience]
-    D --> G[RAG_FIT_CHECK<br/>• machine_readable<br/>• parsing_optimized<br/>• ai_friendly]
+    B --> E["PROVENANCE_CHECK<br/>• authoritative_refs<br/>• link_validation<br/>• trust_indicators"]
+    C --> F["RISK_MANAGEMENT_CHECK<br/>• content_quality<br/>• spam_signals<br/>• user_experience"]
+    D --> G["RAG_FIT_CHECK<br/>• machine_readable<br/>• parsing_optimized<br/>• ai_friendly"]
     
-    E --> H[CALCULATE_GEO_SCORE<br/>score = active_pillars / 16 * 100<br/>IF score >= 70 AND active_pillars >= 12]
+    E --> H["CALCULATE_GEO_SCORE<br/>score = active_pillars / 16 * 100<br/>IF score >= 70 AND active_pillars >= 12"]
     F --> H
     G --> H
     
-    H --> I[Brave Summary<br/>78% Citation Rate<br/>GEO: 0.727]
-    H --> J[Google AI Overviews<br/>72% Citation Rate<br/>GEO: 0.687]
-    H --> K[Perplexity<br/>45% Citation Rate<br/>GEO: 0.300]
+    H --> I["Brave Summary<br/>78% Citation Rate<br/>GEO: 0.727"]
+    H --> J["Google AI Overviews<br/>72% Citation Rate<br/>GEO: 0.687"]
+    H --> K["Perplexity<br/>45% Citation Rate<br/>GEO: 0.300"]
     
     classDef startNode fill:#00ff00,stroke:#333,stroke-width:2px,color:#000
     classDef checkNode fill:#0066cc,stroke:#333,stroke-width:2px,color:#fff
@@ -213,8 +213,19 @@ $serviceSchemas = [
 $GLOBALS['serviceSchemas'] = $serviceSchemas;
 ?>
 
-<!-- CSS for interactive highlighting -->
+<!-- CSS for interactive highlighting and responsiveness -->
 <style>
+.mermaid {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.mermaid svg {
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100% !important;
+  overflow: visible !important;
+}
 .mermaid .node.highlighted {
   filter: brightness(1.3) drop-shadow(0 0 8px #00ff00);
   stroke-width: 4px !important;
@@ -227,6 +238,17 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
 .mermaid .node:hover {
   filter: brightness(1.1);
 }
+/* Responsive text sizing */
+@media (max-width: 768px) {
+  .mermaid svg {
+    font-size: 12px !important;
+  }
+}
+@media (max-width: 480px) {
+  .mermaid svg {
+    font-size: 10px !important;
+  }
+}
 </style>
 
 <!-- Mermaid.js for interactive flowchart -->
@@ -238,9 +260,12 @@ document.addEventListener('DOMContentLoaded', function() {
     theme: 'dark',
     flowchart: {
       useMaxWidth: true,
-      htmlLabels: true
+      htmlLabels: true,
+      curve: 'basis'
     },
-    securityLevel: 'loose'
+    securityLevel: 'loose',
+    maxTextSize: 50000,
+    maxEdges: 1000
   });
   
   // Add interactivity after Mermaid renders
