@@ -1,98 +1,170 @@
 <?php
-// AI Visibility Audit Results Page - SIMPLE VERSION
-$ctx['title'] = 'Audit Request Received | Neural Command';
-$ctx['desc'] = 'Your AI visibility audit request has been received.';
+// AI Visibility Diagnostic Results Page - Three-Layer Architecture
+$ctx['title'] = 'AI Visibility Diagnostic Results | Neural Command';
+$ctx['desc'] = 'Diagnostic analysis of how AI systems interpret your page.';
 
-// Get the audit request from session
+// Get diagnostic results from session
 session_start();
-$request = $_SESSION['audit_request'] ?? null;
+$results = $_SESSION['diagnostic_results'] ?? null;
 
-if (!$request) {
-    header('Location: /resources/diagnostic/');
-    exit;
+if (!$results) {
+    // Check for error
+    if (isset($_SESSION['diagnostic_error'])) {
+        $error = $_SESSION['diagnostic_error'];
+        unset($_SESSION['diagnostic_error']);
+    } else {
+        header('Location: /resources/diagnostic/');
+        exit;
+    }
 }
 
-$domain = $request['domain'] ?? '';
-$email = $request['email'] ?? '';
-$industry = $request['industry'] ?? '';
-$emailSent = $request['email_sent'] ?? false;
+$url = $results['url'] ?? '';
+$email = $results['email'] ?? '';
+$signals = $results['signals'] ?? [];
+$interpretation = $results['interpretation'] ?? [];
 ?>
 
 <main class="container py-8">
-  <div class="card mb-6">
-    <h1 class="text-3xl mb-4">Audit Request Received</h1>
-    <p class="text-gray-700 mb-4">
-      Thank you for requesting an AI visibility audit for <strong><?= esc($domain) ?></strong> in the <strong><?= esc($industry) ?></strong> industry.
-    </p>
-    
-    <?php if ($emailSent): ?>
-    <div class="p-4 bg-green-50 border border-green-200 rounded mb-4">
-      <p class="text-green-800">✓ Your request has been sent successfully. We'll review it and get back to you soon.</p>
+  <?php if (isset($error)): ?>
+    <div class="card mb-6">
+      <h1 class="text-3xl mb-4">Analysis Error</h1>
+      <p class="text-gray-700 mb-4">
+        We couldn't analyze the page. <?= esc($error) ?>
+      </p>
+      <a href="/resources/diagnostic/" class="button button-primary">Try Again</a>
     </div>
-    <?php else: ?>
-    <div class="p-4 bg-yellow-50 border border-yellow-200 rounded mb-4">
-      <p class="text-yellow-800">Note: Email delivery confirmation pending. Your request has been recorded.</p>
+  <?php else: ?>
+    
+    <!-- Human Framing: What This Is / Is Not -->
+    <div class="card mb-6" style="max-width: 900px;">
+      <h1 class="text-3xl mb-4">Diagnostic Results</h1>
+      <p class="text-gray-700 mb-4">
+        Here's what the systems are likely seeing when they interpret <strong><?= esc(parse_url($url, PHP_URL_HOST) . parse_url($url, PHP_URL_PATH)) ?></strong>.
+      </p>
+      <div class="p-4 bg-blue-50 border border-blue-200 rounded mb-4">
+        <p class="text-sm text-blue-800">
+          <strong>What this diagnostic can tell you:</strong> How language models interpret your content based on deterministic signals.<br>
+          <strong>What this diagnostic cannot tell you:</strong> Whether you will rank, get guaranteed citations, or exact visibility scores.
+        </p>
+      </div>
+    </div>
+
+    <!-- Layer 1: Deterministic Signals -->
+    <div class="card mb-6" style="max-width: 900px;">
+      <h2 class="text-xl mb-4">Deterministic Signals</h2>
+      <p class="text-sm text-gray-600 mb-4">These are real data points extracted from the page, not model opinions.</p>
+      
+      <div class="space-y-4">
+        <div>
+          <h3 class="font-semibold mb-2">Page Structure</h3>
+          <ul class="text-sm text-gray-700 space-y-1">
+            <li><strong>Page Type:</strong> <?= esc($signals['page_type'] ?? 'unknown') ?></li>
+            <li><strong>Page Role:</strong> <?= esc($signals['page_role_alignment'] ?? 'unknown') ?></li>
+            <li><strong>Content Length:</strong> <?= number_format($signals['content_structure']['content_length'] ?? 0) ?> characters</li>
+            <li><strong>Has H1:</strong> <?= ($signals['content_structure']['has_h1'] ?? false) ? 'Yes' : 'No' ?></li>
+            <li><strong>Paragraphs:</strong> <?= $signals['content_structure']['paragraph_count'] ?? 0 ?></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="font-semibold mb-2">Indexability</h3>
+          <ul class="text-sm text-gray-700 space-y-1">
+            <li><strong>Noindex:</strong> <?= ($signals['indexability']['noindex'] ?? false) ? 'Yes (page may not be indexed)' : 'No' ?></li>
+            <li><strong>Canonical:</strong> <?= ($signals['canonical_status']['present'] ?? false) ? 'Yes' : 'No' ?></li>
+            <?php if ($signals['canonical_status']['present'] ?? false): ?>
+            <li><strong>Self-referential:</strong> <?= ($signals['canonical_status']['self_referential'] ?? false) ? 'Yes' : 'No' ?></li>
+            <?php endif; ?>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="font-semibold mb-2">Schema & Entities</h3>
+          <ul class="text-sm text-gray-700 space-y-1">
+            <li><strong>Schema Types:</strong> <?= !empty($signals['schema_types']) ? esc(implode(', ', $signals['schema_types'])) : 'None detected' ?></li>
+            <li><strong>Entity References:</strong> <?= !empty($signals['entity_references']) ? esc(implode(', ', $signals['entity_references'])) : 'None detected' ?></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="font-semibold mb-2">Link Structure</h3>
+          <ul class="text-sm text-gray-700 space-y-1">
+            <li><strong>Internal Links:</strong> <?= $signals['internal_link_depth']['internal_links'] ?? 0 ?></li>
+            <li><strong>External Links:</strong> <?= $signals['internal_link_depth']['external_links'] ?? 0 ?></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layer 2: AI Interpretation -->
+    <?php if (!isset($interpretation['error']) && !isset($interpretation['fallback']) && !empty($interpretation['interpretation'])): ?>
+    <div class="card mb-6" style="max-width: 900px;">
+      <h2 class="text-xl mb-4">How AI Systems Are Likely Interpreting This Page</h2>
+      <p class="text-sm text-gray-600 mb-4">
+        This interpretation is based on the deterministic signals above. It explains patterns and identifies ambiguity, not guarantees.
+      </p>
+      <div class="p-4 bg-gray-50 rounded border">
+        <div class="prose prose-sm max-w-none">
+          <?= nl2br(esc($interpretation['interpretation'])) ?>
+        </div>
+      </div>
+    </div>
+    <?php elseif (isset($interpretation['error'])): ?>
+    <div class="card mb-6" style="max-width: 900px;">
+      <h2 class="text-xl mb-4">AI Interpretation</h2>
+      <p class="text-sm text-gray-600 mb-4">
+        AI interpretation is unavailable. The deterministic signals above still provide valuable diagnostic information.
+      </p>
+      <p class="text-xs text-gray-500"><?= esc($interpretation['error']) ?></p>
     </div>
     <?php endif; ?>
-  </div>
 
-  <div class="card mb-6">
-    <h2 class="text-xl mb-4">What Happens Next</h2>
-    <ul class="space-y-3">
-      <li class="flex items-start">
-        <span class="text-gray-500 mr-3 mt-1">1.</span>
-        <span>We'll review your audit request and analyze <strong><?= esc($domain) ?></strong></span>
-      </li>
-      <li class="flex items-start">
-        <span class="text-gray-500 mr-3 mt-1">2.</span>
-        <span>We'll check your presence in ChatGPT, Perplexity, Google AI Overviews, and other AI systems</span>
-      </li>
-      <li class="flex items-start">
-        <span class="text-gray-500 mr-3 mt-1">3.</span>
-        <span>We'll send a detailed assessment to <strong><?= esc($email) ?></strong> with actionable recommendations</span>
-      </li>
-    </ul>
-  </div>
-
-  <div class="card mb-6">
-    <h2 class="text-xl mb-4">Test Your Current AI Visibility</h2>
-    <p class="text-gray-600 mb-4">While you wait, try these prompts in ChatGPT to see how your business currently appears:</p>
-    <div class="space-y-3">
-      <div class="bg-gray-50 p-3 rounded border">
-        <div class="flex items-start justify-between">
-          <div class="font-mono text-sm flex-1">"Name the top 5 <?= esc($industry) ?> companies with the best customer reviews."</div>
-          <button onclick="copyToClipboard('Name the top 5 <?= esc($industry, ENT_QUOTES) ?> companies with the best customer reviews.')" class="ml-2 px-2 py-1 text-xs button secondary">
-            Copy
-          </button>
+    <!-- Layer 3: Human Framing - What This Means -->
+    <div class="card mb-6" style="max-width: 900px;">
+      <h2 class="text-xl mb-4">What This Diagnostic Can and Cannot Tell You</h2>
+      <div class="space-y-4">
+        <div>
+          <h3 class="font-semibold mb-2">This diagnostic explains:</h3>
+          <ul class="list-disc text-sm text-gray-700 space-y-1 ml-5">
+            <li>How language models parse the signals present on your page</li>
+            <li>Where ambiguity or missing context exists</li>
+            <li>What is clearly understood about your content</li>
+            <li>What cannot be inferred without deeper access</li>
+          </ul>
         </div>
-      </div>
-      <div class="bg-gray-50 p-3 rounded border">
-        <div class="flex items-start justify-between">
-          <div class="font-mono text-sm flex-1">"What are the leading <?= esc($industry) ?> providers in the market?"</div>
-          <button onclick="copyToClipboard('What are the leading <?= esc($industry, ENT_QUOTES) ?> providers in the market?')" class="ml-2 px-2 py-1 text-xs button secondary">
-            Copy
-          </button>
+        
+        <div>
+          <h3 class="font-semibold mb-2">This diagnostic does not:</h3>
+          <ul class="list-disc text-sm text-gray-700 space-y-1 ml-5">
+            <li>Guarantee rankings or citations</li>
+            <li>Predict what Google's algorithm will do</li>
+            <li>Provide scores or ratings</li>
+            <li>Replace human analysis of your specific context</li>
+          </ul>
         </div>
-      </div>
-      <div class="bg-gray-50 p-3 rounded border">
-        <div class="flex items-start justify-between">
-          <div class="font-mono text-sm flex-1">"Who should I contact for <?= esc($industry) ?> services?"</div>
-          <button onclick="copyToClipboard('Who should I contact for <?= esc($industry, ENT_QUOTES) ?> services?')" class="ml-2 px-2 py-1 text-xs button secondary">
-            Copy
-          </button>
-        </div>
+        
+        <p class="text-sm text-gray-600 mt-4">
+          Understanding how AI systems interpret information is what separates working strategies from marketing claims. If you want to discuss how to improve your AI visibility based on these signals, start a conversation.
+        </p>
       </div>
     </div>
-  </div>
 
-  <div class="card">
-    <h2 class="text-xl mb-4">Next Steps</h2>
-    <div class="flex flex-col sm:flex-row gap-4">
-      <a href="/contact/" class="button button-primary text-center">Book a Consultation</a>
-      <a href="/services/agentic-seo/" class="button button-secondary text-center">Learn About Agentic SEO</a>
-      <a href="/resources/diagnostic/" class="button button-secondary text-center">Request Another Audit</a>
+    <!-- Next Steps -->
+    <div class="card" style="max-width: 900px;">
+      <h2 class="text-xl mb-4">Next Steps</h2>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <button data-contact-trigger class="button button-primary text-center">Start a Conversation</button>
+        <a href="/resources/diagnostic/" class="button button-secondary text-center">Analyze Another Page</a>
+        <a href="/services/ai-search-optimization/" class="button button-secondary text-center">Learn About AI Search Optimization</a>
+      </div>
     </div>
-  </div>
+
+  <?php endif; ?>
+  
+  <?php
+  // Clear session data after display
+  unset($_SESSION['diagnostic_results']);
+  unset($_SESSION['diagnostic_error']);
+  ?>
 </main>
 
 <script>

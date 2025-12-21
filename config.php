@@ -8,7 +8,10 @@ if (!defined('NC_NAME')) {
     define('NC_LINKEDIN', 'https://www.linkedin.com/company/neural-command/');
     define('NC_GKP', 'https://g.co/kgs/EP6p5de');
     define('NC_BASEURL', 'https://nrlcmd.com');
-    define('NC_EMAIL', 'hirejoelm@gmail.com');
+    // Single source of truth for public-facing contact email
+    define('NC_CONTACT_EMAIL', 'contact@neuralcommandllc.com');
+    // Legacy alias for backward compatibility (will be removed)
+    define('NC_EMAIL', 'contact@neuralcommandllc.com');
     define('NC_EMAIL_FROM', 'noreply@neuralcommandllc.com');
     define('NC_ALLOWED_HOSTS', [
         'nrlcmd.com',

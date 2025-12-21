@@ -11,10 +11,10 @@
       <p class="contact-modal-intro">Choose how you'd like to reach us:</p>
       
       <div class="contact-options">
-        <a id="contact-email-link" href="mailto:<?= esc(NC_EMAIL) ?>" class="contact-option contact-option-email">
+        <a id="contact-email-link" href="mailto:<?= esc(NC_CONTACT_EMAIL) ?>" class="contact-option contact-option-email">
           <div class="contact-option-content">
             <strong>Email Us</strong>
-            <span class="contact-option-desc"><?= esc(NC_EMAIL) ?></span>
+            <span class="contact-option-desc"><?= esc(NC_CONTACT_EMAIL) ?></span>
           </div>
         </a>
         

@@ -200,7 +200,7 @@
     // Get email from the link's current href (set by PHP)
     const currentHref = emailLink.href;
     const emailMatch = currentHref.match(/^mailto:([^?]+)/);
-    const email = emailMatch ? emailMatch[1] : 'hirejoelm@gmail.com';
+    const email = emailMatch ? emailMatch[1] : 'contact@neuralcommandllc.com';
     
     // Encode for mailto: URL
     const encodedSubject = encodeURIComponent(subject);

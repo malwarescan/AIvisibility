@@ -15,7 +15,7 @@ $ctx = [
 // Contact page schema: ContactPoint + Organization + WebPage (per Master Schema Matrix)
 // NO Service, NO FAQ, NO Offer, NO Product
 $contactPointSchema = SchemaEnforcement::generateContactPoint(
-  NC_EMAIL,
+  NC_CONTACT_EMAIL,
   NC_PHONE,
   'General'
 );

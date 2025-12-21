@@ -210,7 +210,7 @@ if (!empty($cityName) && !empty($region)) {
     <p>Ready to transform your AI visibility in <?= htmlspecialchars($cityName, ENT_QUOTES) ?>? Contact Neural Command to discuss how our <?= htmlspecialchars($serviceName, ENT_QUOTES) ?> services can deliver measurable results.</p>
     <p>
       <strong>Phone:</strong> <a href="tel:+18445684624">+1-844-568-4624</a><br>
-      <strong>Email:</strong> <a href="mailto:hello@nrlcmd.com">hello@nrlcmd.com</a>
+      <strong>Email:</strong> <a href="mailto:<?= esc(NC_CONTACT_EMAIL) ?>"><?= esc(NC_CONTACT_EMAIL) ?></a>
     </p>
     <p>
       <a href="<?= htmlspecialchars(Canonical::absolute('/contact/'), ENT_QUOTES) ?>">Contact Us</a> | 

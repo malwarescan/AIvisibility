@@ -70,9 +70,9 @@ function sendViaSMTP($subject, $body, $replyName, $replyEmail) {
             $mail->SMTPSecure = NC_SMTP_SECURE === 'ssl' ? PHPMailer::ENCRYPTION_SMTPS : PHPMailer::ENCRYPTION_STARTTLS;
         }
 
-        $fromAddress = NC_EMAIL_FROM ?: NC_EMAIL;
+        $fromAddress = NC_EMAIL_FROM ?: NC_CONTACT_EMAIL;
         $mail->setFrom($fromAddress, NC_NAME);
-        $mail->addAddress(NC_EMAIL);
+        $mail->addAddress(NC_CONTACT_EMAIL);
         if (!empty($replyEmail)) {
             $mail->addReplyTo($replyEmail, $replyName);
         }
@@ -90,13 +90,13 @@ function sendViaSMTP($subject, $body, $replyName, $replyEmail) {
 
 function sendViaMailFunction($subject, $body, $replyEmail) {
     $headers = [
-        'From: '.(NC_EMAIL_FROM ?: NC_EMAIL),
+        'From: '.(NC_EMAIL_FROM ?: NC_CONTACT_EMAIL),
         'Reply-To: '.esc($replyEmail),
         'X-Mailer: PHP/'.phpversion(),
         'Content-Type: text/plain; charset=UTF-8'
     ];
 
-    return mail(NC_EMAIL, $subject, $body, implode("\r\n", $headers));
+    return mail(NC_CONTACT_EMAIL, $subject, $body, implode("\r\n", $headers));
 }
 
 function sendContactEmail($name, $email, $notes, $context = '', $intent = '', $leadScore = 0, $pathDepth = 1, $schemaTypes = [], $pageUrl = '', $referrer = '') {

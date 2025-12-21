@@ -3,7 +3,7 @@ require_once __DIR__.'/../config.php';
 
 // Email sending function
 function sendQuoteEmail($name, $email, $notes) {
-    $to = NC_EMAIL;
+    $to = NC_CONTACT_EMAIL;
     $subject = "New Quote Request from " . esc($name);
     
     // Create email template
