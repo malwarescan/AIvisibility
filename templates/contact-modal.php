@@ -25,6 +25,13 @@
           </div>
         </a>
         
+        <a href="sms:+12135628438?body=<?= rawurlencode('hi i am contacting you from nrlcmd.com - interested in your services') ?>" class="contact-option contact-option-sms">
+          <div class="contact-option-content">
+            <strong>Text Us</strong>
+            <span class="contact-option-desc">+1 (213) 562-8438</span>
+          </div>
+        </a>
+        
         <?php if (!empty(NC_LINKEDIN)): ?>
         <a href="<?= esc(NC_LINKEDIN) ?>" target="_blank" rel="noopener" class="contact-option contact-option-linkedin">
           <div class="contact-option-content">

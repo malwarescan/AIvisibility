@@ -50,70 +50,57 @@ $BASE = nc_base_url();
 $PAGE = nc_page_url();
 $orgId = nc_org_id();
 
-$cityName  = $cityName ?? null;     // e.g., "Austin"
-$region    = $stateAbbr ?? null;    // e.g., "TX"
+// Ensure cityName and region are not empty strings
+$cityName  = !empty($cityName) ? $cityName : null;     // e.g., "Austin"
+$region    = !empty($stateAbbr) ? $stateAbbr : null;    // e.g., "TX"
 $country   = 'US';
 $svcName   = $serviceName ?? 'Agentic SEO';
 $svcSlug   = $service ?? 'agentic-seo';
 
-if ($cityName && $region) {
+if (!empty($cityName) && !empty($region)) {
+  require_once __DIR__.'/../../lib/schema_enforcement.php';
+  
   $svcId = nc_id('#service');
   $lbId  = nc_id('#local');
 
-  $offers = [];
-  if (!empty($PRICING[$svcSlug])) {
-    foreach ($PRICING[$svcSlug] as $p) {
-      $offers[] = [
-        "@type" => "Offer",
-        "priceSpecification" => [
-          "@type" => "UnitPriceSpecification",
-          "priceCurrency" => $p['currency'] ?? "USD",
-          "price" => (float)($p['price'] ?? 0)
-        ],
-        "itemOffered" => [ "@type" => "Service", "name" => $p['name'] ?? $svcName ]
-      ];
-    }
-  }
+  // Initialize schema_nodes array
+  $GLOBALS['schema_nodes'] = $GLOBALS['schema_nodes'] ?? [];
 
-  $GLOBALS['serviceSchemas'] = array_merge($GLOBALS['serviceSchemas'] ?? [], [
-    [
-      "@type" => "LocalBusiness",
-      "@id"   => $lbId,
-      "name"  => "Neural Command — ".$cityName,
-      "url"   => $PAGE,
-      "image" => $BASE."/assets/og/neural-command.jpg",
-      "telephone" => "+1-844-568-4624",
-      "parentOrganization" => [ "@id" => $orgId ],
-      "address" => [
-        "@type" => "PostalAddress",
-        // Use HQ address for NAP consistency; scope service via areaServed
-        "streetAddress"   => "1639 11th St Suite 110-A",
-        "addressLocality" => "Santa Monica",
-        "addressRegion"   => "CA",
-        "postalCode"      => "90404",
-        "addressCountry"  => "US"
-      ],
-      "areaServed" => [
-        "@type" => "City",
-        "name"  => $cityName,
-        "address" => [ "@type"=>"PostalAddress","addressRegion"=>$region,"addressCountry"=>$country ]
-      ],
-      "makesOffer" => array_map(function($o){ return ["@type"=>"Offer","itemOffered"=>$o['itemOffered']]; }, $offers ?: [["itemOffered"=>["@type"=>"Service","name"=>$svcName]]])
+  // Generate LocalBusiness schema using SchemaEnforcement helper
+  $localBusinessSchema = SchemaEnforcement::generateLocalBusiness([
+    '@id' => $lbId,
+    'name' => "Neural Command — ".$cityName,
+    'url' => $PAGE,
+    'image' => $BASE."/assets/og/neural-command.jpg",
+    'telephone' => "+1-844-568-4624",
+    'parentOrganization' => [ "@id" => $orgId ],
+    'address' => [
+      "@type" => "PostalAddress",
+      "streetAddress"   => "1639 11th St Suite 110-A",
+      "addressLocality" => "Santa Monica",
+      "addressRegion"   => "CA",
+      "postalCode"      => "90404",
+      "addressCountry"  => "US"
     ],
-    [
-      "@type" => "Service",
-      "@id"   => $svcId,
-      "name"  => $svcName." (".$cityName.")",
-      "serviceType" => $svcName,
-      "provider" => [ "@id" => $lbId ],
-      "areaServed" => [ [ "@type"=>"City", "name"=>$cityName ] ],
-      "hasOfferCatalog" => !empty($offers) ? [
-        "@type" => "OfferCatalog",
-        "name"  => $svcName." Packages",
-        "itemListElement" => $offers
-      ] : null
+    'areaServed' => [
+      "@type" => "City",
+      "name"  => $cityName,
+      "address" => [ "@type"=>"PostalAddress","addressRegion"=>$region,"addressCountry"=>$country ]
     ]
   ]);
+  
+  // Generate Service schema using SchemaEnforcement helper
+  $serviceSchema = SchemaEnforcement::generateService([
+    '@id' => $svcId,
+    'name' => $svcName." (".$cityName.")",
+    'serviceType' => $svcName,
+    'provider' => [ "@id" => $lbId ],
+    'areaServed' => [ [ "@type"=>"City", "name"=>$cityName ] ]
+  ]);
+  
+  // Push schemas into schema_nodes (standardized contract)
+  $GLOBALS['schema_nodes'][] = $localBusinessSchema;
+  $GLOBALS['schema_nodes'][] = $serviceSchema;
 
   // Optional page-scoped FAQ (kept for AEO/LLM; SERP rich result restricted)
   if (!empty($SERVICE_FAQS[$svcSlug])) {

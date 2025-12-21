@@ -1,5 +1,5 @@
 <?php global $SERVICES, $CITIES; ?>
-<footer class="container mx-auto px-4 py-12 border-t mt-16 text-sm">
+<footer class="container py-12 border-t mt-16 text-sm">
 
   <div class="grid md:grid-cols-3 gap-4">
 

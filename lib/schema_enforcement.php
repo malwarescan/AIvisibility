@@ -24,7 +24,7 @@ if (!class_exists('SchemaEnforcement')) {
     const ALLOWED_BY_ROLE = [
       'homepage' => ['Organization', 'WebSite', 'WebPage', 'BreadcrumbList'],
       'contact' => ['Organization', 'WebPage', 'ContactPoint', 'BreadcrumbList'],
-      'service' => ['Organization', 'WebPage', 'Service', 'BreadcrumbList', 'FAQPage'],
+      'service' => ['Organization', 'WebPage', 'Service', 'LocalBusiness', 'BreadcrumbList', 'FAQPage'],
       'authority' => ['Organization', 'WebPage', 'Article', 'BlogPosting', 'BreadcrumbList'],
       'hybrid' => ['Organization', 'WebPage', 'BreadcrumbList']
     ];
@@ -156,7 +156,7 @@ if (!class_exists('SchemaEnforcement')) {
       
       foreach ($node as $key => $value) {
         // Remove prohibited nested objects
-        if ($key === 'hasOfferCatalog' || $key === 'offers' || $key === 'review') {
+        if ($key === 'hasOfferCatalog' || $key === 'offers' || $key === 'review' || $key === 'makesOffer') {
           continue;
         }
         
@@ -219,6 +219,65 @@ if (!class_exists('SchemaEnforcement')) {
       // - aggregateRating
       
       return $service;
+    }
+    
+    /**
+     * Generate clean LocalBusiness schema (no Offer, no Review)
+     */
+    public static function generateLocalBusiness(array $data): array {
+      $localBusiness = [
+        '@type' => 'LocalBusiness',
+        'name' => $data['name'] ?? '',
+        'url' => $data['url'] ?? '',
+        'telephone' => $data['telephone'] ?? '',
+        'parentOrganization' => $data['parentOrganization'] ?? ['@id' => 'https://nrlcmd.com/#org']
+      ];
+      
+      if (!empty($data['@id'])) {
+        $localBusiness['@id'] = $data['@id'];
+      }
+      
+      if (!empty($data['image'])) {
+        $localBusiness['image'] = $data['image'];
+      }
+      
+      if (!empty($data['address'])) {
+        $localBusiness['address'] = $data['address'];
+      }
+      
+      if (!empty($data['areaServed'])) {
+        $localBusiness['areaServed'] = $data['areaServed'];
+      }
+      
+      // Explicitly DO NOT include:
+      // - makesOffer
+      // - offers
+      // - review
+      // - aggregateRating
+      
+      return $localBusiness;
+    }
+    
+    /**
+     * Count schema types in graph (for debugging)
+     */
+    public static function countTypes(array $graph): array {
+      $counts = [];
+      $nodes = $graph['@graph'] ?? [];
+      foreach ($nodes as $n) {
+        if (!is_array($n)) continue;
+        $t = $n['@type'] ?? null;
+        if (is_array($t)) {
+          foreach ($t as $tt) {
+            if (is_string($tt)) {
+              $counts[$tt] = ($counts[$tt] ?? 0) + 1;
+            }
+          }
+        } elseif (is_string($t)) {
+          $counts[$t] = ($counts[$t] ?? 0) + 1;
+        }
+      }
+      return $counts;
     }
   }
 }

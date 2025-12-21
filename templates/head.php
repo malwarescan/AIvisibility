@@ -85,24 +85,44 @@ $graph[] = [
   "itemListElement" => $itemListElement
 ];
 
-// --- Page-specific schemas appended by pages/* via $GLOBALS
+// --- Page-specific schemas appended by pages/* via $GLOBALS['schema_nodes']
+$GLOBALS['schema_nodes'] = $GLOBALS['schema_nodes'] ?? [];
+
+// Legacy support: migrate old keys to schema_nodes
 if (!empty($GLOBALS['serviceSchemas']) && is_array($GLOBALS['serviceSchemas'])) {
-  $graph = array_merge($graph, $GLOBALS['serviceSchemas']);
+  foreach ($GLOBALS['serviceSchemas'] as $node) {
+    if (is_array($node) && !empty($node['@type'])) {
+      $GLOBALS['schema_nodes'][] = $node;
+    }
+  }
 }
-if (!empty($GLOBALS['articleSchema']) && is_array($GLOBALS['articleSchema'])) {
-  $graph[] = $GLOBALS['articleSchema'];
+if (!empty($GLOBALS['articleSchema']) && is_array($GLOBALS['articleSchema']) && !empty($GLOBALS['articleSchema']['@type'])) {
+  $GLOBALS['schema_nodes'][] = $GLOBALS['articleSchema'];
 }
-if (!empty($GLOBALS['videoSchema']) && is_array($GLOBALS['videoSchema'])) {
-  $graph[] = $GLOBALS['videoSchema'];
+if (!empty($GLOBALS['videoSchema']) && is_array($GLOBALS['videoSchema']) && !empty($GLOBALS['videoSchema']['@type'])) {
+  $GLOBALS['schema_nodes'][] = $GLOBALS['videoSchema'];
 }
-if (!empty($GLOBALS['contactPointSchema']) && is_array($GLOBALS['contactPointSchema'])) {
-  $graph[] = $GLOBALS['contactPointSchema'];
+if (!empty($GLOBALS['contactPointSchema']) && is_array($GLOBALS['contactPointSchema']) && !empty($GLOBALS['contactPointSchema']['@type'])) {
+  $GLOBALS['schema_nodes'][] = $GLOBALS['contactPointSchema'];
+}
+
+// --- Merge page-provided schema nodes into graph (flat array)
+foreach ($GLOBALS['schema_nodes'] as $node) {
+  if (is_array($node) && !empty($node['@type'])) {
+    $graph[] = $node;
+  }
 }
 
 // --- Schema Enforcement (Master Schema Matrix)
 require_once __DIR__.'/../lib/schema_enforcement.php';
 $pageType = SchemaEnforcement::getPageType(parse_url($PAGE, PHP_URL_PATH) ?? '/');
 $graph = SchemaEnforcement::cleanGraph($graph, $pageType);
+
+// --- Convert to @graph structure for output
+$graphStructure = [
+  '@context' => 'https://schema.org',
+  '@graph' => $graph
+];
 ?>
 <!doctype html>
 <html lang="<?= !empty($ctx['lang']) ? esc($ctx['lang']) : 'en' ?>">
@@ -127,7 +147,7 @@ $alt_ko = str_contains($PAGE, '/ko/') ? $PAGE : rtrim($BASE.'/ko'.parse_url($PAG
          <link rel="stylesheet" href="/assets/css/styles.css?v=<?= time() ?>" />
 <?php 
 // Emit one unified @graph
-echo nc_jsonld($graph);
+echo '<script type="application/ld+json">'.json_encode($graphStructure, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE).'</script>';
 ?>
   <script>
     document.addEventListener('DOMContentLoaded', function() {

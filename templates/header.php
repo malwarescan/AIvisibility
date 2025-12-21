@@ -1,6 +1,11 @@
 <header class="header">
   <div class="container">
     <h1><a href="/">neuralCommand(get visible)</a></h1>
+    <button type="button" class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
     <nav class="nav">
       <a href="/services/"><?= I18n::t('nav.services') ?></a>
       <a href="/resources/diagnostic/">Are we invisible to AI?</a>

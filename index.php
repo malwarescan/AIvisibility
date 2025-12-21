@@ -115,7 +115,32 @@ switch (true) {
         $_GET['state'] = $m[1];
         $setPage('services/state-hub');
         break;
-    case preg_match('#^/services/([^/]+)/([^/]+)/$#', $path, $m):
+    // Handle service + state name (e.g., /services/agentic-seo/texas)
+    case preg_match('#^/services/([^/]+)/(texas|california|new-york|florida|illinois|washington|massachusetts|georgia|north-carolina|michigan|virginia|tennessee|arizona|colorado|oregon)(/|$)$#', $path, $m):
+        $_GET['service'] = $m[1];
+        // Convert state name to state key
+        $stateMap = [
+            'texas' => 'tx',
+            'california' => 'ca',
+            'new-york' => 'ny',
+            'florida' => 'fl',
+            'illinois' => 'il',
+            'washington' => 'wa',
+            'massachusetts' => 'ma',
+            'georgia' => 'ga',
+            'north-carolina' => 'nc',
+            'michigan' => 'mi',
+            'virginia' => 'va',
+            'tennessee' => 'tn',
+            'arizona' => 'az',
+            'colorado' => 'co',
+            'oregon' => 'or'
+        ];
+        $_GET['state'] = $stateMap[strtolower($m[2])] ?? strtolower($m[2]);
+        $_GET['slug'] = $m[1];
+        $setPage('service-state');
+        break;
+    case preg_match('#^/services/([^/]+)/([^/]+)/?$#', $path, $m):
         $_GET['service'] = $m[1];
         $_GET['city'] = $m[2];
         $setPage('services/city');
@@ -228,15 +253,34 @@ if (strpos($page, '/') !== false) {
     }
 } else {
     $valid = ['home','about','services','service','service-city','service-state','state','city-service','process-audit','audit-results','contact','contact-confirmation','thanks','quote-thanks','services/service-hub','services/index','services/state-hub','services/city','process-contact','ai-consulting/index','resources','resources/diagnostic','resources/llmo-optimization','insights/index','insights/geo-16-framework','insights/geo-16-framework/ko'];
-    if (!in_array($page,$valid)) $page='home';
-    $pageFile = __DIR__.'/pages/'.$page.'.php';
+    if (!in_array($page,$valid)) {
+        // Invalid page - return 404 instead of redirecting to homepage
+        http_response_code(404);
+        $page = '404';
+        $pageFile = __DIR__.'/pages/404.php';
+        if (!file_exists($pageFile)) {
+            // If 404 page doesn't exist, create a simple one
+            $pageFile = null;
+        }
+    } else {
+        $pageFile = __DIR__.'/pages/'.$page.'.php';
+    }
 }
 
 ob_start();
-if (file_exists($pageFile)) {
+if ($pageFile && file_exists($pageFile)) {
     include $pageFile;
 } else {
-    include __DIR__.'/pages/home.php';
+    // Page file doesn't exist - return 404, don't show homepage
+    http_response_code(404);
+    // Try to include a 404 page, otherwise show minimal error
+    $errorPage = __DIR__.'/pages/404.php';
+    if (file_exists($errorPage)) {
+        include $errorPage;
+    } else {
+        // Minimal 404 response if no 404 page exists
+        echo '<!DOCTYPE html><html><head><title>404 Not Found</title></head><body><h1>404 Not Found</h1><p>The requested page could not be found.</p></body></html>';
+    }
 }
 $pageContent = ob_get_clean();
 
