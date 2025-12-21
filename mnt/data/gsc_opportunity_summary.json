@@ -1,0 +1,268 @@
+{
+  "query_opportunities": [
+    {
+      "query": "AI SEO services",
+      "impressions": 12500,
+      "position": 8.2,
+      "ctr": 0.8,
+      "opportunity_score": 85.4
+    },
+    {
+      "query": "ChatGPT optimization",
+      "impressions": 8900,
+      "position": 12.1,
+      "ctr": 0.6,
+      "opportunity_score": 78.9
+    },
+    {
+      "query": "schema markup optimization",
+      "impressions": 6700,
+      "position": 6.8,
+      "ctr": 1.2,
+      "opportunity_score": 82.1
+    },
+    {
+      "query": "AI visibility audit",
+      "impressions": 5400,
+      "position": 9.5,
+      "ctr": 0.7,
+      "opportunity_score": 75.3
+    },
+    {
+      "query": "agentic SEO",
+      "impressions": 4200,
+      "position": 11.3,
+      "ctr": 0.5,
+      "opportunity_score": 71.8
+    },
+    {
+      "query": "AI consulting services",
+      "impressions": 3800,
+      "position": 14.7,
+      "ctr": 0.4,
+      "opportunity_score": 68.2
+    },
+    {
+      "query": "programmatic SEO",
+      "impressions": 3200,
+      "position": 7.9,
+      "ctr": 1.1,
+      "opportunity_score": 79.6
+    },
+    {
+      "query": "AI Overview optimization",
+      "impressions": 2800,
+      "position": 13.2,
+      "ctr": 0.3,
+      "opportunity_score": 65.4
+    },
+    {
+      "query": "entity graph implementation",
+      "impressions": 2100,
+      "position": 10.8,
+      "ctr": 0.9,
+      "opportunity_score": 76.5
+    },
+    {
+      "query": "authority building AI",
+      "impressions": 1800,
+      "position": 15.1,
+      "ctr": 0.2,
+      "opportunity_score": 58.7
+    }
+  ],
+  "page_opportunities": [
+    {
+      "page": "/services/agentic-seo/new-york-ny/",
+      "impressions": 3200,
+      "clicks": 45,
+      "ctr": 1.4,
+      "position": 8.7,
+      "priority_score": 89.2,
+      "top_queries": ["AI SEO services", "agentic SEO", "AI Overview optimization"]
+    },
+    {
+      "page": "/services/chatgpt-optimization/los-angeles-ca/",
+      "impressions": 2800,
+      "clicks": 38,
+      "ctr": 1.4,
+      "position": 9.1,
+      "priority_score": 87.5,
+      "top_queries": ["ChatGPT optimization", "AI visibility audit", "LLM mentions"]
+    },
+    {
+      "page": "/services/schema-optimizer/chicago-il/",
+      "impressions": 2400,
+      "clicks": 52,
+      "ctr": 2.2,
+      "position": 6.3,
+      "priority_score": 85.8,
+      "top_queries": ["schema markup optimization", "JSON-LD", "structured data"]
+    },
+    {
+      "page": "/services/ai-consulting/san-francisco-ca/",
+      "impressions": 2100,
+      "clicks": 28,
+      "ctr": 1.3,
+      "position": 12.4,
+      "priority_score": 82.1,
+      "top_queries": ["AI consulting services", "AI integration", "machine learning consulting"]
+    },
+    {
+      "page": "/services/ai-visibility-audit/dallas-tx/",
+      "impressions": 1900,
+      "clicks": 31,
+      "ctr": 1.6,
+      "position": 7.8,
+      "priority_score": 84.3,
+      "top_queries": ["AI visibility audit", "ChatGPT audit", "AI search optimization"]
+    },
+    {
+      "page": "/services/programmatic-seo/phoenix-az/",
+      "impressions": 1700,
+      "clicks": 42,
+      "ctr": 2.5,
+      "position": 5.9,
+      "priority_score": 88.7,
+      "top_queries": ["programmatic SEO", "PSEO", "automated SEO"]
+    },
+    {
+      "page": "/services/entity-graph/boston-ma/",
+      "impressions": 1500,
+      "clicks": 35,
+      "ctr": 2.3,
+      "position": 6.7,
+      "priority_score": 86.4,
+      "top_queries": ["entity graph implementation", "knowledge graph", "semantic SEO"]
+    },
+    {
+      "page": "/services/authority-pr/seattle-wa/",
+      "impressions": 1300,
+      "clicks": 18,
+      "ctr": 1.4,
+      "position": 14.2,
+      "priority_score": 78.9,
+      "top_queries": ["authority building AI", "digital PR", "AI citations"]
+    },
+    {
+      "page": "/services/agentic-actions-api/miami-fl/",
+      "impressions": 1100,
+      "clicks": 22,
+      "ctr": 2.0,
+      "position": 8.9,
+      "priority_score": 81.6,
+      "top_queries": ["agentic actions API", "AI automation", "LLM integration"]
+    },
+    {
+      "page": "/services/ai-visibility-monitoring/denver-co/",
+      "impressions": 1000,
+      "clicks": 25,
+      "ctr": 2.5,
+      "position": 7.2,
+      "priority_score": 83.8,
+      "top_queries": ["AI visibility monitoring", "AI tracking", "LLM analytics"]
+    },
+    {
+      "page": "/services/agentic-seo/los-angeles-ca/",
+      "impressions": 950,
+      "clicks": 19,
+      "ctr": 2.0,
+      "position": 9.5,
+      "priority_score": 80.3,
+      "top_queries": ["AI SEO services", "agentic SEO", "AI Overview optimization"]
+    },
+    {
+      "page": "/services/chatgpt-optimization/chicago-il/",
+      "impressions": 900,
+      "clicks": 21,
+      "ctr": 2.3,
+      "position": 8.1,
+      "priority_score": 82.7,
+      "top_queries": ["ChatGPT optimization", "AI visibility audit", "LLM mentions"]
+    },
+    {
+      "page": "/services/schema-optimizer/san-francisco-ca/",
+      "impressions": 850,
+      "clicks": 28,
+      "ctr": 3.3,
+      "position": 5.2,
+      "priority_score": 91.5,
+      "top_queries": ["schema markup optimization", "JSON-LD", "structured data"]
+    },
+    {
+      "page": "/services/ai-consulting/new-york-ny/",
+      "impressions": 800,
+      "clicks": 12,
+      "ctr": 1.5,
+      "position": 13.8,
+      "priority_score": 75.6,
+      "top_queries": ["AI consulting services", "AI integration", "machine learning consulting"]
+    },
+    {
+      "page": "/services/ai-visibility-audit/phoenix-az/",
+      "impressions": 750,
+      "clicks": 17,
+      "ctr": 2.3,
+      "position": 8.4,
+      "priority_score": 81.9,
+      "top_queries": ["AI visibility audit", "ChatGPT audit", "AI search optimization"]
+    },
+    {
+      "page": "/services/programmatic-seo/boston-ma/",
+      "impressions": 700,
+      "clicks": 24,
+      "ctr": 3.4,
+      "position": 4.8,
+      "priority_score": 93.2,
+      "top_queries": ["programmatic SEO", "PSEO", "automated SEO"]
+    },
+    {
+      "page": "/services/entity-graph/seattle-wa/",
+      "impressions": 650,
+      "clicks": 20,
+      "ctr": 3.1,
+      "position": 6.1,
+      "priority_score": 87.8,
+      "top_queries": ["entity graph implementation", "knowledge graph", "semantic SEO"]
+    },
+    {
+      "page": "/services/authority-pr/miami-fl/",
+      "impressions": 600,
+      "clicks": 14,
+      "ctr": 2.3,
+      "position": 11.7,
+      "priority_score": 79.4,
+      "top_queries": ["authority building AI", "digital PR", "AI citations"]
+    },
+    {
+      "page": "/services/agentic-actions-api/denver-co/",
+      "impressions": 550,
+      "clicks": 16,
+      "ctr": 2.9,
+      "position": 7.6,
+      "priority_score": 84.1,
+      "top_queries": ["agentic actions API", "AI automation", "LLM integration"]
+    },
+    {
+      "page": "/services/ai-visibility-monitoring/chicago-il/",
+      "impressions": 500,
+      "clicks": 18,
+      "ctr": 3.6,
+      "position": 5.4,
+      "priority_score": 89.7,
+      "top_queries": ["AI visibility monitoring", "AI tracking", "LLM analytics"]
+    }
+  ],
+  "device_mix": {
+    "mobile": 0.68,
+    "desktop": 0.28,
+    "tablet": 0.04
+  },
+  "country_top": [
+    {"country": "US", "percentage": 0.85},
+    {"country": "CA", "percentage": 0.06},
+    {"country": "GB", "percentage": 0.04},
+    {"country": "AU", "percentage": 0.03},
+    {"country": "DE", "percentage": 0.02}
+  ]
+}

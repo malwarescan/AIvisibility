@@ -1,0 +1,52 @@
+RewriteEngine On
+
+# Force HTTPS
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# Collapse multiple slashes (except protocol)
+RewriteCond %{THE_REQUEST} \s/+([^\ ]*)
+RewriteRule .* https://%{HTTP_HOST}/%1 [R=301,L]
+
+# Strip noisy params that create duplicates
+RewriteCond %{QUERY_STRING} (^|&)(utm_source|utm_medium|utm_campaign|utm_term|utm_content|ref|fbclid|gclid|msclkid|_hsmi|_hsenc)=[^&]* [NC]
+RewriteRule ^ %{REQUEST_URI}? [R=301,L]
+
+# Remove trailing slash for non-directories (except root)
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/$
+RewriteCond %{REQUEST_URI} !^/sitemap.*\.xml\.php$
+RewriteCond %{REQUEST_URI} !^/sitemaps/sitemap-.*\.xml$
+RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+# AI Consulting city pages
+RewriteRule ^ai-consulting/([^/]+)/?$ ai-consulting/index.php [L,QSA]
+RewriteRule ^ai-consulting/?$ ai-consulting/index.php [L,QSA]
+
+# Front controller
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L,QSA]
+
+# Speed + crawl confidence
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Agent.json CORS and caching
+<Files "agent.json">
+  Header set Access-Control-Allow-Origin "*"
+  Header set Cache-Control "max-age=3600, must-revalidate"
+  FileETag MTime Size
+</Files>
+
+<FilesMatch "^agent\.json$|^\.well-known/agent\.json$">
+  Header set Access-Control-Allow-Origin "*"
+  Header set Cache-Control "max-age=3600, must-revalidate"
+</FilesMatch>
+
+# Gzip/Brotli if available (optional)
+# See your server modules or CDN for compression settings

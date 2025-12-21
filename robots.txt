@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+# Block obvious non-content areas only if they exist
+# Disallow: /admin/
+# Disallow: /private/
+
+Sitemap: https://www.nrlcmd.com/sitemap.xml
+
+# Agentic affordances for LLMs / task-bots:
+# Public actions documented at /agent.json

@@ -1,0 +1,31 @@
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "@id": "https://nrlcmd.com/services/schema-optimizer/chicago-il/#breadcrumb",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://nrlcmd.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Services",
+      "item": "https://nrlcmd.com/services/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Schema Optimizer",
+      "item": "https://nrlcmd.com/services/schema-optimizer/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "name": "Chicago",
+      "item": "https://nrlcmd.com/services/schema-optimizer/chicago-il/"
+    }
+  ]
+}

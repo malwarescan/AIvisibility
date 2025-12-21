@@ -1,0 +1,5 @@
+{
+  "name": "nrl-cmd/site",
+  "require": { "php": "^8.2",
+    "phpmailer/phpmailer": "^6.11" }
+}

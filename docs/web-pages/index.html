@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Command - AI Search Optimization Platform | Complete User Documentation</title>
+    <meta name="description" content="Comprehensive user documentation for Neural Command's AI search optimization platform. Learn how to use 9 specialized tools for authority monitoring, schema optimization, performance analytics, and AI search visibility enhancement across ChatGPT, Claude, Perplexity, and Google AI Overviews.">
+    <meta name="keywords" content="AI search optimization, ChatGPT optimization, Claude optimization, Perplexity optimization, Google AI Overviews, authority signals, E-A-T framework, schema markup, citation building, AI search tools">
+    <meta name="author" content="Neural Command Team">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Neural Command - AI Search Optimization Platform">
+    <meta property="og:description" content="Comprehensive user documentation for Neural Command's AI search optimization platform with 9 specialized tools for maximum AI search visibility.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://neuralcommand.com/docs">
+    <meta property="og:image" content="https://neuralcommand.com/images/neural-command-platform.jpg">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Neural Command - AI Search Optimization Platform">
+    <meta name="twitter:description" content="Master AI search optimization with 9 specialized tools for ChatGPT, Claude, Perplexity, and Google AI Overviews.">
+    <meta name="twitter:image" content="https://neuralcommand.com/images/neural-command-platform.jpg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://neuralcommand.com/docs">
+    
+    <!-- Styles -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            color: #2d3748;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            color: #4a5568;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .tool-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .tool-card h3 {
+            font-size: 1.5rem;
+            color: #2d3748;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .tool-card p {
+            color: #4a5568;
+            margin-bottom: 20px;
+        }
+        
+        .tool-features {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+        
+        .tool-features li {
+            padding: 5px 0;
+            color: #4a5568;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .tool-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #48bb78;
+            font-weight: bold;
+        }
+        
+        .tool-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: transform 0.2s ease;
+        }
+        
+        .tool-link:hover {
+            transform: scale(1.05);
+        }
+        
+        .getting-started {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .getting-started h2 {
+            font-size: 2.5rem;
+            color: #2d3748;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .step {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+        
+        .step h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+        
+        .step p {
+            color: #4a5568;
+        }
+        
+        .best-practices {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .best-practices h2 {
+            font-size: 2.5rem;
+            color: #2d3748;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .practice-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .practice-category h3 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .practice-category ul {
+            list-style: none;
+        }
+        
+        .practice-category li {
+            padding: 8px 0;
+            color: #4a5568;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .practice-category li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .footer {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .footer h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+        
+        .footer p {
+            color: #4a5568;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .steps {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Neural Command User Documentation</h1>
+            <p>Comprehensive guides for AI search optimization across ChatGPT, Claude, Perplexity, and Google AI Overviews. Master 9 specialized tools designed specifically for AI search engines.</p>
+        </header>
+
+        <div class="tools-grid">
+            <div class="tool-card">
+                <h3>Authority Signal Monitor</h3>
+                <p>Monitor and optimize authority signals across 20+ AI platforms using Google's E-A-T framework.</p>
+                <ul class="tool-features">
+                    <li>Real-time E-A-T analysis</li>
+                    <li>Multi-platform authority monitoring</li>
+                    <li>Actionable optimization recommendations</li>
+                    <li>Competitive analysis and benchmarking</li>
+                </ul>
+                <a href="authority-signal-monitor.html" class="tool-link">Read Documentation</a>
+            </div>
+
+            <div class="tool-card">
+                <h3>Schema Reverse Engineer</h3>
+                <p>Extract, analyze, and generate optimized schema markup from websites appearing in Google AI Overviews.</p>
+                <ul class="tool-features">
+                    <li>AI Overview schema extraction</li>
+                    <li>AI-enhanced schema generation</li>
+                    <li>Voice search optimization</li>
+                    <li>Trust signal implementation</li>
+                </ul>
+                <a href="schema-reverse-engineer.html" class="tool-link">Read Documentation</a>
+            </div>
+
+            <div class="tool-card">
+                <h3>Batch Authority Analyzer</h3>
+                <p>Compare multiple domains simultaneously to identify authority gaps and optimization opportunities.</p>
+                <ul class="tool-features">
+                    <li>Concurrent multi-domain analysis</li>
+                    <li>Competitive intelligence and gap analysis</li>
+                    <li>Export capabilities for team collaboration</li>
+                    <li>Real-time progress tracking</li>
+                </ul>
+                <a href="batch-authority-analyzer.html" class="tool-link">Read Documentation</a>
+            </div>
+
+            <div class="tool-card">
+                <h3>AI Content Auditor</h3>
+                <p>Comprehensive technical optimization for AI search engines with detailed audit capabilities.</p>
+                <ul class="tool-features">
+                    <li>Technical SEO, accessibility, and performance auditing</li>
+                    <li>AI-specific optimization recommendations</li>
+                    <li>Content structure and engagement analysis</li>
+                    <li>Competitive benchmarking</li>
+                </ul>
+                <a href="ai-content-auditor.html" class="tool-link">Read Documentation</a>
+            </div>
+
+            <div class="tool-card">
+                <h3>Performance Analytics</h3>
+                <p>Track AI-specific metrics that traditional SEO tools ignore, focusing on conversational queries and knowledge graph optimization.</p>
+                <ul class="tool-features">
+                    <li>AI visibility tracking across platforms</li>
+                    <li>Conversational query performance analysis</li>
+                    <li>Knowledge graph presence monitoring</li>
+                    <li>Predictive analytics and trend forecasting</li>
+                </ul>
+                <a href="performance-analytics.html" class="tool-link">Read Documentation</a>
+            </div>
+
+            <div class="tool-card">
+                <h3>Agent Connect</h3>
+                <p>API integrations and automation for AI search optimization across multiple platforms.</p>
+                <ul class="tool-features">
+                    <li>Secure API management and authentication</li>
+                    <li>Automated workflow creation</li>
+                    <li>Real-time data synchronization</li>
+                    <li>Performance monitoring and alerting</li>
+                </ul>
+                <a href="agent-connect.html" class="tool-link">Read Documentation</a>
+            </div>
+
+            <div class="tool-card">
+                <h3>QueryMind</h3>
+                <p>6-month forecasting for AI search trends and opportunities using advanced predictive analytics.</p>
+                <ul class="tool-features">
+                    <li>Advanced trend prediction and forecasting</li>
+                    <li>Opportunity identification and assessment</li>
+                    <li>Risk analysis and mitigation strategies</li>
+                    <li>Strategic planning and implementation guidance</li>
+                </ul>
+                <a href="querymind.html" class="tool-link">Read Documentation</a>
+            </div>
+
+            <div class="tool-card">
+                <h3>AgentRank</h3>
+                <p>Predict how AI agents will rank content across 20+ platforms using advanced ranking algorithms.</p>
+                <ul class="tool-features">
+                    <li>Multi-platform ranking prediction</li>
+                    <li>Platform-specific optimization recommendations</li>
+                    <li>Competitive analysis and positioning</li>
+                    <li>Ranking factor analysis</li>
+                </ul>
+                <a href="agentrank.html" class="tool-link">Read Documentation</a>
+            </div>
+
+            <div class="tool-card">
+                <h3>CitationFlow</h3>
+                <p>Increase citation frequency and authority signals across AI platforms through advanced citation optimization.</p>
+                <ul class="tool-features">
+                    <li>Citation tracking across multiple platforms</li>
+                    <li>High-probability opportunity identification</li>
+                    <li>Citation-attracting content strategies</li>
+                    <li>Quality assessment and improvement</li>
+                </ul>
+                <a href="citationflow.html" class="tool-link">Read Documentation</a>
+            </div>
+        </div>
+
+        <section class="getting-started">
+            <h2>Getting Started with Neural Command</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Choose Your Focus</h3>
+                    <p>Identify which aspect of AI search optimization you want to improve and select the appropriate tools.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Start with Authority</h3>
+                    <p>Begin with Authority Signal Monitor for comprehensive E-A-T analysis and optimization.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Conduct Technical Audit</h3>
+                    <p>Use AI Content Auditor to identify technical optimization opportunities and improvements.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Optimize Schema</h3>
+                    <p>Implement Schema Reverse Engineer to optimize schema markup for AI Overviews.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <h3>Track Performance</h3>
+                    <p>Monitor AI-specific metrics using Performance Analytics and track improvements over time.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">6</div>
+                    <h3>Build Authority</h3>
+                    <p>Use CitationFlow to build authority signals through strategic citation building.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="best-practices">
+            <h2>AI Search Optimization Best Practices</h2>
+            <div class="practice-categories">
+                <div class="practice-category">
+                    <h3>AI Search Optimization Fundamentals</h3>
+                    <ul>
+                        <li>Authority First: Focus on building strong E-A-T signals</li>
+                        <li>Platform Understanding: Each AI platform has unique preferences</li>
+                        <li>Content Quality: Create comprehensive, accurate, and helpful content</li>
+                        <li>Technical Excellence: Ensure fast loading, mobile optimization, and accessibility</li>
+                        <li>Continuous Monitoring: Regular analysis and adjustment based on performance data</li>
+                    </ul>
+                </div>
+                <div class="practice-category">
+                    <h3>Content Strategy</h3>
+                    <ul>
+                        <li>Conversational Approach: Write content that answers natural language questions</li>
+                        <li>Comprehensive Coverage: Provide thorough, detailed information on topics</li>
+                        <li>Expert Authority: Demonstrate subject matter expertise and credentials</li>
+                        <li>Current Information: Keep content fresh and up-to-date</li>
+                        <li>User Experience: Prioritize helpfulness and user satisfaction</li>
+                    </ul>
+                </div>
+                <div class="practice-category">
+                    <h3>Technical Optimization</h3>
+                    <ul>
+                        <li>Schema Markup: Implement comprehensive structured data</li>
+                        <li>Performance: Optimize for Core Web Vitals and loading speed</li>
+                        <li>Accessibility: Ensure content is accessible to all users</li>
+                        <li>Security: Implement HTTPS and security best practices</li>
+                        <li>Mobile Optimization: Ensure excellent mobile experience</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <h2>Support and Resources</h2>
+            <p>Need help with Neural Command? We provide comprehensive support to help you succeed with AI search optimization.</p>
+            <p><strong>Documentation</strong> • <strong>Video Tutorials</strong> • <strong>Technical Support</strong> • <strong>Community Forum</strong></p>
+        </footer>
+    </div>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Neural Command - AI Search Optimization Platform",
+        "description": "Comprehensive user documentation for Neural Command's AI search optimization platform, featuring 9 specialized tools for authority monitoring, schema optimization, performance analytics, and AI search visibility enhancement across ChatGPT, Claude, Perplexity, and Google AI Overviews.",
+        "url": "https://neuralcommand.com/docs",
+        "author": {
+            "@type": "Person",
+            "name": "Neural Command Team"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Neural Command",
+            "url": "https://neuralcommand.com",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://neuralcommand.com/images/logo.png"
+            }
+        },
+        "datePublished": "2025-01-14",
+        "dateModified": "2025-01-14",
+        "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://neuralcommand.com"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Documentation",
+                    "item": "https://neuralcommand.com/docs"
+                }
+            ]
+        },
+        "mainEntity": [
+            {
+                "@type": "HowTo",
+                "name": "How to Get Started with Neural Command",
+                "description": "Step-by-step instructions for getting started with Neural Command's AI search optimization platform",
+                "step": [
+                    {
+                        "@type": "HowToStep",
+                        "name": "Choose Your Focus",
+                        "text": "Identify which aspect of AI search optimization you want to improve and select the appropriate tools."
+                    },
+                    {
+                        "@type": "HowToStep",
+                        "name": "Start with Authority",
+                        "text": "Begin with Authority Signal Monitor for comprehensive E-A-T analysis and optimization."
+                    },
+                    {
+                        "@type": "HowToStep",
+                        "name": "Conduct Technical Audit",
+                        "text": "Use AI Content Auditor to identify technical optimization opportunities and improvements."
+                    },
+                    {
+                        "@type": "HowToStep",
+                        "name": "Optimize Schema",
+                        "text": "Implement Schema Reverse Engineer to optimize schema markup for AI Overviews."
+                    },
+                    {
+                        "@type": "HowToStep",
+                        "name": "Track Performance",
+                        "text": "Monitor AI-specific metrics using Performance Analytics and track improvements over time."
+                    },
+                    {
+                        "@type": "HowToStep",
+                        "name": "Build Authority",
+                        "text": "Use CitationFlow to build authority signals through strategic citation building."
+                    }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "name": "Neural Command FAQ",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "What makes Neural Command different from traditional SEO tools?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Neural Command is specifically designed for AI search optimization, focusing on the unique ranking factors that AI platforms like ChatGPT, Claude, and Perplexity use to evaluate content. Traditional SEO tools focus on standard search engines, while Neural Command optimizes for AI search behavior and preferences."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How many tools are included in the Neural Command platform?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Neural Command includes 9 specialized tools: Authority Signal Monitor, Schema Reverse Engineer, Batch Authority Analyzer, AI Content Auditor, Performance Analytics, Agent Connect, QueryMind, AgentRank, and CitationFlow. Each tool is designed for specific aspects of AI search optimization."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Which AI platforms does Neural Command optimize for?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Neural Command optimizes for major AI search platforms including ChatGPT, Claude, Perplexity, Google AI Overviews, and other emerging AI search engines. The platform continuously updates to support new AI platforms as they emerge."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "How long does it take to see results from AI search optimization?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "AI search optimization typically shows initial improvements within 2-4 weeks, with significant results appearing in 2-3 months. Authority building and citation optimization may take 3-6 months for full impact. Regular monitoring and optimization are key to maintaining and improving results."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Can I use Neural Command alongside traditional SEO tools?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Yes! Neural Command complements traditional SEO tools perfectly. While traditional tools focus on standard search engines, Neural Command optimizes specifically for AI search platforms. Using both provides comprehensive optimization across all search platforms."
+                        }
+                    }
+                ]
+            }
+        ],
+        "speakable": {
+            "@type": "SpeakableSpecification",
+            "cssSelector": ["#overview", "#tool-documentation", "#getting-started"]
+        },
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://neuralcommand.com/search?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+        },
+        "about": [
+            {
+                "@type": "Thing",
+                "name": "AI Search Optimization",
+                "description": "Optimization techniques specifically designed for AI search engines like ChatGPT, Claude, and Perplexity"
+            },
+            {
+                "@type": "Thing",
+                "name": "Authority Signals",
+                "description": "E-A-T framework implementation for building expertise, authoritativeness, and trustworthiness"
+            },
+            {
+                "@type": "Thing",
+                "name": "Schema Markup",
+                "description": "Structured data optimization for AI Overviews and rich search results"
+            }
+        ],
+        "mentions": [
+            {
+                "@type": "Thing",
+                "name": "ChatGPT",
+                "description": "OpenAI's AI language model and search platform"
+            },
+            {
+                "@type": "Thing",
+                "name": "Claude",
+                "description": "Anthropic's AI assistant and search platform"
+            },
+            {
+                "@type": "Thing",
+                "name": "Perplexity",
+                "description": "AI-powered search engine and research platform"
+            },
+            {
+                "@type": "Thing",
+                "name": "Google AI Overviews",
+                "description": "Google's AI-generated search result summaries"
+            }
+        ]
+    }
+    </script>
+</body>
+</html> 
