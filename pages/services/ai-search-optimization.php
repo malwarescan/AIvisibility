@@ -70,14 +70,28 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
 ?>
 
 <main class="container py-8">
-  <h1>AI Search Optimization</h1>
-  <p class="lead">Optimize for Google AI Mode, Bing Copilot, and Perplexity ranking logic.</p>
-
-  <section class="intro">
-    <h2>Why AI Search Optimization Matters</h2>
-    <p>AI-powered search interfaces are becoming the primary way users discover information. Google AI Mode, Bing Copilot, and Perplexity use sophisticated ranking algorithms that differ significantly from traditional search engines. Our AI Search Optimization ensures your content performs optimally across these AI search platforms.</p>
+  <h1>AI Search Optimization for Businesses</h1>
+  
+  <section class="intro" style="margin-bottom: 3rem;">
+    <p style="font-size: 1.125rem; line-height: 1.6; margin-bottom: 2rem; max-width: 700px;">
+      Neural Command LLC provides AI search optimization services that help businesses maintain visibility as Google shifts from traditional rankings to AI-driven retrieval.
+    </p>
     
-    <p>We focus on three critical areas: deterministic content token systems that ensure consistent AI understanding, crawl-clarity ranking that improves AI processing efficiency, and structured embedding that optimizes for AI retrieval patterns.</p>
+    <p style="margin-bottom: 1.5rem; max-width: 700px;">
+      <strong>Who it's for:</strong> For companies experiencing traffic loss, indexing issues, or declining visibility due to changes in Google Search behavior.
+    </p>
+    
+    <p style="margin-bottom: 1.5rem; max-width: 700px;">
+      <strong>What it fixes:</strong> We identify and fix crawl, indexing, canonical, and authority issues that prevent your site from being surfaced by modern search systems.
+    </p>
+    
+    <p style="margin-bottom: 2rem; max-width: 700px;">
+      <strong>Cost of inaction:</strong> Without intervention, search visibility continues to decay as AI systems replace traditional result layouts.
+    </p>
+    
+    <p style="margin-bottom: 2rem;">
+      <a data-contact-trigger href="#" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; text-decoration: none; border-radius: 0.375rem; font-weight: 500;">Get an AI Search Assessment</a>
+    </p>
   </section>
 
   <section class="technical-explanation">

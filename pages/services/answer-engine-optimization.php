@@ -87,14 +87,28 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
 ?>
 
 <main class="container py-8">
-  <h1>Answer Engine Optimization (AEO)</h1>
-  <p class="lead">Make your content answer-eligible.</p>
-
-  <section class="intro">
-    <h2>Why AEO Matters</h2>
-    <p>As AI systems become the primary interface for information discovery, being the source that AI systems reference is crucial for visibility and authority. Our Answer Engine Optimization services ensure your content becomes answer-eligible across AI platforms.</p>
+  <h1>Answer Engine Optimization Services</h1>
+  
+  <section class="intro" style="margin-bottom: 3rem;">
+    <p style="font-size: 1.125rem; line-height: 1.6; margin-bottom: 2rem; max-width: 700px;">
+      Neural Command LLC provides answer engine optimization services that help businesses remain visible as search shifts from clicks to answers.
+    </p>
     
-    <p>We focus on three critical areas: answer eligibility that makes your content easily summarizable by AI systems, knowledge snippet preparation that structures information for AI consumption, and FAQ schema chaining that creates comprehensive answer frameworks.</p>
+    <p style="margin-bottom: 1.5rem; max-width: 700px;">
+      <strong>Who it's for:</strong> For organizations whose customers now receive answers directly from search engines instead of visiting websites.
+    </p>
+    
+    <p style="margin-bottom: 1.5rem; max-width: 700px;">
+      <strong>What it fixes:</strong> We restructure content and signals so your site is chosen as the answer source.
+    </p>
+    
+    <p style="margin-bottom: 2rem; max-width: 700px;">
+      <strong>Cost of inaction:</strong> Your brand disappears from customer decision paths even when demand still exists.
+    </p>
+    
+    <p style="margin-bottom: 2rem;">
+      <a data-contact-trigger href="#" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; text-decoration: none; border-radius: 0.375rem; font-weight: 500;">Assess Answer Engine Visibility</a>
+    </p>
   </section>
 
   <section class="technical-explanation">

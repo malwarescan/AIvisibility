@@ -1,89 +1,71 @@
 <?php
+declare(strict_types=1);
+require_once __DIR__.'/../bootstrap/canonical.php';
+
+$canonical = Canonical::absolute('/services/');
+
 $breadcrumbs = [
-  ['label' => 'Home', 'url' => canonical('/')],
+  ['label' => 'Home', 'url' => Canonical::absolute('/')],
   ['label' => 'Services'],
 ];
+
+$ctx = [
+  'title' => 'AI Search Optimization Services for Businesses | Neural Command',
+  'desc' => 'AI-focused SEO and answer engine optimization services for businesses affected by Google AI Overviews and modern search systems.'
+];
 ?>
-<?php global $SERVICES; ?>
-<main class="container py-8 services-index">
-  <h1 class="text-3xl mb-6">Services</h1>
-  <div class="grid lg:grid-cols-[2fr,1fr] gap-8">
-    <div>
-      <div class="grid md:grid-cols-2 gap-6 services-list">
-        <?php foreach($SERVICES as $slug=>$svc): ?>
-        <article class="services-list__card">
-          <header>
-            <h2><?= esc($svc['name']) ?></h2>
-            <span class="services-list__code">/services/<?= esc($slug) ?>/</span>
-          </header>
-          <p><?= esc($svc['short']) ?></p>
-          <a href="/services/<?= esc($slug) ?>/" class="services-list__link">Open file</a>
-        </article>
-        <?php endforeach; ?>
-      </div>
-      <section class="card mt-8">
-        <h2 class="text-xl mb-4">Explore Service Categories</h2>
-        <div class="grid md:grid-cols-3 gap-4 text-sm">
-          <div>
-            <h3 class="font-semibold text-gray-900 mb-2">AI Visibility</h3>
-            <ul class="space-y-1">
-              <li><a href="/services/agentic-seo/" class="underline">Agentic SEO & AI Overviews</a></li>
-              <li><a href="/services/ai-search-optimization/" class="underline">AI Search Optimization</a></li>
-              <li><a href="/services/answer-engine-optimization/" class="underline">Answer Engine Optimization</a></li>
-            </ul>
-          </div>
-          <div>
-            <h3 class="font-semibold text-gray-900 mb-2">LLM Training Signals</h3>
-            <ul class="space-y-1">
-              <li><a href="/services/generative-engine-optimization/" class="underline">Generative Engine Optimization</a></li>
-              <li><a href="/services/schema-optimizer/" class="underline">Schema Optimizer</a></li>
-              <li><a href="/services/ai-discovery-services/" class="underline">AI Discovery Services</a></li>
-            </ul>
-          </div>
-          <div>
-            <h3 class="font-semibold text-gray-900 mb-2">Strategic Advisory</h3>
-            <ul class="space-y-1">
-              <li><a href="/services/ai-consulting/" class="underline">AI Consulting & Integration</a></li>
-              <li><a href="/services/ai-recommendation-consulting/" class="underline">AI Recommendation Consulting</a></li>
-              <li><a href="/services/chatgpt-seo/" class="underline">ChatGPT SEO Services</a></li>
-            </ul>
-          </div>
-        </div>
-      </section>
-    </div>
-    <aside class="card h-fit">
-      <h2 class="text-xl mb-4">Where to Start</h2>
-      <ul class="space-y-3 text-sm">
-        <li>
-          <strong>Need visibility fast?</strong><br>
-          <a href="/services/agentic-seo/" class="underline">Agentic SEO</a> plus <a href="/services/answer-engine-optimization/" class="underline">Answer Engine Optimization</a>.
-        </li>
-        <li>
-          <strong>Fix your schema coverage?</strong><br>
-          Combine <a href="/services/schema-optimizer/" class="underline">Schema Optimizer</a> with <a href="/services/ai-discovery-services/" class="underline">AI Discovery Services</a>.
-        </li>
-        <li>
-          <strong>Need advisory support?</strong><br>
-          Pair <a href="/services/ai-consulting/" class="underline">AI Consulting</a> with <a href="/services/ai-recommendation-consulting/" class="underline">AI Recommendation Consulting</a>.
-        </li>
-        <li>
-          <strong>Going multi-location?</strong><br>
-          Use <a href="/services/generative-engine-optimization/" class="underline">GEO</a> plus <a href="/services/agentic-seo/" class="underline">Agentic SEO</a> for programmatic coverage.
-        </li>
-      </ul>
-      <div class="mt-6">
-        <h3 class="font-semibold text-gray-900 mb-2 text-sm uppercase tracking-wide">Recommended Resources</h3>
-        <ul class="space-y-2 text-sm">
-          <li><a href="/how-to-get-featured-in-ai-overviews/" class="underline">Get Featured in AI Overviews</a></li>
-          <li><a href="/what-is-google-ai-mode/" class="underline">What is Google AI Mode?</a></li>
-          <li><a href="/who-controls-which-sites-ai-picks/" class="underline">Who Controls AI Picks?</a></li>
-          <li><a href="/resources/diagnostic/" class="underline">Run an AI Visibility Diagnostic</a></li>
-        </ul>
-      </div>
-    </aside>
+<main class="container py-8">
+  <h1>AI Search Optimization Services for Businesses</h1>
+  <p style="margin-bottom: 3rem; max-width: 700px; line-height: 1.6; color: var(--text-muted);">
+    Neural Command LLC provides AI-focused SEO and answer engine optimization services for businesses affected by Google AI Overviews and modern search systems. Each service below addresses a specific visibility, indexing, or eligibility problem.
+  </p>
+
+  <div style="display: grid; gap: 2rem; margin-bottom: 3rem;">
+    <article style="border: 1px solid var(--border); padding: 1.5rem; border-radius: 0.375rem;">
+      <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem;">AI Search Optimization</h2>
+      <p style="margin-bottom: 1rem; color: var(--text-muted); line-height: 1.6;">
+        Fixes crawlability, indexing, and authority signals so your site remains visible as search systems shift to AI-driven retrieval.
+      </p>
+      <a href="<?= Canonical::absolute('/services/ai-search-optimization/') ?>" style="color: var(--primary); text-decoration: underline;">View service →</a>
+    </article>
+
+    <article style="border: 1px solid var(--border); padding: 1.5rem; border-radius: 0.375rem;">
+      <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem;">AI Overview Optimization</h2>
+      <p style="margin-bottom: 1rem; color: var(--text-muted); line-height: 1.6;">
+        Improves eligibility and visibility inside Google AI Overviews and generative summaries.
+      </p>
+      <a href="<?= Canonical::absolute('/services/ai-overview-optimization/') ?>" style="color: var(--primary); text-decoration: underline;">View service →</a>
+    </article>
+
+    <article style="border: 1px solid var(--border); padding: 1.5rem; border-radius: 0.375rem;">
+      <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem;">Answer Engine Optimization</h2>
+      <p style="margin-bottom: 1rem; color: var(--text-muted); line-height: 1.6;">
+        Positions your content to be selected by answer engines instead of buried beneath them.
+      </p>
+      <a href="<?= Canonical::absolute('/services/answer-engine-optimization/') ?>" style="color: var(--primary); text-decoration: underline;">View service →</a>
+    </article>
+
+    <article style="border: 1px solid var(--border); padding: 1.5rem; border-radius: 0.375rem;">
+      <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem;">Generative Engine Optimization</h2>
+      <p style="margin-bottom: 1rem; color: var(--text-muted); line-height: 1.6;">
+        Aligns content and structure for retrieval by large language models and AI search agents.
+      </p>
+      <a href="<?= Canonical::absolute('/services/generative-engine-optimization/') ?>" style="color: var(--primary); text-decoration: underline;">View service →</a>
+    </article>
+
+    <article style="border: 1px solid var(--border); padding: 1.5rem; border-radius: 0.375rem;">
+      <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem;">Structured Data Engineering</h2>
+      <p style="margin-bottom: 1rem; color: var(--text-muted); line-height: 1.6;">
+        Implements and validates structured data systems required for modern search eligibility.
+      </p>
+      <a href="<?= Canonical::absolute('/services/structured-data-engineering/') ?>" style="color: var(--primary); text-decoration: underline;">View service →</a>
+    </article>
+  </div>
+
+  <div style="padding-top: 2rem; border-top: 1px solid var(--border);">
+    <p style="margin-bottom: 1rem;">
+      Not sure which service applies? <a data-contact-trigger href="#" style="color: var(--primary); text-decoration: underline;">Get an AI Search Visibility Assessment</a>.
+    </p>
   </div>
 </main>
-<?php 
-// Schemas now handled by unified @graph system in templates/head.php
-?>
 

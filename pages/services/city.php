@@ -14,6 +14,109 @@ $city    = Canonical::kebab($_GET['city'] ?? '');
 $path    = "/services/$service/$city/";
 $canonical = Canonical::absoluteCanonical($path);
 
+// Check if this is a classifier-compliant service-city page (GSC-verified only)
+$classifierCompliant = false;
+$classifierCombos = [
+  'ai-overview-optimization' => ['new-york', 'san-antonio'],
+  'answer-engine-optimization' => ['new-york']
+];
+if (isset($classifierCombos[$service]) && in_array($city, $classifierCombos[$service])) {
+  $classifierCompliant = true;
+}
+
+// If classifier-compliant, use minimal structure
+if ($classifierCompliant) {
+  $serviceName = ucwords(str_replace('-', ' ', $service));
+  $cityName = ucwords(str_replace('-', ' ', $city));
+  
+  // Set breadcrumbs
+  $breadcrumbs = [
+    ['label' => 'Home', 'url' => Canonical::absolute('/')],
+    ['label' => 'Services', 'url' => Canonical::absolute('/services/')],
+    ['label' => $serviceName, 'url' => Canonical::absolute('/services/'.$service.'/')],
+    ['label' => $cityName]
+  ];
+  
+  // Set page context
+  $ctx = [
+    'title' => $serviceName . ' in ' . $cityName . ' | Neural Command LLC',
+    'desc' => 'Neural Command LLC provides ' . strtolower($serviceName) . ' for businesses in ' . $cityName . '.'
+  ];
+  
+  // Service schema only (no LocalBusiness)
+  require_once __DIR__.'/../../lib/schema_enforcement.php';
+  $serviceSchemas = [
+    SchemaEnforcement::generateService([
+      '@id' => Canonical::absolute($path).'#service',
+      'name' => $serviceName . ' in ' . $cityName,
+      'description' => 'Neural Command LLC provides ' . strtolower($serviceName) . ' for businesses in ' . $cityName . '.',
+      'serviceType' => $serviceName,
+      'provider' => ['@id' => 'https://nrlcmd.com/#organization'],
+      'areaServed' => [
+        '@type' => 'City',
+        'name' => $cityName
+      ]
+    ])
+  ];
+  $GLOBALS['serviceSchemas'] = $serviceSchemas;
+  
+  // Render minimal classifier-compliant page
+  ?>
+  <main class="container py-8">
+    <h1><?= htmlspecialchars($serviceName . ' in ' . $cityName, ENT_QUOTES) ?></h1>
+    
+    <section class="intro" style="margin-bottom: 3rem;">
+      <?php
+      // Service-specific content based on parent service page
+      if ($service === 'ai-overview-optimization') {
+        echo '<p style="font-size: 1.125rem; line-height: 1.6; margin-bottom: 2rem; max-width: 700px;">';
+        echo 'Neural Command LLC provides Google AI Overview optimization for businesses in ' . htmlspecialchars($cityName, ENT_QUOTES) . '.';
+        echo '</p>';
+        
+        echo '<p style="margin-bottom: 1.5rem; max-width: 700px;">';
+        echo '<strong>Who it\'s for:</strong> For businesses in ' . htmlspecialchars($cityName, ENT_QUOTES) . ' whose content is not appearing in AI-generated answers despite strong historical rankings.';
+        echo '</p>';
+        
+        echo '<p style="margin-bottom: 1.5rem; max-width: 700px;">';
+        echo '<strong>What it fixes:</strong> We correct structural, semantic, and eligibility gaps that prevent your content from being selected for AI Overviews.';
+        echo '</p>';
+        
+        echo '<p style="margin-bottom: 2rem; max-width: 700px;">';
+        echo '<strong>Cost of inaction:</strong> Competitors become the source of AI answers while your content is ignored.';
+        echo '</p>';
+        
+        echo '<p style="margin-bottom: 2rem;">';
+        echo '<a data-contact-trigger href="#" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; text-decoration: none; border-radius: 0.375rem; font-weight: 500;">Evaluate AI Overview Eligibility in ' . htmlspecialchars($cityName, ENT_QUOTES) . '</a>';
+        echo '</p>';
+      } elseif ($service === 'answer-engine-optimization') {
+        echo '<p style="font-size: 1.125rem; line-height: 1.6; margin-bottom: 2rem; max-width: 700px;">';
+        echo 'Neural Command LLC provides answer engine optimization services for businesses in ' . htmlspecialchars($cityName, ENT_QUOTES) . ' as search shifts from clicks to answers.';
+        echo '</p>';
+        
+        echo '<p style="margin-bottom: 1.5rem; max-width: 700px;">';
+        echo '<strong>Who it\'s for:</strong> For organizations in ' . htmlspecialchars($cityName, ENT_QUOTES) . ' whose customers now receive answers directly from search engines instead of visiting websites.';
+        echo '</p>';
+        
+        echo '<p style="margin-bottom: 1.5rem; max-width: 700px;">';
+        echo '<strong>What it fixes:</strong> We restructure content and signals so your site is chosen as the answer source.';
+        echo '</p>';
+        
+        echo '<p style="margin-bottom: 2rem; max-width: 700px;">';
+        echo '<strong>Cost of inaction:</strong> Your brand disappears from customer decision paths even when demand still exists.';
+        echo '</p>';
+        
+        echo '<p style="margin-bottom: 2rem;">';
+        echo '<a data-contact-trigger href="#" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; text-decoration: none; border-radius: 0.375rem; font-weight: 500;">Assess Answer Engine Visibility in ' . htmlspecialchars($cityName, ENT_QUOTES) . '</a>';
+        echo '</p>';
+      }
+      ?>
+    </section>
+  </main>
+  <?php
+  return; // Exit early for classifier-compliant pages
+}
+
+// Standard city page logic continues below
 // Generate deterministic content sections
 $sections = compose_content($service, $city, $canonical);
 

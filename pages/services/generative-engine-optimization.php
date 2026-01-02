@@ -80,13 +80,27 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
 
 <main class="container py-8">
   <h1>Generative Engine Optimization (GEO)</h1>
-  <p class="lead">Train the engines that train the world.</p>
-
-  <section class="intro">
-    <h2>Why GEO Matters Now</h2>
-    <p>We've reached an inflection point where AI language models are becoming the primary interface for information discovery. Traditional keyword-based SEO, while still valuable, misses the fundamental shift toward entity-centric AI understanding. GEO positions your brand as an authoritative entity within AI knowledge graphs, ensuring consistent representation across ChatGPT, Claude, Gemini, and emerging AI platforms.</p>
+  
+  <section class="intro" style="margin-bottom: 3rem;">
+    <p style="font-size: 1.125rem; line-height: 1.6; margin-bottom: 2rem; max-width: 700px;">
+      Neural Command LLC provides generative engine optimization services for visibility in AI-driven search and retrieval systems.
+    </p>
     
-    <p>Unlike search engines that crawl and index pages, AI models learn through structured data ingestion, entity relationship mapping, and semantic embedding. Our GEO methodology bridges this gap by teaching AI systems not just what you do, but who you are, what you know, and how you relate to the broader knowledge ecosystem.</p>
+    <p style="margin-bottom: 1.5rem; max-width: 700px;">
+      <strong>Who it's for:</strong> For companies operating in markets where AI systems summarize, synthesize, or replace traditional search results.
+    </p>
+    
+    <p style="margin-bottom: 1.5rem; max-width: 700px;">
+      <strong>What it fixes:</strong> We align content, structure, and data so generative systems can retrieve and trust your information.
+    </p>
+    
+    <p style="margin-bottom: 2rem; max-width: 700px;">
+      <strong>Cost of inaction:</strong> AI systems summarize your market using competitor content instead of yours.
+    </p>
+    
+    <p style="margin-bottom: 2rem;">
+      <a data-contact-trigger href="#" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; text-decoration: none; border-radius: 0.375rem; font-weight: 500;">Evaluate Generative Search Readiness</a>
+    </p>
   </section>
 
   <section class="technical-explanation">
