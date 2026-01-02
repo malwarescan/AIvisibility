@@ -87,32 +87,34 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
 ?>
 
 <main class="container py-8">
-  <h1>Answer Engine Optimization Services</h1>
-  
-  <section class="intro" style="margin-bottom: 3rem;">
-    <p style="font-size: 1.125rem; line-height: 1.6; margin-bottom: 2rem; max-width: 700px;">
+  <section class="service-hero">
+    <h1>Answer Engine Optimization Services</h1>
+    <p class="service-subtitle">
       Neural Command LLC provides answer engine optimization services that help businesses remain visible as search shifts from clicks to answers.
     </p>
+  </section>
+  
+  <section class="intro mb-3xl">
     
-    <p style="margin-bottom: 1.5rem; max-width: 700px;">
+    <p class="mb-lg max-w-md">
       <strong>Who it's for:</strong> For organizations whose customers now receive answers directly from search engines instead of visiting websites.
     </p>
     
-    <p style="margin-bottom: 1.5rem; max-width: 700px;">
+    <p class="mb-lg max-w-md">
       <strong>What it fixes:</strong> We restructure content and signals so your site is chosen as the answer source.
     </p>
     
-    <p style="margin-bottom: 2rem; max-width: 700px;">
+    <p class="mb-xl max-w-md">
       <strong>Cost of inaction:</strong> Your brand disappears from customer decision paths even when demand still exists.
     </p>
     
-    <p style="margin-bottom: 2rem;">
-      <a data-contact-trigger href="#" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; text-decoration: none; border-radius: 0.375rem; font-weight: 500;">Assess Answer Engine Visibility</a>
+    <p class="mb-xl">
+      <a data-contact-trigger href="#" class="btn-primary-inline">Assess Answer Engine Visibility</a>
     </p>
   </section>
 
-  <section class="technical-explanation">
-    <h2>How We Implement AEO</h2>
+  <section class="service-section service-section--muted">
+    <h2 class="service-section-title">How We Implement AEO</h2>
     <p>AEO requires a fundamental shift from keyword-focused content to answer-focused architecture. Our methodology addresses this transformation:</p>
     
     <ul>
@@ -124,8 +126,8 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
     <p>This approach transforms your content from search-optimized to answer-optimized, ensuring AI systems naturally reference your expertise.</p>
   </section>
 
-  <section class="trustworthy-compression">
-    <h2>Trustworthy Compression for LLM Summarization</h2>
+  <section class="service-section">
+    <h2 class="service-section-title">Trustworthy Compression for LLM Summarization</h2>
     <p>AI systems excel at compressing and summarizing information, but they need trustworthy sources to reference. Our AEO methodology optimizes for this compression process:</p>
     
     <ul>
@@ -136,20 +138,22 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
     </ul>
   </section>
 
-  <section class="use-cases">
-    <h2>AEO Success Stories</h2>
-    <p>We've helped brands achieve measurable improvements in AI answer eligibility:</p>
-    
-    <ul>
+  <section class="service-section">
+    <div class="service-proof">
+      <h2 class="service-section-title">AEO Success Stories</h2>
+      <p>We've helped brands achieve measurable improvements in AI answer eligibility:</p>
+      
+      <ul>
       <li><strong>Healthcare providers:</strong> Achieved consistent AI citations for medical advice, becoming the go-to source for AI-generated health information.</li>
       <li><strong>Legal firms:</strong> Optimized for AI legal research tools, achieving featured placement in AI-generated legal guidance.</li>
       <li><strong>Technology companies:</strong> Structured technical expertise for AI systems, becoming the default reference for implementation guidance.</li>
       <li><strong>Educational institutions:</strong> Optimized for AI educational content, driving enrollment through AI-recommended learning resources.</li>
-    </ul>
+      </ul>
+    </div>
   </section>
 
-  <section class="faq">
-    <h2>Frequently Asked Questions</h2>
+  <section class="service-section">
+    <h2 class="service-section-title">Frequently Asked Questions</h2>
     
     <div class="faq-item">
       <h3>What is AEO?</h3>
@@ -167,7 +171,7 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
     </div>
   </section>
 
-  <section class="cta">
+  <section class="service-cta">
     <h2>Ready to Make Your Content Answer-Eligible?</h2>
     <p>Transform your content into the source that AI systems naturally reference. Our AEO methodology drives measurable improvements in AI answer eligibility and citation frequency.</p>
     <p><a href="<?= Canonical::absolute('/resources/diagnostic/') ?>" class="btn btn-primary">Run AI Visibility Diagnostic</a></p>

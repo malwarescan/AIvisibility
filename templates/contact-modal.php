@@ -1,5 +1,5 @@
 <!-- Global Contact Modal -->
-<div id="contact-modal" class="contact-modal" style="display: none;">
+<div id="contact-modal" class="contact-modal hidden">
   <div class="contact-modal-overlay"></div>
   <div class="contact-modal-content">
     <div class="contact-modal-header">

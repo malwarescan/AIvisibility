@@ -26,7 +26,7 @@ $GLOBALS['contactPointSchema'] = $contactPointSchema;
 <main class="container py-8">
   <h1>Contact Neural Command</h1>
   
-  <div class="contact-intro" style="max-width: 700px; margin-bottom: 3rem;">
+  <div class="contact-intro max-w-md mb-3xl">
     <p class="lead">
       We work with teams and founders who need clarity around AI visibility, search performance, and strategic execution.
     </p>
@@ -35,10 +35,10 @@ $GLOBALS['contactPointSchema'] = $contactPointSchema;
     </p>
   </div>
 
-  <div class="contact-fit-section" style="max-width: 700px; margin-bottom: 3rem;">
+  <div class="contact-fit-section max-w-md mb-3xl">
     <h2>What this conversation is / is not</h2>
     
-    <div style="margin-bottom: 2rem;">
+    <div class="mb-xl">
       <h3>This is a good fit if you are:</h3>
       <ul>
         <li>Evaluating AI search visibility, SEO, or AI-driven discovery</li>
@@ -58,19 +58,19 @@ $GLOBALS['contactPointSchema'] = $contactPointSchema;
     </div>
   </div>
 
-  <div class="contact-cta-section" style="max-width: 600px; margin-bottom: 3rem;">
+  <div class="contact-cta-section max-w-md mb-3xl">
     <div class="space-y-4">
-      <button data-contact-trigger class="button button-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
+      <button data-contact-trigger class="button button-primary btn-primary-full">
         Start Conversation
       </button>
       
-      <button data-contact-trigger class="button button-secondary" style="width: 100%; padding: 1rem; font-size: 1.1rem; border: 1px solid var(--border);">
+      <button data-contact-trigger class="button button-secondary btn-secondary-full">
         Request an Audit
       </button>
     </div>
   </div>
 
-  <div class="contact-next-steps" style="max-width: 700px; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+  <div class="contact-next-steps max-w-md mt-3xl section-divider">
     <h2>What happens next</h2>
     <p>
       When you reach out, your message goes directly to us.

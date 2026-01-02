@@ -65,48 +65,48 @@ if ($classifierCompliant) {
   <main class="container py-8">
     <h1><?= htmlspecialchars($serviceName . ' in ' . $cityName, ENT_QUOTES) ?></h1>
     
-    <section class="intro" style="margin-bottom: 3rem;">
+    <section class="intro mb-3xl">
       <?php
       // Service-specific content based on parent service page
       if ($service === 'ai-overview-optimization') {
-        echo '<p style="font-size: 1.125rem; line-height: 1.6; margin-bottom: 2rem; max-width: 700px;">';
+        echo '<p class="text-lg leading-relaxed mb-xl max-w-md">';
         echo 'Neural Command LLC provides Google AI Overview optimization for businesses in ' . htmlspecialchars($cityName, ENT_QUOTES) . '.';
         echo '</p>';
         
-        echo '<p style="margin-bottom: 1.5rem; max-width: 700px;">';
+        echo '<p class="mb-lg max-w-md">';
         echo '<strong>Who it\'s for:</strong> For businesses in ' . htmlspecialchars($cityName, ENT_QUOTES) . ' whose content is not appearing in AI-generated answers despite strong historical rankings.';
         echo '</p>';
         
-        echo '<p style="margin-bottom: 1.5rem; max-width: 700px;">';
+        echo '<p class="mb-lg max-w-md">';
         echo '<strong>What it fixes:</strong> We correct structural, semantic, and eligibility gaps that prevent your content from being selected for AI Overviews.';
         echo '</p>';
         
-        echo '<p style="margin-bottom: 2rem; max-width: 700px;">';
+        echo '<p class="mb-xl max-w-md">';
         echo '<strong>Cost of inaction:</strong> Competitors become the source of AI answers while your content is ignored.';
         echo '</p>';
         
-        echo '<p style="margin-bottom: 2rem;">';
-        echo '<a data-contact-trigger href="#" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; text-decoration: none; border-radius: 0.375rem; font-weight: 500;">Evaluate AI Overview Eligibility in ' . htmlspecialchars($cityName, ENT_QUOTES) . '</a>';
+        echo '<p class="mb-xl">';
+        echo '<a data-contact-trigger href="#" class="btn-primary-inline">Evaluate AI Overview Eligibility in ' . htmlspecialchars($cityName, ENT_QUOTES) . '</a>';
         echo '</p>';
       } elseif ($service === 'answer-engine-optimization') {
-        echo '<p style="font-size: 1.125rem; line-height: 1.6; margin-bottom: 2rem; max-width: 700px;">';
+        echo '<p class="text-lg leading-relaxed mb-xl max-w-md">';
         echo 'Neural Command LLC provides answer engine optimization services for businesses in ' . htmlspecialchars($cityName, ENT_QUOTES) . ' as search shifts from clicks to answers.';
         echo '</p>';
         
-        echo '<p style="margin-bottom: 1.5rem; max-width: 700px;">';
+        echo '<p class="mb-lg max-w-md">';
         echo '<strong>Who it\'s for:</strong> For organizations in ' . htmlspecialchars($cityName, ENT_QUOTES) . ' whose customers now receive answers directly from search engines instead of visiting websites.';
         echo '</p>';
         
-        echo '<p style="margin-bottom: 1.5rem; max-width: 700px;">';
+        echo '<p class="mb-lg max-w-md">';
         echo '<strong>What it fixes:</strong> We restructure content and signals so your site is chosen as the answer source.';
         echo '</p>';
         
-        echo '<p style="margin-bottom: 2rem; max-width: 700px;">';
+        echo '<p class="mb-xl max-w-md">';
         echo '<strong>Cost of inaction:</strong> Your brand disappears from customer decision paths even when demand still exists.';
         echo '</p>';
         
-        echo '<p style="margin-bottom: 2rem;">';
-        echo '<a data-contact-trigger href="#" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; text-decoration: none; border-radius: 0.375rem; font-weight: 500;">Assess Answer Engine Visibility in ' . htmlspecialchars($cityName, ENT_QUOTES) . '</a>';
+        echo '<p class="mb-xl">';
+        echo '<a data-contact-trigger href="#" class="btn-primary-inline">Assess Answer Engine Visibility in ' . htmlspecialchars($cityName, ENT_QUOTES) . '</a>';
         echo '</p>';
       }
       ?>

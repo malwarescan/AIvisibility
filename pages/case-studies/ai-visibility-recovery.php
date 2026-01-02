@@ -17,34 +17,34 @@ $ctx = [
 <main class="container py-8">
   <h1>AI Visibility Recovery for a Service-Based Website</h1>
   
-  <section style="margin-bottom: 3rem; max-width: 800px;">
-    <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem;">Problem</h2>
-    <p style="margin-bottom: 2rem; line-height: 1.6;">
+  <section class="mb-3xl max-w-lg">
+    <h2 class="text-2xl font-semibold mb-md">Problem</h2>
+    <p class="mb-xl leading-relaxed">
       A service-based website experienced declining impressions and reduced visibility as Google AI Overviews replaced traditional results.
     </p>
     
-    <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem;">Constraints</h2>
-    <ul style="margin-bottom: 2rem; padding-left: 1.5rem; line-height: 1.8;">
+    <h2 class="text-2xl font-semibold mb-md">Constraints</h2>
+    <ul class="mb-xl pl-lg leading-loose">
       <li>Existing content could not be rewritten entirely</li>
       <li>No paid acquisition allowed</li>
       <li>Indexing issues were unclear</li>
     </ul>
     
-    <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem;">Actions Taken</h2>
-    <ul style="margin-bottom: 2rem; padding-left: 1.5rem; line-height: 1.8;">
+    <h2 class="text-2xl font-semibold mb-md">Actions Taken</h2>
+    <ul class="mb-xl pl-lg leading-loose">
       <li>Audited indexing and canonical signals</li>
       <li>Identified AI Overview eligibility gaps</li>
       <li>Implemented structured data corrections</li>
       <li>Re-aligned content structure for AI retrieval</li>
     </ul>
     
-    <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem;">Outcome</h2>
-    <p style="margin-bottom: 2rem; line-height: 1.6;">
+    <h2 class="text-2xl font-semibold mb-md">Outcome</h2>
+    <p class="mb-xl leading-relaxed">
       Within weeks, impressions stabilized and AI-driven visibility signals improved across affected pages.
     </p>
     
-    <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem;">What this proves</h2>
-    <p style="margin-bottom: 2rem; line-height: 1.6;">
+    <h2 class="text-2xl font-semibold mb-md">What this proves</h2>
+    <p class="mb-xl leading-relaxed">
       This work demonstrates applied AI search optimization under real constraints.
     </p>
   </section>

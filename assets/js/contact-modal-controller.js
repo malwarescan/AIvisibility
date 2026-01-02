@@ -214,7 +214,7 @@
     modalOpen = true;
     const modal = document.getElementById('contact-modal');
     if (modal) {
-      modal.style.display = 'flex';
+      modal.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
       
       // Update score when opening (user might have been on page a while)
@@ -234,7 +234,7 @@
     modalOpen = false;
     const modal = document.getElementById('contact-modal');
     if (modal) {
-      modal.style.display = 'none';
+      modal.classList.add('hidden');
       document.body.style.overflow = '';
     }
   }

@@ -42,25 +42,25 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
 <main class="container py-8">
   <h1>Structured Data Engineering for Search Visibility</h1>
   
-  <section class="intro" style="margin-bottom: 3rem;">
-    <p style="font-size: 1.125rem; line-height: 1.6; margin-bottom: 2rem; max-width: 700px;">
+  <section class="intro mb-3xl">
+    <p class="text-lg leading-relaxed mb-xl max-w-md">
       Neural Command LLC designs and implements structured data systems required for modern search eligibility.
     </p>
     
-    <p style="margin-bottom: 1.5rem; max-width: 700px;">
+    <p class="mb-lg max-w-md">
       <strong>Who it's for:</strong> For businesses whose content is technically sound but invisible to AI-driven search features.
     </p>
     
-    <p style="margin-bottom: 1.5rem; max-width: 700px;">
+    <p class="mb-lg max-w-md">
       <strong>What it fixes:</strong> We implement and validate structured data that enables indexing, rich results, and AI retrieval.
     </p>
     
-    <p style="margin-bottom: 2rem; max-width: 700px;">
+    <p class="mb-xl max-w-md">
       <strong>Cost of inaction:</strong> Your content remains unreadable to machines that now control visibility.
     </p>
     
-    <p style="margin-bottom: 2rem;">
-      <a data-contact-trigger href="#" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; text-decoration: none; border-radius: 0.375rem; font-weight: 500;">Review Structured Data Eligibility</a>
+    <p class="mb-xl">
+      <a data-contact-trigger href="#" class="btn-primary-inline">Review Structured Data Eligibility</a>
     </p>
   </section>
 </main>

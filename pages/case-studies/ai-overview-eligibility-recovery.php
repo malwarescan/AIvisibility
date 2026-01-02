@@ -17,36 +17,36 @@ $ctx = [
 <main class="container py-8">
   <h1>AI Overview Eligibility Recovery for a Content-Heavy Website</h1>
   
-  <section style="margin-bottom: 3rem; max-width: 800px;">
-    <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem;">Problem</h2>
-    <p style="margin-bottom: 2rem; line-height: 1.6;">
+  <section class="mb-3xl max-w-lg">
+    <h2 class="text-2xl font-semibold mb-md">Problem</h2>
+    <p class="mb-xl leading-relaxed">
       A content-heavy website experienced declining impressions as Google AI Overviews replaced traditional result layouts.
     </p>
     
-    <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem;">Baseline</h2>
-    <ul style="margin-bottom: 2rem; padding-left: 1.5rem; line-height: 1.8;">
+    <h2 class="text-2xl font-semibold mb-md">Baseline</h2>
+    <ul class="mb-xl pl-lg leading-loose">
       <li>Declining impressions across key pages</li>
       <li>Reduced visibility for non-brand queries</li>
       <li>No AI Overview presence</li>
     </ul>
     
-    <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem;">Actions Taken</h2>
-    <ul style="margin-bottom: 2rem; padding-left: 1.5rem; line-height: 1.8;">
+    <h2 class="text-2xl font-semibold mb-md">Actions Taken</h2>
+    <ul class="mb-xl pl-lg leading-loose">
       <li>Audited AI Overview eligibility signals</li>
       <li>Identified structured data and semantic gaps</li>
       <li>Repaired canonical and indexing conflicts</li>
       <li>Re-aligned content structure for AI retrieval</li>
     </ul>
     
-    <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem;">Results</h2>
-    <ul style="margin-bottom: 2rem; padding-left: 1.5rem; line-height: 1.8;">
+    <h2 class="text-2xl font-semibold mb-md">Results</h2>
+    <ul class="mb-xl pl-lg leading-loose">
       <li>Impressions increased across affected pages</li>
       <li>AI-driven visibility stabilized within weeks</li>
       <li>Eligible pages began appearing in AI summaries</li>
     </ul>
     
-    <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem;">Why This Matters</h2>
-    <p style="margin-bottom: 2rem; line-height: 1.6;">
+    <h2 class="text-2xl font-semibold mb-md">Why This Matters</h2>
+    <p class="mb-xl leading-relaxed">
       This demonstrates applied AI search optimization under real-world constraints.
     </p>
   </section>

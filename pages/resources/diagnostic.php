@@ -6,7 +6,7 @@ $ctx['desc'] = 'Understand how language models interpret your content. Get a dia
 <main class="container py-8">
   <h1 class="text-3xl mb-4">How AI systems interpret your page</h1>
   
-  <div class="card mb-6" style="max-width: 800px;">
+  <div class="card mb-6 max-w-lg">
     <p class="text-gray-700 mb-4">
       This diagnostic combines deterministic signals (schema, structure, indexability) with AI interpretation to explain how language models are likely understanding your content.
     </p>
@@ -16,7 +16,7 @@ $ctx['desc'] = 'Understand how language models interpret your content. Get a dia
     </p>
   </div>
 
-  <div class="card mb-8" style="max-width: 800px;">
+  <div class="card mb-8 max-w-lg">
     <h2 class="text-xl mb-4">Run Diagnostic</h2>
     <form method="POST" action="/process-audit/" class="space-y-4">
       <div>
@@ -46,13 +46,13 @@ $ctx['desc'] = 'Understand how language models interpret your content. Get a dia
         <p class="text-xs text-gray-500 mt-1">We'll send the results to this address</p>
       </div>
       
-      <button type="submit" class="button button-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
+      <button type="submit" class="button button-primary btn-primary-full">
         Analyze Page
       </button>
     </form>
   </div>
 
-  <div class="card mb-8" style="max-width: 800px;">
+  <div class="card mb-8 max-w-lg">
     <h2 class="text-xl mb-4">What We Analyze</h2>
     <div class="space-y-4">
       <div>
@@ -87,7 +87,7 @@ $ctx['desc'] = 'Understand how language models interpret your content. Get a dia
     </div>
   </div>
 
-  <div class="card" style="max-width: 800px;">
+  <div class="card max-w-lg">
     <h2 class="text-xl mb-4">What This Diagnostic Cannot Tell You</h2>
     <ul class="list-disc text-sm text-gray-700 space-y-2 ml-5">
       <li>Whether you will rank in Google search results</li>

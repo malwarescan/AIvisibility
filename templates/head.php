@@ -143,8 +143,11 @@ $alt_ko = str_contains($PAGE, '/ko/') ? $PAGE : rtrim($BASE.'/ko'.parse_url($PAG
 <link rel="alternate" hreflang="ko" href="<?= htmlspecialchars($alt_ko, ENT_QUOTES) ?>">
 <link rel="alternate" hreflang="x-default" href="<?= htmlspecialchars($canonical, ENT_QUOTES) ?>">
   <?php include __DIR__.'/../partials/head.php'; ?>
-         <link rel="preload" href="/assets/css/styles.css?v=<?= time() ?>" as="style" />
-         <link rel="stylesheet" href="/assets/css/styles.css?v=<?= time() ?>" />
+         <!-- Design System (authoritative) -->
+         <link rel="preload" href="/assets/css/design-system.css?v=<?= time() ?>" as="style" />
+         <link rel="stylesheet" href="/assets/css/design-system.css?v=<?= time() ?>" />
+         <!-- Legacy Styles (frozen, do not edit) -->
+         <link rel="stylesheet" href="/assets/css/styles.legacy.css?v=<?= time() ?>" />
 <?php 
 // Emit one unified @graph
 echo '<script type="application/ld+json">'.json_encode($graphStructure, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE).'</script>';

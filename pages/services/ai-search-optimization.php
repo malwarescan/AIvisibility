@@ -70,32 +70,34 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
 ?>
 
 <main class="container py-8">
-  <h1>AI Search Optimization for Businesses</h1>
-  
-  <section class="intro" style="margin-bottom: 3rem;">
-    <p style="font-size: 1.125rem; line-height: 1.6; margin-bottom: 2rem; max-width: 700px;">
+  <section class="service-hero">
+    <h1>AI Search Optimization for Businesses</h1>
+    <p class="service-subtitle">
       Neural Command LLC provides AI search optimization services that help businesses maintain visibility as Google shifts from traditional rankings to AI-driven retrieval.
     </p>
+  </section>
+  
+  <section class="intro mb-3xl">
     
-    <p style="margin-bottom: 1.5rem; max-width: 700px;">
+    <p class="mb-lg max-w-md">
       <strong>Who it's for:</strong> For companies experiencing traffic loss, indexing issues, or declining visibility due to changes in Google Search behavior.
     </p>
     
-    <p style="margin-bottom: 1.5rem; max-width: 700px;">
+    <p class="mb-lg max-w-md">
       <strong>What it fixes:</strong> We identify and fix crawl, indexing, canonical, and authority issues that prevent your site from being surfaced by modern search systems.
     </p>
     
-    <p style="margin-bottom: 2rem; max-width: 700px;">
+    <p class="mb-xl max-w-md">
       <strong>Cost of inaction:</strong> Without intervention, search visibility continues to decay as AI systems replace traditional result layouts.
     </p>
     
-    <p style="margin-bottom: 2rem;">
-      <a data-contact-trigger href="#" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; text-decoration: none; border-radius: 0.375rem; font-weight: 500;">Get an AI Search Assessment</a>
+    <p class="mb-xl">
+      <a data-contact-trigger href="#" class="btn-primary-inline">Get an AI Search Assessment</a>
     </p>
   </section>
 
-  <section class="technical-explanation">
-    <h2>How We Optimize for AI Search</h2>
+  <section class="service-section service-section--muted">
+    <h2 class="service-section-title">How We Optimize for AI Search</h2>
     <p>AI search platforms use specialized algorithms that prioritize different factors than traditional search engines. Our methodology addresses these unique requirements:</p>
     
     <ul>
@@ -107,8 +109,8 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
     <p>This specialized approach ensures your content performs optimally across all major AI search interfaces.</p>
   </section>
 
-  <section class="platform-optimization">
-    <h2>Multi-Platform AI Search Optimization</h2>
+  <section class="service-section">
+    <h2 class="service-section-title">Multi-Platform AI Search Optimization</h2>
     <p>Each AI search platform has unique characteristics that require specialized optimization:</p>
     
     <ul>
@@ -119,20 +121,22 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
     </ul>
   </section>
 
-  <section class="use-cases">
-    <h2>AI Search Optimization Success Stories</h2>
-    <p>We've helped brands achieve measurable improvements across AI search platforms:</p>
-    
-    <ul>
+  <section class="service-section">
+    <div class="service-proof">
+      <h2 class="service-section-title">AI Search Optimization Success Stories</h2>
+      <p>We've helped brands achieve measurable improvements across AI search platforms:</p>
+      
+      <ul>
       <li><strong>E-commerce brands:</strong> Achieved consistent AI Overview appearances for product categories, driving significant traffic through AI-generated summaries.</li>
       <li><strong>Professional services:</strong> Optimized for AI search citations, becoming the go-to reference for specialized expertise across multiple platforms.</li>
       <li><strong>Technology companies:</strong> Structured content for AI search algorithms, achieving featured placement in AI-generated technical comparisons.</li>
       <li><strong>Educational institutions:</strong> Optimized for AI search discovery, driving enrollment through AI-recommended educational content.</li>
-    </ul>
+      </ul>
+    </div>
   </section>
 
-  <section class="faq">
-    <h2>Frequently Asked Questions</h2>
+  <section class="service-section">
+    <h2 class="service-section-title">Frequently Asked Questions</h2>
     
     <div class="faq-item">
       <h3>How does AI Search Optimization differ from GEO?</h3>
@@ -150,7 +154,7 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
     </div>
   </section>
 
-  <section class="cta">
+  <section class="service-cta">
     <h2>Ready to Dominate AI Search?</h2>
     <p>Transform your content's performance across AI search platforms. Our specialized methodology drives measurable improvements in AI search visibility and ranking.</p>
     <p><a href="<?= Canonical::absolute('/resources/diagnostic/') ?>" class="btn btn-primary">Run AI Visibility Diagnostic</a></p>

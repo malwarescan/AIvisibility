@@ -36,7 +36,7 @@ $interpretation = $results['interpretation'] ?? [];
   <?php else: ?>
     
     <!-- Human Framing: What This Is / Is Not -->
-    <div class="card mb-6" style="max-width: 900px;">
+    <div class="card mb-6 max-w-2xl">
       <h1 class="text-3xl mb-4">Diagnostic Results</h1>
       <p class="text-gray-700 mb-4">
         Here's what the systems are likely seeing when they interpret <strong><?= esc(parse_url($url, PHP_URL_HOST) . parse_url($url, PHP_URL_PATH)) ?></strong>.
@@ -50,7 +50,7 @@ $interpretation = $results['interpretation'] ?? [];
     </div>
 
     <!-- Layer 1: Deterministic Signals -->
-    <div class="card mb-6" style="max-width: 900px;">
+    <div class="card mb-6 max-w-2xl">
       <h2 class="text-xl mb-4">Deterministic Signals</h2>
       <p class="text-sm text-gray-600 mb-4">These are real data points extracted from the page, not model opinions.</p>
       
@@ -97,7 +97,7 @@ $interpretation = $results['interpretation'] ?? [];
 
     <!-- Layer 2: AI Interpretation -->
     <?php if (!isset($interpretation['error']) && !isset($interpretation['fallback']) && !empty($interpretation['interpretation'])): ?>
-    <div class="card mb-6" style="max-width: 900px;">
+    <div class="card mb-6 max-w-2xl">
       <h2 class="text-xl mb-4">How AI Systems Are Likely Interpreting This Page</h2>
       <p class="text-sm text-gray-600 mb-4">
         This interpretation is based on the deterministic signals above. It explains patterns and identifies ambiguity, not guarantees.
@@ -109,7 +109,7 @@ $interpretation = $results['interpretation'] ?? [];
       </div>
     </div>
     <?php elseif (isset($interpretation['error'])): ?>
-    <div class="card mb-6" style="max-width: 900px;">
+    <div class="card mb-6 max-w-2xl">
       <h2 class="text-xl mb-4">AI Interpretation</h2>
       <p class="text-sm text-gray-600 mb-4">
         AI interpretation is unavailable. The deterministic signals above still provide valuable diagnostic information.
@@ -119,7 +119,7 @@ $interpretation = $results['interpretation'] ?? [];
     <?php endif; ?>
 
     <!-- Layer 3: Human Framing - What This Means -->
-    <div class="card mb-6" style="max-width: 900px;">
+    <div class="card mb-6 max-w-2xl">
       <h2 class="text-xl mb-4">What This Diagnostic Can and Cannot Tell You</h2>
       <div class="space-y-4">
         <div>
@@ -149,7 +149,7 @@ $interpretation = $results['interpretation'] ?? [];
     </div>
 
     <!-- Next Steps -->
-    <div class="card" style="max-width: 900px;">
+    <div class="card max-w-2xl">
       <h2 class="text-xl mb-4">Next Steps</h2>
       <div class="flex flex-col sm:flex-row gap-4">
         <button data-contact-trigger class="button button-primary text-center">Start a Conversation</button>

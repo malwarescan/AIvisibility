@@ -40,28 +40,36 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
 ?>
 
 <main class="container py-8">
-  <h1>Google AI Overview Optimization</h1>
-  
-  <section class="intro" style="margin-bottom: 3rem;">
-    <p style="font-size: 1.125rem; line-height: 1.6; margin-bottom: 2rem; max-width: 700px;">
+  <section class="service-hero">
+    <h1>Google AI Overview Optimization</h1>
+    <p class="service-subtitle">
       Neural Command LLC optimizes websites for eligibility and visibility inside Google AI Overviews.
     </p>
+  </section>
+  
+  <section class="intro mb-3xl">
     
-    <p style="margin-bottom: 1.5rem; max-width: 700px;">
+    <p class="mb-lg max-w-md">
       <strong>Who it's for:</strong> For businesses whose content is not appearing in AI-generated answers despite strong historical rankings.
     </p>
     
-    <p style="margin-bottom: 1.5rem; max-width: 700px;">
+    <p class="mb-lg max-w-md">
       <strong>What it fixes:</strong> We correct structural, semantic, and eligibility gaps that prevent your content from being selected for AI Overviews.
     </p>
     
-    <p style="margin-bottom: 2rem; max-width: 700px;">
+    <p class="mb-xl max-w-md">
       <strong>Cost of inaction:</strong> Competitors become the source of AI answers while your content is ignored.
     </p>
     
-    <p style="margin-bottom: 2rem;">
-      <a data-contact-trigger href="#" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary); color: white; text-decoration: none; border-radius: 0.375rem; font-weight: 500;">Evaluate AI Overview Eligibility</a>
+    <p class="mb-xl">
+      <a data-contact-trigger href="#" class="btn-primary-inline">Evaluate AI Overview Eligibility</a>
     </p>
+  </section>
+
+  <section class="service-cta">
+    <h2>Ready to Improve AI Overview Eligibility?</h2>
+    <p>Get started with an AI Overview eligibility assessment.</p>
+    <p><a data-contact-trigger href="#" class="btn-primary-inline">Evaluate AI Overview Eligibility</a></p>
   </section>
 </main>
 
