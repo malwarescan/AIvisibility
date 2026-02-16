@@ -88,7 +88,28 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
 
 <main class="container py-8">
   <section class="service-hero">
-    <h1>Answer Engine Optimization Services</h1>
+    <h1
+</h1>
+<p class="mb-md max-w-md leading-relaxed">
+  <strong>Answer Engine Optimization</strong> positions your content to be selected by answer engines by creating citation-ready pages: direct answers, definitions, constraints, and FAQs.
+</p>
+<section class="card-style mb-lg">
+  <h2 class="text-xl font-semibold mb-sm">What you get</h2>
+  <ul class="list-disc pl-lg text-muted">
+    <li>Answer-first rewrites for key landing pages</li>
+    <li>Comparison/definition/how-to intent alignment per query cluster</li>
+    <li>Citation-ready FAQ + glossary blocks</li>
+    <li>Internal linking that funnels retrieval to the right leaf page</li>
+  </ul>
+</section>
+<section class="card-style mb-lg">
+  <h2 class="text-xl font-semibold mb-sm">FAQ</h2>
+  <h3 class="text-lg font-semibold mb-xs">What’s the difference between SEO and AEO?</h3>
+  <p class="text-muted">SEO targets rankings; AEO targets selection and citation inside AI answers and summaries.</p>
+  <h3 class="text-lg font-semibold mb-xs">What pages matter most?</h3>
+  <p class="text-muted">Pages that already get impressions, pages tied to high-intent services, and pages that AI frequently paraphrases incorrectly.</p>
+</section>
+>Answer Engine Optimization Services</h1>
     <p class="service-subtitle">
       Neural Command LLC provides answer engine optimization services that help businesses remain visible as search shifts from clicks to answers.
     </p>

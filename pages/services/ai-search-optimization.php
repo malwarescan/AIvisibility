@@ -71,7 +71,28 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
 
 <main class="container py-8">
   <section class="service-hero">
-    <h1>AI Search Optimization for Businesses</h1>
+    <h1
+</h1>
+<p class="mb-md max-w-md leading-relaxed">
+  <strong>AI Search Optimization</strong> fixes crawlability, indexing, and authority signals so your site is selected and cited by AI-driven retrieval systems (ChatGPT, Google AI Overviews, Bing Copilot).
+</p>
+<section class="card-style mb-lg">
+  <h2 class="text-xl font-semibold mb-sm">What you get</h2>
+  <ul class="list-disc pl-lg text-muted">
+    <li>Indexing + crawl diagnostics with prioritized fixes</li>
+    <li>Entity and topical coverage improvements (what AI expects to see)</li>
+    <li>Internal link architecture upgrades for retrieval</li>
+    <li>Schema validation and eligibility cleanup</li>
+  </ul>
+</section>
+<section class="card-style mb-lg">
+  <h2 class="text-xl font-semibold mb-sm">FAQ</h2>
+  <h3 class="text-lg font-semibold mb-xs">What problem does AI Search Optimization solve?</h3>
+  <p class="text-muted">It prevents visibility loss when search engines switch from ranking pages to retrieving and citing sources inside AI answers.</p>
+  <h3 class="text-lg font-semibold mb-xs">How do you measure results?</h3>
+  <p class="text-muted">We track crawl/index status, query coverage, landing-page performance, and citation eligibility signals.</p>
+</section>
+>AI Search Optimization for Businesses</h1>
     <p class="service-subtitle">
       Neural Command LLC provides AI search optimization services that help businesses maintain visibility as Google shifts from traditional rankings to AI-driven retrieval.
     </p>

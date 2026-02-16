@@ -41,7 +41,28 @@ $GLOBALS['serviceSchemas'] = $serviceSchemas;
 
 <main class="container py-8">
   <section class="service-hero">
-    <h1>Google AI Overview Optimization</h1>
+    <h1
+</h1>
+<p class="mb-md max-w-md leading-relaxed">
+  <strong>AI Overview Optimization</strong> improves your eligibility and visibility inside Google AI Overviews by aligning page structure, entities, and verification signals that generative summaries pull from.
+</p>
+<section class="card-style mb-lg">
+  <h2 class="text-xl font-semibold mb-sm">What you get</h2>
+  <ul class="list-disc pl-lg text-muted">
+    <li>Overview-eligibility structural upgrades (answer-first formatting)</li>
+    <li>Entity reinforcement and definition blocks that survive chunking</li>
+    <li>FAQ scaffolds that match common overview prompts</li>
+    <li>Snippet + summary safety rails to reduce paraphrase drift</li>
+  </ul>
+</section>
+<section class="card-style mb-lg">
+  <h2 class="text-xl font-semibold mb-sm">FAQ</h2>
+  <h3 class="text-lg font-semibold mb-xs">What makes a page eligible for AI Overviews?</h3>
+  <p class="text-muted">Clear answers, strong entity context, consistent structured data, and content that can be verified and extracted reliably.</p>
+  <h3 class="text-lg font-semibold mb-xs">Do you need new pages?</h3>
+  <p class="text-muted">Sometimes. If you lack a dedicated citation surface for a query cluster, we create one.</p>
+</section>
+>Google AI Overview Optimization</h1>
     <p class="service-subtitle">
       Neural Command LLC optimizes websites for eligibility and visibility inside Google AI Overviews.
     </p>
